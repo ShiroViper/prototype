@@ -1,0 +1,42 @@
+
+$color: #ff9478;
+$current: #fef160;
+$paid: #7befb2;
+
+.lighted a{
+    background-color : $color !important;
+    border: 1px solid darken($color, 10%) !important;
+    background-image : none !important;
+    color: White !important;
+    // font-weight: bold !important;
+ }
+
+ .ui-state-highlight {
+    border: 1px solid darken($current, 30%) !important;
+    background: $current !important;
+    color: darken($current, 60%) !important;
+    // font-weight: bold !important;
+ }
+
+ .square {
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+    border: 1px solid rgba(0, 0, 0, .2);
+  }
+
+  .pay-dates {
+      background: $color;
+  }
+
+  .paid-dates {
+      background: $paid;
+  }
+
+  .current-date {
+      background: $current;
+  }
+ 
+//  div.ui-datepicker {
+//      margin: auto;
+//  }

@@ -1,0 +1,31 @@
+.welcome-title {
+    font-family: "Roboto", sans-serif;
+    font-weight: 900;
+}
+
+.title-header, .header, .about-header {
+    font-family: "Roboto", sans-serif;
+}
+
+.featured-desc, .about-desc {
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+}
+
+.brand-title-header {
+    font-size: 1.5rem;
+}
+
+.title-header {
+	font-size: 1.25rem;
+}
+
+@media screen and (min-width: 992px) {
+	.brand-title-header {
+    	font-size: 3rem;
+    }
+
+    .title-header {
+        font-size: 1.5rem;
+    }
+}
