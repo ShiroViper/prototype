@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<h3 class="header mt-3">My Calendar</h3>
+<h3 class="header mt-3">Schedules</h3>
 <div class="row">
     <div class="col-md-8 my-3">
         <div class="card">

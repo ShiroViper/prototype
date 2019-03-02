@@ -22,9 +22,9 @@
                 @foreach ($users as $user)
                         @if ( $user->user_type == 1 )
                             {{-- Highlight if they are collectors --}}
-                            <tr class="manage-accounts clickable-row table-warning" data-href="users/{{ $user->id }}">
+                            <tr class="manage-accounts clickable-row table-warning" data-href="/admin/users/{{ $user->id }}">
                         @else
-                            <tr class="manage-accounts clickable-row" data-href="users/{{ $user->id }}">
+                            <tr class="manage-accounts clickable-row" data-href="/admin/users/{{ $user->id }}">
                         @endif
                                 <td>{{ $user->id }}</td>
                                 <td>

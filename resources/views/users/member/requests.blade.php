@@ -11,7 +11,7 @@
             <h3 class="header">Requests</h3>
         </div>
         <div class="float-right">
-            <a class="btn btn-success badge-pill px-3" role="button" href="/member/requests/create"><span class="h5"><i class="fas fa-plus"></i> Add a new request</span></a>
+            <a class="badge badge-pill badge-success shadow border py-2" role="button" data-toggle="tooltip" data-placement="top" title="Add Loan Request" href="/member/requests/create"><span class="h5"><i class="fas fa-plus fa-lg"></i></a>
         </div>
     </div>
 </div>

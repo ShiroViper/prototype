@@ -77,7 +77,10 @@
                         </a>
                     </li>
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'manage' ? ' active callout' : '' }}" href="/admin/users">Manage Accounts</a>
+                        <a class="nav-link{{ $active == 'manage' ? ' active callout' : '' }}" href="/admin/users">Manage</a>
+                    </li>
+                    <li class="nav-item px-3 h6">
+                        <a class="nav-link{{ $active == 'sched' ? ' active callout' : '' }}" href="/admin/calendar">Calendar</a>
                     </li>
                     <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/admin/requests">Requests 

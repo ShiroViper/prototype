@@ -40,10 +40,11 @@ Route::middleware(['auth'])->group(function () {
         ])->except([
             'edit', 'show', 'update'
         ]);
+        Route::get('/calendar', 'SchedulesController@index')->name('admin-calendar');
     });
 
     Route::prefix('member')->group(function () {
-        Route::get('/dashboard', 'MembersController@dashboard')->name('member-dashboard');
+        Route::get('/dashboard', 'SchedulesController@index')->name('member-dashboard');
         Route::resource('/requests', 'LoanRequestsController', [
             'names' => [
                 'index' => 'member-requests',

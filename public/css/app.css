@@ -16316,7 +16316,7 @@ readers do not read off random characters that represent icons */
   font-weight: 900;
   font-display: auto;
   src: url(/fonts/fa-solid-900.eot?b5596f4d339f99e3d69bc41be78db962);
-  src: url(/fonts/fa-solid-900.eot?b5596f4d339f99e3d69bc41be78db962) format("embedded-opentype"), url(/fonts/fa-solid-900.woff2?462806316fea535a6a57651bc2b000b0) format("woff2"), url(/fonts/fa-solid-900.woff?61969d433bf265b9717a6c357a1e04e4) format("woff"), url(/fonts/fa-solid-900.ttf?b70cea0339374107969eb53e5b1f603f) format("truetype"), url(/fonts/fa-solid-900.svg?82905d8d1c06969df11c8c378e9bdd4c) format("svg");
+  src: url(/fonts/fa-solid-900.eot?b5596f4d339f99e3d69bc41be78db962) format("embedded-opentype"), url(/fonts/fa-solid-900.woff2?462806316fea535a6a57651bc2b000b0) format("woff2"), url(/fonts/fa-solid-900.woff?61969d433bf265b9717a6c357a1e04e4) format("woff"), url(/fonts/fa-solid-900.ttf?b70cea0339374107969eb53e5b1f603f) format("truetype"), url(/fonts/fa-solid-900.svg?b9bd91a94665aa8013d6e0390a8629b8) format("svg");
 }
 
 .fa,
@@ -16331,7 +16331,7 @@ readers do not read off random characters that represent icons */
   font-weight: 400;
   font-display: auto;
   src: url(/fonts/fa-regular-400.eot?414ff5daad323a1c47c5177d4bd29674);
-  src: url(/fonts/fa-regular-400.eot?414ff5daad323a1c47c5177d4bd29674) format("embedded-opentype"), url(/fonts/fa-regular-400.woff2?65779ebcc35604a25c2ba77309c5b8af) format("woff2"), url(/fonts/fa-regular-400.woff?5dd3976cb5d61e2e561f2a46b916f377) format("woff"), url(/fonts/fa-regular-400.ttf?f6c6f6c8cb7784254ad00056f6fbd74e) format("truetype"), url(/fonts/fa-regular-400.svg?e7e957c87c454bccaa3bf9fdaa6874f8) format("svg");
+  src: url(/fonts/fa-regular-400.eot?414ff5daad323a1c47c5177d4bd29674) format("embedded-opentype"), url(/fonts/fa-regular-400.woff2?65779ebcc35604a25c2ba77309c5b8af) format("woff2"), url(/fonts/fa-regular-400.woff?5dd3976cb5d61e2e561f2a46b916f377) format("woff"), url(/fonts/fa-regular-400.ttf?f6c6f6c8cb7784254ad00056f6fbd74e) format("truetype"), url(/fonts/fa-regular-400.svg?1f65fad32ac9d1bc04ac7860930c31e2) format("svg");
 }
 
 .far {
@@ -16387,19 +16387,6 @@ readers do not read off random characters that represent icons */
   }
 }
 
-.lighted a {
-  background-color: #ff9478 !important;
-  border: 1px solid #ff6c45 !important;
-  background-image: none !important;
-  color: White !important;
-}
-
-.ui-state-highlight {
-  border: 1px solid #c4b401 !important;
-  background: #fef160 !important;
-  color: #2c2800 !important;
-}
-
 .square {
   width: 20px;
   height: 20px;
@@ -16408,7 +16395,7 @@ readers do not read off random characters that represent icons */
 }
 
 .pay-dates {
-  background: #ff9478;
+  background: #ff7043;
 }
 
 .paid-dates {
@@ -16416,7 +16403,11 @@ readers do not read off random characters that represent icons */
 }
 
 .current-date {
-  background: #fef160;
+  background: #fff59d;
+}
+
+.fc-unthemed td.fc-today {
+  background: #fff59d !important;
 }
 
 .main-login-container {

@@ -20,7 +20,12 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/app.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.css"/>
     {{-- <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css')}}"> --}}
+
+    <!-- Scripts -->
+    @include('inc.scripts')
+    
 </head>
 <body>
     @include('inc.navbar')
@@ -31,7 +36,5 @@
         </div>
     </main>
     @include('inc.footer')
-
-    @include('inc.scripts')
 </body>
 </html>

@@ -9,9 +9,9 @@
 <div class="row">
     <div class="col-sm col-md-10 col-xl-8">
         <div class="py-3 d-flex justify-content-between align-items-center">
-            <a class="btn btn-light" role="button" href="/users"><i class="fas fa-arrow-left"></i>  Back to list</a>
+            <a class="btn btn-light border" role="button" href="/admin/users"><i class="fas fa-arrow-left"></i>  Back to list</a>
             <div class="float-right">
-                <a href="/users/{{ $user->id }}/edit" class="btn btn-success btn-block edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-2x"></i></a>
+                <a href="/admin/users/{{ $user->id }}/edit" class="btn btn-success btn-block edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a>
             </div>
             {{-- <div class="float-right mr-2">
                 <button class="btn btn-outline-secondary border" type="button" title="Archive"><i class="fas fa-archive"></i></button>

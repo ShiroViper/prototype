@@ -1,22 +1,22 @@
 
-$color: #ff9478;
-$current: #fef160;
+$pay: #ff7043;
+$current: #fff59d;
 $paid: #7befb2;
 
-.lighted a{
-    background-color : $color !important;
-    border: 1px solid darken($color, 10%) !important;
-    background-image : none !important;
-    color: White !important;
-    // font-weight: bold !important;
- }
+// .lighted a{
+//     background-color : $color !important;
+//     border: 1px solid darken($color, 10%) !important;
+//     background-image : none !important;
+//     color: White !important;
+//     // font-weight: bold !important;
+//  }
 
- .ui-state-highlight {
-    border: 1px solid darken($current, 30%) !important;
-    background: $current !important;
-    color: darken($current, 60%) !important;
-    // font-weight: bold !important;
- }
+//  .ui-state-highlight {
+//     border: 1px solid darken($current, 30%) !important;
+//     background: $current !important;
+//     color: darken($current, 60%) !important;
+//     // font-weight: bold !important;
+//  }
 
  .square {
     width: 20px;
@@ -26,7 +26,7 @@ $paid: #7befb2;
   }
 
   .pay-dates {
-      background: $color;
+      background: $pay;
   }
 
   .paid-dates {
@@ -35,6 +35,10 @@ $paid: #7befb2;
 
   .current-date {
       background: $current;
+  }
+
+  .fc-unthemed td.fc-today {
+      background: $current !important;
   }
  
 //  div.ui-datepicker {

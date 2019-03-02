@@ -10,10 +10,10 @@
     <div class="col-sm col-md-10 col-xl-8">
         {!! Form::open(['action' => ['UsersController@update', $user->id], 'method' => 'POST']) !!}
         <div class="py-3">
-            {{-- <a class="btn btn-light" role="button" href="/admin">&lsaquo; Go back to Manage Accounts Table</a> --}}
-            <a class="btn btn-danger" role="button" href="/admin/users/{{ $user->id }}">Cancel</a>
+            <a class="btn btn-light border" role="button" href="/admin"><i class="fas fa-arrow-left"></i> Back to table</a>
             <div class="float-right">
                 {{ Form::hidden('_method', 'PUT') }}
+                <a class="btn btn-outline-danger mr-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/admin/users/{{ $user->id }}"><i class="fas fa-times fa-lg"></i></a>
                 {{ Form::submit('Save Changes', ['class' => 'btn btn-success edit-button']) }}
             </div>
         </div>
