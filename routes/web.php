@@ -24,12 +24,35 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', 'AdminController@index')->name('admin-dashboard');
-    Route::resource('/users', 'UsersController', [
-        'names' => [
-            'index' => 'users-index'
-        ]
-    ]);
+    Route::prefix('admin')->group(function () {
+        Route::get('/dashboard', 'AdminController@index')->name('admin-dashboard');
+        Route::resource('/users', 'UsersController', [
+            'names' => [
+                'index' => 'users-index'
+            ]
+        ]);
+        Route::get('/requests/{id}/accept', 'LoanRequestsController@accept');
+        Route::get('/requests/{id}/reject', 'LoanRequestsController@reject');
+        Route::resource('/requests', 'LoanRequestsController', [
+            'names' => [
+                'index' => 'admin-requests'
+            ]
+        ])->except([
+            'edit', 'show', 'update'
+        ]);
+    });
+
+    Route::prefix('member')->group(function () {
+        Route::get('/dashboard', 'MembersController@dashboard')->name('member-dashboard');
+        Route::resource('/requests', 'LoanRequestsController', [
+            'names' => [
+                'index' => 'member-requests',
+                'create' => 'member-create-request'
+            ]
+        ]);
+    });
+    
+    Route::view('/terms', 'terms', ['active' => 'terms']);
 });
 
 // Route::get('/home', 'HomeController@index')->name('home');

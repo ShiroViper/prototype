@@ -27,4 +27,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * A User may have a lot of loan requests.
+     */
+    public function loanRequests()
+    {
+        return $this->hasMany('App\Loan_Request');
+    }
 }

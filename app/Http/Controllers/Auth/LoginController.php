@@ -36,4 +36,19 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     * 
+     * This function is from AuthenticatesUsers.php
+     * We override this since we want to login using
+     * Member ID and to avoid future errors of not
+     * logging in using ID
+     */
+    public function username()
+    {
+        return 'id';
+    }
 }

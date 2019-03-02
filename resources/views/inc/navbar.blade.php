@@ -68,19 +68,19 @@
                 {{-- ADMINISTRATOR --}}
                 @if (Auth::user()->user_type == 2)
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/dashboard">Transactions</a>
+                        <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/admin/dashboard">Transactions</a>
                     </li>
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'create' ? ' active callout' : '' }}" href="/users/create">
+                        <a class="nav-link{{ $active == 'create' ? ' active callout' : '' }}" href="/admin/users/create">
                             <!-- <span class="sr-only">(current)</span> -->
                             Add Member
                         </a>
                     </li>
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'manage' ? ' active callout' : '' }}" href="/users">Manage Accounts</a>
+                        <a class="nav-link{{ $active == 'manage' ? ' active callout' : '' }}" href="/admin/users">Manage Accounts</a>
                     </li>
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/requests">Requests 
+                        <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/admin/requests">Requests 
                             @if (isset($counter) && $counter > 0)
                                 <span class="badge badge-pill badge-danger">
                                     {{ $counter }}
@@ -100,13 +100,13 @@
                         <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="#">Collector 1</a>
                     </li>
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'create' ? ' active callout' : '' }}" href="/admin/create">
+                        <a class="nav-link{{ $active == 'create' ? ' active callout' : '' }}" href="#">
                             <!-- <span class="sr-only">(current)</span> -->
                             Collector 2
                         </a>
                     </li>
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'manage' ? ' active callout' : '' }}" href="/">Collector 3</a>
+                        <a class="nav-link{{ $active == 'manage' ? ' active callout' : '' }}" href="#">Collector 3</a>
                     </li>
                 {{-- MEMBER --}}
                 @else
