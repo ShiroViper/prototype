@@ -1,28 +1,34 @@
-.welcome-title {
-    font-family: "Roboto", sans-serif;
-    font-weight: 900;
-}
-
 .title-header, .header, .about-header {
     font-family: "Roboto", sans-serif;
 }
 
 .featured-desc, .about-desc {
-    font-family: "Roboto", sans-serif;
-    font-weight: 100;
+    font-family: "Merriweather", serif;
+    font-weight: 300;
 }
 
 .brand-title-header {
+    font-family: "Roboto", sans-serif;
+    font-weight: 900;
+    font-size: 1.5rem;
+}
+
+.welcome-title {
     font-size: 1.5rem;
 }
 
 .title-header {
-	font-size: 1.25rem;
+    font-size: 1.25rem;
+}
+
+.featured-desc {
+    letter-spacing: .25px;
 }
 
 @media screen and (min-width: 992px) {
-	.brand-title-header {
-    	font-size: 3rem;
+	.brand-title-header, .welcome-title {
+        font-size: 3rem;
+        line-height: 1.2;
     }
 
     .title-header {

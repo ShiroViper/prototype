@@ -16,15 +16,15 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,500,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:300,400,700|Roboto:400,500,900" rel="stylesheet">
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/app.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.css"/>
     {{-- <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css')}}"> --}}
 
-    <!-- Scripts -->
-    @include('inc.scripts')
+    <!-- App Scripts -->
+    @include('inc.app-scripts')
     
 </head>
 <body>
@@ -37,4 +37,6 @@
     </main>
     @include('inc.footer')
 </body>
+    {{-- Additional Scripts --}}
+    @include('inc.scripts')
 </html>
