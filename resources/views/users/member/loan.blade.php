@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-<title>Alkansya</title>
+<title>Alkansya - Request Loan</title>
 @endsection
 
 @section('content')

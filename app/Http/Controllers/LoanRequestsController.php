@@ -26,7 +26,7 @@ class LoanRequestsController extends Controller
             return view('users.admin.requests')->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         } else {
             $lr = Loan_Request::orderBy('updated_at', 'desc')->where('user_id', Auth::user()->id)->whereNotNull('confirmed')->paginate(10);
-            $pending = Loan_Request::orderBy('created_at', 'desc')->where('user_id', Auth::user()->id)->paginate(5);
+            $pending = Loan_Request::orderBy('created_at', 'desc')->where('user_id', Auth::user()->id)->where('confirmed', NULL)->paginate(5);
 
             return view('users.member.requests')->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         }
@@ -38,7 +38,7 @@ class LoanRequestsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
+    {   
         return view('users.member.loan')->with('active', 'loan');
     }
 

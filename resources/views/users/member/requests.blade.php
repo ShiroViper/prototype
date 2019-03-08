@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-<title>Alkansya</title>
+<title>Alkansya - Requests</title>
 @endsection
 
 @section('content')
@@ -21,7 +21,7 @@
             <h6 class="card-header">Pending Requests</h6>
             <div class="container">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover" style="text-align: center">
                         <thead>
                             <tr>
                                 <th>Date</th>
@@ -34,9 +34,9 @@
                             @if (count($pending) > 0)
                                 @foreach ($pending as $item)
                                     <tr>
-                                        <td>{{ $item->created_at }}</td>
-                                        <td>{{ $item->loan_amount }}</td>
-                                        <td>{{ $item->days_payable }}</td>
+                                        <td>{{ date('F d, Y', strtotime($item->created_at)) }}</td>
+                                        <td>{{ $item->loan_amount }} Php</td>
+                                        <td>{{ $item->days_payable }} Days</td>
                                         <td>
                                             {!! Form::open(['action' => ['LoanRequestsController@destroy', $item->id], 'method' => 'POST']) !!}
                                                 {{ Form::hidden('_method', 'DELETE') }}
@@ -66,7 +66,7 @@
             <h6 class="card-header">Requests History</h6>
             <div class="container">
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table" style="text-align: center">
                         <thead>
                             <tr>
                                 <th>Date</th>
@@ -83,9 +83,9 @@
                                     @else
                                     <tr class="text-danger">
                                     @endif
-                                        <td>{{ $request->updated_at }}</td>
-                                        <td>{{ $request->loan_amount }}</td>
-                                        <td>{{ $request->days_payable }}</td>
+                                        <td>{{ date('F d, Y', strtotime($request->updated_at)) }}</td>
+                                        <td>{{ $request->loan_amount }} Php</td>
+                                        <td>{{ $request->days_payable }} days</td>
                                         <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
                                     </tr>
                                 @endforeach
