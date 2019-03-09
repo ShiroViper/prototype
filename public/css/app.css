@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:100,500,900);@charset "UTF-8";
+@import url(https://fonts.googleapis.com/css?family=Roboto:100,500,900|Merriweather:300,400,700);@charset "UTF-8";
 
 /*!
  * Bootstrap v4.3.1 (https://getbootstrap.com/)
@@ -16444,7 +16444,7 @@ readers do not read off random characters that represent icons */
 }
 
 .active a {
-  color: #007bff !important;
+  color: #4da3ff !important;
 }
 
 .featured-img {
@@ -16452,11 +16452,7 @@ readers do not read off random characters that represent icons */
 }
 
 .main-feature {
-  padding: 3rem 0;
-}
-
-.brand-title-header {
-  color: #007bff;
+  padding: 1.75rem 0;
 }
 
 .box {
@@ -16474,13 +16470,9 @@ readers do not read off random characters that represent icons */
 }
 
 @media screen and (min-width: 992px) {
-  .main-feature {
-    padding: 6rem 1rem;
-  }
-
   .main-header {
-    padding: 0 0 3.5rem 0rem;
-    margin-bottom: calc(100vh - 35rem);
+    padding-top: calc(20vh - 44px);
+    padding-bottom: 20vh;
   }
 
   .featured-img {
@@ -16492,11 +16484,6 @@ readers do not read off random characters that represent icons */
   }
 }
 
-.welcome-title {
-  font-family: "Roboto", sans-serif;
-  font-weight: 900;
-}
-
 .title-header,
 .header,
 .about-header {
@@ -16505,11 +16492,17 @@ readers do not read off random characters that represent icons */
 
 .featured-desc,
 .about-desc {
-  font-family: "Roboto", sans-serif;
-  font-weight: 100;
+  font-family: "Merriweather", serif;
+  font-weight: 300;
 }
 
 .brand-title-header {
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+  font-size: 1.5rem;
+}
+
+.welcome-title {
   font-size: 1.5rem;
 }
 
@@ -16517,9 +16510,15 @@ readers do not read off random characters that represent icons */
   font-size: 1.25rem;
 }
 
+.featured-desc {
+  letter-spacing: 0.25px;
+}
+
 @media screen and (min-width: 992px) {
-  .brand-title-header {
+  .brand-title-header,
+  .welcome-title {
     font-size: 3rem;
+    line-height: 1.2;
   }
 
   .title-header {

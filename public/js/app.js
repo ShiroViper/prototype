@@ -36584,9 +36584,8 @@ module.exports = function(module) {
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-
-__webpack_require__(/*! ./scripts */ "./resources/js/scripts.js"); // window.Vue = require('vue');
+__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js"); // require('./scripts');
+// window.Vue = require('vue');
 // /**
 //  * The following block of code may be used to automatically register your
 //  * Vue components. It will recursively scan this directory for the Vue
@@ -36666,31 +36665,6 @@ if (token) {
 
 /***/ }),
 
-/***/ "./resources/js/scripts.js":
-/*!*********************************!*\
-  !*** ./resources/js/scripts.js ***!
-  \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/**
- * The alternative of this:
- * onclick="document.location = '/admin/{{ $user->id }}';"
- */
-$(".clickable-row").on("click", function () {
-  window.location = $(this).data("href");
-});
-/**
- * Fades away after a brief delay
- */
-
-$('.pop-messages').fadeOut(4200, "linear");
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip();
-});
-
-/***/ }),
-
 /***/ "./resources/sass/app.scss":
 /*!*********************************!*\
   !*** ./resources/sass/app.scss ***!
@@ -36709,8 +36683,8 @@ $(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\prototype\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\prototype\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\prototype-alkansya-capstone\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\prototype-alkansya-capstone\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -7,7 +7,7 @@
 @section('content')
 <div class="main-feature">
     <div class="container">
-        <h1 class="h1 welcome-title text-primary text-center">The Team</h1>
+        <h1 class="brand-title-header text-primary text-center">The Team</h1>
         <hr>
         <div class="row">
             <div class="col-sm-12">

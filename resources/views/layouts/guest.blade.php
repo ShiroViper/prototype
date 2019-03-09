@@ -21,6 +21,9 @@
 
 	<!-- Styles -->
 	<link rel="stylesheet" href="{{ asset('css/app.css')}}">
+
+	<!-- App Scripts -->
+  @include('inc.app-scripts')
 </head>
     <body>
 		@include('inc.navbar')
