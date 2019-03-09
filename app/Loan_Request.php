@@ -28,5 +28,13 @@ class Loan_Request extends Model
         return $this->belongsTo('App\User');
     }
 
+    /**
+     * Get the Schedule of the Loan Request.
+     */
+    public function schedule()
+    {
+        return $this->hasOne('App\Schedule');
+    }
+
 
 }

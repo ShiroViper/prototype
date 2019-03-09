@@ -11,12 +11,16 @@
         {!! Form::open(['action' => 'LoanRequestsController@store', 'method' => 'POST']) !!}
         <div class="form-group">
             {{ Form::label('amount', 'Loan Amount') }}
-                {{ Form::number('amount', '', ['class' => 'form-control', 'placeholder' => 'Enter amount (e.g. 1000.50)', 'step' => '0.01', 'required']) }}
+            {{ Form::number('amount', '', ['class' => 'form-control', 'placeholder' => 'Enter amount (e.g. 1000.50)', 'step' => '0.01', 'required']) }}
         </div>
         {{ Form::label('', 'Days Payable') }}
             <div class="form-group">
             {{ Form::number('days', '', ['class' => 'form-control', 'placeholder' => 'Number of days', 'required']) }}
             </div>
+        <div class="form-group">
+            {{ Form::label('desc', 'Description') }}{!! "<small class='text-muted'> (Optional)</small>" !!}
+            {{ Form::textarea('desc', '', ['class' => 'form-control', 'rows' => 3]) }}
+        </div>
         <div class="form-group">
             <div class="form-check">
                 {!! Form::checkbox('agreement', 'yes', false, ['class' => 'form-check-input', 'id' => 'agreement', 'required']) !!}

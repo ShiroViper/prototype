@@ -48,9 +48,11 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('/requests', 'LoanRequestsController', [
             'names' => [
                 'index' => 'member-requests',
-                'create' => 'member-create-request'
+                'create' => 'member-create-request',
+                'show' => 'member-loan'
             ]
         ]);
+        // Route::get('/requests', 'SchedulesController@show')->name('member-loan');
     });
     
     Route::view('/terms', 'terms', ['active' => 'terms']);
