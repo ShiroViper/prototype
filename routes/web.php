@@ -65,6 +65,16 @@ Route::middleware(['auth'])->group(function () {
         ]);
         Route::view('/transactions','users.admin.dashboard',['active'=>'transactions'])->name('member-transactions');
     });
+
+    Route::prefix('collector')->group(function () {
+         Route::resource('/collection','CollectorController',[
+            'names'=>[
+                'index'=>'collector-dashboard',
+                'create'=>'collector-collect'
+            ]
+        ]);
+
+    });
     
     Route::view('/terms', 'terms', ['active' => 'terms']);
 });

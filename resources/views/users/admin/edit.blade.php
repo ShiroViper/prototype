@@ -9,8 +9,9 @@
 <div class="row">
     <div class="col-sm col-md-10 col-xl-8">
         {!! Form::open(['action' => ['UsersController@update', $user->id], 'method' => 'POST']) !!}
+        @csrf
         <div class="py-3">
-            <a class="btn btn-light border" role="button" href="/admin"><i class="fas fa-arrow-left"></i> Back to table</a>
+            <a class="btn btn-light border" role="button" href="/admin/users "><i class="fas fa-arrow-left"></i> Back to table</a>
             <div class="float-right">
                 {{ Form::hidden('_method', 'PUT') }}
                 <a class="btn btn-outline-danger mr-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/admin/users/{{ $user->id }}"><i class="fas fa-times fa-lg"></i></a>
@@ -55,6 +56,14 @@
                         <div class="col">Email</div>
                         <div class="col font-weight-bold">
                             {{ Form::email('email', $user->email, ['class' => 'form-control']) }}
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col">Cell Num</div>
+                        <div class="col font-weight-bold">
+                            {{ Form::text('cell_num', $user->cell_num, ['class' => 'form-control']) }}
                         </div>
                     </div>
                 </li>

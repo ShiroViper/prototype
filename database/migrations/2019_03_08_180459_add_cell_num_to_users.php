@@ -14,7 +14,7 @@ class AddCellNumToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('cell_num');
+            $table->string('cell_num')->after('email');
         });
     }
 

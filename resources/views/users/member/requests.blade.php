@@ -10,9 +10,11 @@
         <div class="float-left">
             <h3 class="header">Requests</h3>
         </div>
-        <div class="float-right">
-            <a class="badge badge-pill badge-success shadow border py-2" role="button" data-toggle="tooltip" data-placement="top" title="Add Loan Request" href="/member/requests/create"><span class="h5"><i class="fas fa-plus fa-lg"></i></a>
-        </div>
+        @if(!$unpaid)
+            <div class="float-right">
+                <a class="badge badge-pill badge-success shadow border py-2" role="button" data-toggle="tooltip" data-placement="top" title="Add Loan Request" href="/member/requests/create"><span class="h5"><i class="fas fa-plus fa-lg"></i></a>
+            </div>
+        @endif
     </div>
 </div>
 <div class="row pt-3">

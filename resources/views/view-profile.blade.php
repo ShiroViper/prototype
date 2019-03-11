@@ -10,11 +10,11 @@
         <h3 style="text-align:center;">View {{$user->fname}}'s Information</h3>
         <div class="py-3">
             @if(Auth::user()->user_type == 2)
-                <a href="/admin/profile/{{$user->id}}/edit" class="btn btn-success float-right edit-button" role="button">Edit</a>
+                <a href="/admin/profile/{{$user->id}}/edit" class="btn btn-success float-right edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a><br>
             @elseif(Auth::user()->user_type == 1)
-                <a href="/collector/profile/{{$user->id}}/edit" class="btn btn-success float-right edit-button" role="button">Edit</a>
+                <a href="/collector/profile/{{$user->id}}/edit" class="btn btn-success float-right edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a><br>
             @else
-                <a href="/member/profile/{{$user->id}}/edit" class="btn btn-success float-right edit-button" role="button">Edit</a>
+                <a href="/member/profile/{{$user->id}}/edit" class="btn btn-success float-right edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a><br>
             @endif
             <br>
         </div>

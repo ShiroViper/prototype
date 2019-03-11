@@ -52,6 +52,12 @@
                 </li>
                 <li class="list-group-item">
                     <div class="row">
+                        <div class="col col-sm">Cell Number</div>
+                        <div class="col font-weight-bold">{{ $user->cell_num }}</div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="row">
                         <div class="col col-sm">Role</div>
                         <div class="col font-weight-bold">
                             @if ( $user->user_type == 2 )
