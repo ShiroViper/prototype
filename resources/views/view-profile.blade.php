@@ -1,64 +1,65 @@
 @extends('layouts.app')
 
 @section('title')
-<title>Alkasnya - View user</title>
+<title>Alkasnya - View {{$user->fname}}'s Info </title>
 @endsection
 
 @section('content')
-<h3 class="header mt-3">View User Information</h3>
 <div class="row">
     <div class="col-sm col-md-10 col-xl-8">
-        <div class="py-3 d-flex justify-content-between align-items-center">
-            <a class="btn btn-light border" role="button" href="/admin/users"><i class="fas fa-arrow-left"></i>  Back to list</a>
-            <div class="float-right">
-                <a href="/admin/users/{{ $user->id }}/edit" class="btn btn-success btn-block edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a>
-            </div>
-            {{-- <div class="float-right mr-2">
-                <button class="btn btn-outline-secondary border" type="button" title="Archive"><i class="fas fa-archive"></i></button>
-            </div> --}}
+        <h3 style="text-align:center;">View {{$user->fname}}'s Information</h3>
+        <div class="py-3">
+            @if(Auth::user()->user_type == 2)
+                <a href="/admin/profile/{{$user->id}}/edit" class="btn btn-success float-right edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a><br>
+            @elseif(Auth::user()->user_type == 1)
+                <a href="/collector/profile/{{$user->id}}/edit" class="btn btn-success float-right edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a><br>
+            @else
+                <a href="/member/profile/{{$user->id}}/edit" class="btn btn-success float-right edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a><br>
+            @endif
+            <br>
         </div>
         <div class="card">
             <h6 class="card-header">User information</h6>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col col-sm">Member ID</div>
+                        <div class="col">Member ID</div>
                         <div class="col font-weight-bold">{{ $user->id }}</div>
                     </div>
                 </li>
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col col-sm">Last Name</div>
+                        <div class="col">Last Name</div>
                         <div class="col font-weight-bold">{{ $user->lname }}</div>
                     </div>
                 </li>
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col col-sm">First Name</div>
+                        <div class="col">First Name</div>
                         <div class="col font-weight-bold">{{ $user->fname }}</div>
                     </div>
                 </li>
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col col-sm">Middle Name</div>
+                        <div class="col">Middle Name</div>
                         <div class="col font-weight-bold">{{ $user->mname }}</div>
                     </div>
                 </li>
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col col-sm">Email</div>
+                        <div class="col">Email</div>
                         <div class="col font-weight-bold">{{ $user->email }}</div>
                     </div>
                 </li>
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col col-sm">Cell Number</div>
+                        <div class="col">Cell Number</div>
                         <div class="col font-weight-bold">{{ $user->cell_num }}</div>
                     </div>
                 </li>
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col col-sm">Role</div>
+                        <div class="col">Role</div>
                         <div class="col font-weight-bold">
                             @if ( $user->user_type == 2 )
                                 Admin
@@ -72,9 +73,11 @@
                 </li>
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col col-sm">Address</div>
+                        <div class="col">Address</div>
                         <div class="col font-weight-bold">{{ $user->address }}</div>
                     </div>
+                    {{-- <div class="row">
+                    </div> --}}
                 </li>
             </ul>
             <div class="card-footer text-muted">

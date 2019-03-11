@@ -96,6 +96,7 @@ class UsersController extends Controller
             'lname' => ['required', 'string', 'alpha'],
             'fname' => ['required', 'string', 'alpha'],
             'mname' => ['required', 'string', 'alpha'],
+            'cell_num' => ['required', 'string', 'numeric'],
             'email' => ['required', 'string', 'unique:users', 'email'],
             'address' => ['required', 'string'],
         ], $messages);
@@ -108,6 +109,7 @@ class UsersController extends Controller
         $user->mname = $request->input('mname');
         $user->password = Hash::make($user->id);
         $user->email = $request->input('email');
+        $user->cell_num = $request->input('cell_num');
         $user->address = $request->input('address');
         $user->save();
 
@@ -148,14 +150,15 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         // return dd($request);
-        $this->validate($request, [
-            'lname' => ['required', 'string', 'alpha'],
-            'fname' => ['required', 'string', 'alpha'],
-            'mname' => ['required', 'string', 'alpha'],
-            'email' => ['required', 'string', 'email', Rule::unique('users')->ignore($id)],
-            'user_type' => ['required'],
-            'address' => ['required', 'string'],
-        ]);
+        // $this->validate($request, [
+        //     'lname' => ['required', 'string', 'alpha'],
+        //     'fname' => ['required', 'string', 'alpha'],
+        //     'mname' => ['required', 'string', 'alpha'],
+        //     'cell_num'=>['required', 'string', 'numeric'],
+        //     'email' => ['required', 'string', 'email', Rule::unique('users')->ignore($id)],
+        //     'user_type' => ['required'],
+        //     'address' => ['required', 'string'],
+        // ]);
 
         $user = User::find($id);
         $user->user_type = $request->input('user_type');
@@ -163,6 +166,7 @@ class UsersController extends Controller
         $user->fname = $request->input('fname');
         $user->mname = $request->input('mname');
         $user->email = $request->input('email');
+        $user->cell_num = $request->input('cell_num');
         $user->address = $request->input('address');
         $user->save();
         

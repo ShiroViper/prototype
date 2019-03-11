@@ -71,6 +71,10 @@
                         <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/admin/dashboard">Transactions</a>
                     </li>
                     <li class="nav-item px-3 h6">
+                        <a class="nav-link{{ $active == 'profile' ? ' active callout' : '' }}" href="/admin/profile ">Profile 
+                        </a>
+                    </li>
+                    <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'create' ? ' active callout' : '' }}" href="/admin/users/create">
                             <!-- <span class="sr-only">(current)</span> -->
                             Add Member
@@ -97,11 +101,15 @@
                     <li class="nav-item px-3 h6">
                         <a class="nav-link" href="#">Receipts</a>
                     </li>
+                    
                 {{-- COLLECTOR --}}
                 @elseif (Auth::user()->user_type == 1)
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="#">Collector 1</a>
+                        <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/collector/transaction">Transactions</a>
                     </li>
+                    <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'collect' ? ' active callout' : '' }}" href="/collector/transaction/create">Collection</a>
+                        </li>
                     <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'create' ? ' active callout' : '' }}" href="#">
                             <!-- <span class="sr-only">(current)</span> -->
@@ -117,7 +125,7 @@
                         <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/member/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'profile' ? ' active callout' : '' }}" href="/member/settings">Profile</a>
+                        <a class="nav-link{{ $active == 'profile' ? ' active callout' : '' }}" href="/member/profile">Profile</a>
                     </li>
                     <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'transactions' ? ' active callout' : '' }}" href="/member/transactions">Transactions</a>
