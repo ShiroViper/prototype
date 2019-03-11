@@ -38,6 +38,9 @@
                         <div class="col">Last Name</div>
                         <div class="col font-weight-bold">
                             {{ Form::text('lname', $user->lname, ['class' => 'form-control']) }}
+                            @if ($errors->has('lname'))
+                                <div class="invalid-feedback">{{ $errors->first('lname') }}</div>
+                            @endif
                         </div>
                     </div>
                 </li>
@@ -46,6 +49,9 @@
                         <div class="col">First Name</div>
                         <div class="col font-weight-bold">
                             {{ Form::text('fname', $user->fname, ['class' => 'form-control']) }}
+                            @if ($errors->has('fname'))
+                                <div class="invalid-feedback">{{ $errors->first('fname') }}</div>
+                            @endif
                         </div>
                     </div>
                 </li>
@@ -54,6 +60,9 @@
                         <div class="col">Middle Name</div>
                         <div class="col font-weight-bold">
                             {{ Form::text('mname', $user->mname, ['class' => 'form-control']) }}
+                            @if ($errors->has('mname'))
+                                <div class="invalid-feedback">{{ $errors->first('mname') }}</div>
+                            @endif
                         </div>
                     </div>
                 </li>
@@ -62,6 +71,9 @@
                         <div class="col">Email</div>
                         <div class="col font-weight-bold">
                             {{ Form::email('email', $user->email, ['class' => 'form-control']) }}
+                            @if ($errors->has('email'))
+                                <div class="invalid-feedback">{{ $errors->first('email') }}</div>
+                            @endif
                         </div>
                     </div>
                 </li>
@@ -70,6 +82,9 @@
                         <div class="col">Cell Number</div>
                         <div class="col font-weight-bold">
                             {{ Form::text('cell_num', $user->cell_num, ['class' => 'form-control']) }}
+                            @if ($errors->has('cell_num'))
+                                <div class="invalid-feedback">{{ $errors->first('cell_num') }}</div>
+                            @endif
                         </div>
                     </div>
                 </li>
@@ -80,6 +95,9 @@
                     <div class="row">
                         <div class="col font-weight-bold">
                             {{ Form::textarea('address', $user->address, ['class' => 'form-control', 'rows' => 3, 'placeholder' => 'Street number, Barangay, City/Town, Province, Philippines, Zip Code']) }}
+                            @if ($errors->has('address'))
+                                <div class="invalid-feedback">{{ $errors->first('address') }}</div>
+                            @endif
                         </div>
                     </div>
                 </li>

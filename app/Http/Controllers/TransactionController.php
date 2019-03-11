@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Collector;
+use App\Transaction;
 use Illuminate\Http\Request;
 use DB;
 use Auth;
 use App\Loan_Request;
 
-class CollectorController extends Controller
+class TransactionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,14 @@ class CollectorController extends Controller
      */
     public function index()
     {
-        return view('users.collector.dashboard')->with('active', 'dashboard');
+        $transactions = DB::table('transactions')
+                        ->join('users','users.id', '=', 'transactions.member_id')
+                        ->select('*')
+                        ->where('transactions.collector_id', Auth::user()->id)
+                        ->orderBy('transactions.created_at', 'DESC')
+                        ->paginate(10);
+
+        return view('users.collector.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
     }
 
     /**
@@ -47,12 +54,12 @@ class CollectorController extends Controller
             'id' => ['required', 'numeric'],
         ], $messages);
 
-        $transact = New Collector;
+        $transact = New Transaction;
         $transact->member_id = $request->id;
         $transact->trans_type = $request->type;
         
         if($request->amount <= 49){
-            return redirect()->route('collector-collect')->with('active', 'collect')->with('error', 'Please pay above 50.00 Php');
+            return redirect()->route('transaction-collect')->with('active', 'collect')->with('error', 'Please pay above 50.00 Php');
         }
 
         $transact->amount = $request->amount;
@@ -60,7 +67,8 @@ class CollectorController extends Controller
         if($request->type==0){
 
         }else if($request->type==1){
-            if(Collector::count() == 0){
+            if(Transaction::count() == 0 || Transaction::find($request->id) == NULL){
+                
                 $temp = DB::table('loan_request')
                     ->where('user_id', $request->id)
                     ->where('confirmed', 1)
@@ -87,6 +95,8 @@ class CollectorController extends Controller
                     ->where('member_id', $request->id)
                     ->where('get',0)
                     ->sum('transactions.balance');
+                    
+                    
 
             if($temp <= 0){
                 DB::table('loan_request')
@@ -94,12 +104,12 @@ class CollectorController extends Controller
                     ->where('paid', NULL)
                     ->update(['paid'=>1]);
                     
-                return redirect()->route('collector-collect')->with('error', 'You already paid the loan');
+                return redirect()->route('transaction-collect')->with('error', 'You already paid the loan');
             }
 
                 if($temp < $request->amount){
                     $msg = 'Your payment should not above '.$temp.' Php';
-                    return redirect()->route('collector-collect')->with('error', $msg);
+                    return redirect()->route('transaction-collect')->with('error', $msg);
                 }
                     
                 if($temp > 0){
@@ -126,7 +136,7 @@ class CollectorController extends Controller
         }else{
             // for deposit
         }
-       return redirect()->route('collector-collect')->with('success', 'Successfully Transacted');
+       return redirect()->route('transaction-collect')->with('success', 'Successfully Transacted');
     }
 
     /**

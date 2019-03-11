@@ -105,10 +105,10 @@
                 {{-- COLLECTOR --}}
                 @elseif (Auth::user()->user_type == 1)
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/collector/collection">Transactions</a>
+                        <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/collector/transaction">Transactions</a>
                     </li>
                     <li class="nav-item px-3 h6">
-                            <a class="nav-link{{ $active == 'collect' ? ' active callout' : '' }}" href="/collector/collection/create">Collection</a>
+                            <a class="nav-link{{ $active == 'collect' ? ' active callout' : '' }}" href="/collector/transaction/create">Collection</a>
                         </li>
                     <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'create' ? ' active callout' : '' }}" href="#">

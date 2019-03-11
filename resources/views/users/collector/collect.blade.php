@@ -9,7 +9,7 @@
 <h3>Collect Payment</h3>
 <div class="row">
     <div class="col-sm-10 col-md-7 col-lg-5 my-3">  
-      {!!Form::open(['action'=> 'CollectorController@store', 'method'=>'POST']) !!}
+      {!!Form::open(['action'=> 'TransactionController@store', 'method'=>'POST']) !!}
       @csrf
     
       <div class="form-group">

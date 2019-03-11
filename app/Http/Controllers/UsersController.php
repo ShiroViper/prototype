@@ -150,15 +150,15 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         // return dd($request);
-        $this->validate($request, [
-            'lname' => ['required', 'string', 'alpha'],
-            'fname' => ['required', 'string', 'alpha'],
-            'mname' => ['required', 'string', 'alpha'],
-            'cell_num'=>['required', 'string', 'numeric'],
-            'email' => ['required', 'string', 'email', Rule::unique('users')->ignore($id)],
-            'user_type' => ['required'],
-            'address' => ['required', 'string'],
-        ]);
+        // $this->validate($request, [
+        //     'lname' => ['required', 'string', 'alpha'],
+        //     'fname' => ['required', 'string', 'alpha'],
+        //     'mname' => ['required', 'string', 'alpha'],
+        //     'cell_num'=>['required', 'string', 'numeric'],
+        //     'email' => ['required', 'string', 'email', Rule::unique('users')->ignore($id)],
+        //     'user_type' => ['required'],
+        //     'address' => ['required', 'string'],
+        // ]);
 
         $user = User::find($id);
         $user->user_type = $request->input('user_type');

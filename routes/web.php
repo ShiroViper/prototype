@@ -67,15 +67,14 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('collector')->group(function () {
-         Route::resource('/collection','CollectorController',[
+         Route::resource('/transaction','TransactionController',[
             'names'=>[
                 'index'=>'collector-dashboard',
-                'create'=>'collector-collect'
+                'create'=>'transaction-collect'
             ]
         ]);
 
     });
-    
     Route::view('/terms', 'terms', ['active' => 'terms']);
 });
 
