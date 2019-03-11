@@ -78,7 +78,8 @@
                 </li>
             </ul>
             <div class="card-footer text-muted">
-                <small>Date Created: {{ $user->created_at }}</small>
+                <small>Account Created: {{date("F d, Y", strtotime($user->created_at))}}  Time: {{date(" h:i:s A", strtotime($user->created_at))}}</small><br>
+                <small>Account Updated: {{date("F d, Y", strtotime($user->updated_at))}}  Time: {{date(" h:i:s A", strtotime($user->updated_at))}}</small>
             </div>
         </div>
         {{-- <div class="row mt-3">
