@@ -28,9 +28,12 @@ class LoanRequestsController extends Controller
             return view('users.admin.requests')->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         } else {
             $lr = Loan_Request::orderBy('updated_at', 'desc')->where('user_id', Auth::user()->id)->whereNotNull('confirmed')->paginate(10);
-            $pending = Loan_Request::orderBy('created_at', 'desc')->where('user_id', Auth::user()->id)->paginate(5);
+            $pending = Loan_Request::orderBy('created_at', 'desc')->where('user_id', Auth::user()->id)->where('confirmed', NULL)->paginate(5);
+            $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
+
+            return view('users.member.requests')->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
             
-            return view('users.member.requests')->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
+            // return view('users.member.requests')->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         }
     }
 
@@ -61,6 +64,7 @@ class LoanRequestsController extends Controller
         $lr = new Loan_Request;
         $lr->loan_amount = $request->input('amount');
         $lr->days_payable = $request->input('days');
+        $lr->get = 0;
         $lr->description = $request->input('desc');
         $lr->user_id = Auth::user()->id;
         $lr->save();

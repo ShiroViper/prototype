@@ -52,7 +52,6 @@ Route::middleware(['auth'])->group(function () {
                 'show' => 'member-loan'
             ]
         ]);
-        // Route::get('/requests', 'SchedulesController@show')->name('member-loan');
     });
     
     Route::view('/terms', 'terms', ['active' => 'terms']);

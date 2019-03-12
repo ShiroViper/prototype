@@ -17,10 +17,10 @@
             <div class="form-group">
             {{ Form::number('days', '', ['class' => 'form-control', 'placeholder' => 'Number of days', 'required']) }}
             </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
             {{ Form::label('desc', 'Description') }}{!! "<small class='text-muted'> (Optional)</small>" !!}
             {{ Form::textarea('desc', '', ['class' => 'form-control', 'rows' => 3]) }}
-        </div>
+        </div> -->
         <div class="form-group">
             <div class="form-check">
                 {!! Form::checkbox('agreement', 'yes', false, ['class' => 'form-check-input', 'id' => 'agreement', 'required']) !!}
