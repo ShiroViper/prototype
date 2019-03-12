@@ -30,7 +30,7 @@ class LoanRequestsController extends Controller
             $lr = Loan_Request::orderBy('updated_at', 'desc')->where('user_id', Auth::user()->id)->whereNotNull('confirmed')->paginate(10);
             $pending = Loan_Request::orderBy('created_at', 'desc')->where('user_id', Auth::user()->id)->where('confirmed', NULL)->paginate(5);
             $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
-
+           
             return view('users.member.requests')->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         }
     }
@@ -41,8 +41,9 @@ class LoanRequestsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        return view('users.member.loan')->with('active', 'loan');
+    {   
+        $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
+        return view('users.member.loan')->with('unpaid', $unpaid)->with('active', 'loan');
     }
 
     /**
@@ -142,6 +143,7 @@ class LoanRequestsController extends Controller
     public function reject($id) {
         $rq = Loan_Request::find($id);
         $rq->confirmed = false;
+        $rq->paid = 1;
         $rq->save();
         return redirect()->route('admin-requests')->with('error', 'Request Rejected');
     }

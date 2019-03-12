@@ -19,6 +19,7 @@ class UsersTableSeeder extends Seeder
             'fname' => Str::random(10),
             'mname' => Str::random(10),
             'email' => Str::random(10).'@admin.com',
+            'cell_num' => Str::random(10),
             'password' => bcrypt(123456),
             'user_type' => 2,
             'address' => Str::random(10),

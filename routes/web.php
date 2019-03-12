@@ -40,6 +40,12 @@ Route::middleware(['auth'])->group(function () {
         ])->except([
             'edit', 'show', 'update'
         ]);
+        Route::resource('/profile', 'ProfilesController',[
+            'names' => [
+                'index' => 'profile-index',
+                'show' => 'profile-show'
+            ]
+        ]);
         Route::get('/calendar', 'SchedulesController@index')->name('admin-calendar');
     });
 
@@ -52,8 +58,24 @@ Route::middleware(['auth'])->group(function () {
                 'show' => 'member-loan'
             ]
         ]);
+        Route::resource('/profile', 'ProfilesController',[
+            'names' => [
+                'index' => 'profile-index',
+                'show' => 'profile-show'
+            ]
+        ]);
+        Route::view('/transactions','users.admin.dashboard',['active'=>'transactions'])->name('member-transactions');
     });
-    
+
+    Route::prefix('collector')->group(function () {
+         Route::resource('/transaction','TransactionController',[
+            'names'=>[
+                'index'=>'collector-dashboard',
+                'create'=>'transaction-collect'
+            ]
+        ]);
+
+    });
     Route::view('/terms', 'terms', ['active' => 'terms']);
 });
 

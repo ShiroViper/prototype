@@ -36,6 +36,7 @@ or creates a new one depending on the year --}}
 <div class="row">
     <div class="col-sm-10 col-md-7 col-lg-5 my-3">  
         {!! Form::open(['action' => 'UsersController@store', 'method' => 'POST']) !!}
+            @csrf
             <div class="form-group">
                 {{ Form::label('id', 'Member ID') }}
                 {{ Form::text('id', $result, ['class' => 'form-control', 'readonly']) }}
@@ -70,6 +71,13 @@ or creates a new one depending on the year --}}
                 {{ Form::email('email', '', ['class' => $errors->has('email') ? 'form-control is-invalid' : 'form-control']) }}
                 @if ($errors->has('email'))
                     <div class="invalid-feedback">{{ $errors->first('email') }}</div>
+                @endif
+            </div>
+            <div class="form-group">
+                {{ Form::label('cell_num', 'Cellphone Number') }}
+                {{ Form::text('cell_num', '', ['class' => $errors->has('cell_num') ? 'form-control is-invalid' : 'form-control']) }}
+                @if ($errors->has('cell_num'))
+                    <div class="invalid-feedback">{{ $errors->first('cell_num') }}</div>
                 @endif
             </div>
             <div class="form-group">

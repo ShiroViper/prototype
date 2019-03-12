@@ -1,21 +1,27 @@
 @extends('layouts.app')
 
 @section('title')
-<title>Alkansya</title>
+
+<title>Alkansya - {{$user->fname}}'s Profile </title>
 @endsection
 
 @section('content')
-<h3>View User Information > Edit User</h3>
 <div class="row">
     <div class="col-sm col-md-10 col-xl-8">
-        {!! Form::open(['action' => ['UsersController@update', $user->id], 'method' => 'POST']) !!}
-        @csrf
+        <h3 style="text-align:center;">Update {{$user->fname}}'s Information</h3>
+        {!! Form::open(['action' => ['ProfilesController@update', $user->id], 'method' => 'POST']) !!}
         <div class="py-3">
-            <a class="btn btn-light border" role="button" href="/admin/users "><i class="fas fa-arrow-left"></i> Back to table</a>
+            @if(Auth::user()->user_type == 2)
+                <a class="btn btn-outline-danger mr-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/admin/profile"><i class="fas fa-times fa-lg"></i></a>
+            @elseif(Auth::user()->user_type == 1)
+                <a class="btn btn-outline-danger mr-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/collector/profile"><i class="fas fa-times fa-lg"></i></a>
+            @else
+                <a class="btn btn-outline-danger mr-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/member/profile"><i class="fas fa-times fa-lg"></i></a>
+            @endif
             <div class="float-right">
-                {{ Form::hidden('_method', 'PUT') }}
-                <a class="btn btn-outline-danger mr-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/admin/users/{{ $user->id }}"><i class="fas fa-times fa-lg"></i></a>
+                {{Form::hidden('_method', 'PUT')}}
                 {{ Form::submit('Save Changes', ['class' => 'btn btn-success edit-button']) }}
+                @csrf
             </div>
         </div>
         <div class="card">
@@ -43,7 +49,7 @@
                         <div class="col">First Name</div>
                         <div class="col font-weight-bold">
                             {{ Form::text('fname', $user->fname, ['class' => 'form-control']) }}
-                             @if ($errors->has('fname'))
+                            @if ($errors->has('fname'))
                                 <div class="invalid-feedback">{{ $errors->first('fname') }}</div>
                             @endif
                         </div>
@@ -54,7 +60,7 @@
                         <div class="col">Middle Name</div>
                         <div class="col font-weight-bold">
                             {{ Form::text('mname', $user->mname, ['class' => 'form-control']) }}
-                             @if ($errors->has('mname'))
+                            @if ($errors->has('mname'))
                                 <div class="invalid-feedback">{{ $errors->first('mname') }}</div>
                             @endif
                         </div>
@@ -65,7 +71,7 @@
                         <div class="col">Email</div>
                         <div class="col font-weight-bold">
                             {{ Form::email('email', $user->email, ['class' => 'form-control']) }}
-                             @if ($errors->has('email'))
+                            @if ($errors->has('email'))
                                 <div class="invalid-feedback">{{ $errors->first('email') }}</div>
                             @endif
                         </div>
@@ -73,20 +79,12 @@
                 </li>
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col">Cell Num</div>
+                        <div class="col">Cell Number</div>
                         <div class="col font-weight-bold">
                             {{ Form::text('cell_num', $user->cell_num, ['class' => 'form-control']) }}
-                             @if ($errors->has('cell_num'))
+                            @if ($errors->has('cell_num'))
                                 <div class="invalid-feedback">{{ $errors->first('cell_num') }}</div>
                             @endif
-                        </div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col">Role</div>
-                        <div class="col">
-                            {{ Form::select('user_type', [0 => 'Member', 1 => 'Collector'], $user->user_type, ['class' => 'form-control']) }}
                         </div>
                     </div>
                 </li>
@@ -97,7 +95,7 @@
                     <div class="row">
                         <div class="col font-weight-bold">
                             {{ Form::textarea('address', $user->address, ['class' => 'form-control', 'rows' => 3, 'placeholder' => 'Street number, Barangay, City/Town, Province, Philippines, Zip Code']) }}
-                             @if ($errors->has('address'))
+                            @if ($errors->has('address'))
                                 <div class="invalid-feedback">{{ $errors->first('address') }}</div>
                             @endif
                         </div>

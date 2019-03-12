@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col">
                 <div class="clearfix">
-                   <small> © 2018 Alkansya App</small>
+                   <small> © 2019 Alkansya App</small>
                     <div class="float-right">
                         <small><a href="/terms">Terms and Conditions</a></small>
                     </div>

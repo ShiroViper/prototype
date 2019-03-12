@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-<title>Alkansya</title>
+<title>Alkansya - Requests</title>
 @endsection
 
 @section('content')
@@ -10,9 +10,11 @@
         <div class="float-left">
             <h3 class="header">Requests</h3>
         </div>
-        <div class="float-right">
-            <a class="badge badge-pill badge-success shadow border py-2" role="button" data-toggle="tooltip" data-placement="top" title="Add Loan Request" href="/member/requests/create"><span class="h5"><i class="fas fa-plus fa-lg"></i></a>
-        </div>
+        @if(!$unpaid)
+            <div class="float-right">
+                <a class="badge badge-pill badge-success shadow border py-2" role="button" data-toggle="tooltip" data-placement="top" title="Add Loan Request" href="/member/requests/create"><span class="h5"><i class="fas fa-plus fa-lg"></i></a>
+            </div>
+        @endif
     </div>
 </div>
 <div class="row pt-3">
@@ -21,7 +23,7 @@
             <h6 class="card-header">Pending Requests</h6>
             <div class="container">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover" style="text-align: center">
                         <thead>
                             <tr>
                                 {{-- <th>Date</th> --}}
@@ -84,9 +86,9 @@
                                     @else
                                     <tr class="text-danger" data-toggle="modal" data-target="#histReqModal" data-id="{{ $request->id }}" data-ca="{{ $request->created_at }}" data-cf="{{ $request->updated_at }}" data-la="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-ap="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}">
                                     @endif
-                                        <td>{{ $request->updated_at }}</td>
-                                        <td>{{ $request->loan_amount }}</td>
-                                        <td>{{ $request->days_payable }}</td>
+                                        <td>{{ date('F d, Y', strtotime($request->updated_at)) }}</td>
+                                        <td>{{ $request->loan_amount }} Php</td>
+                                        <td>{{ $request->days_payable }} days</td>
                                         <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
                                     </tr>
                                 @endforeach
