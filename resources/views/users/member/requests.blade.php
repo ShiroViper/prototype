@@ -36,8 +36,8 @@
                                     <!-- <tr data-toggle="modal" data-target="#reqModal" data-id="{{ $item->id }}" data-ca="{{ $item->created_at }}" data-la="{{ $item->loan_amount }}" data-dp="{{ $item->days_payable }}" data-desc="{{ $item->description }}"> -->
                                     <tr>
                                         <td>{{ date('F d, Y', strtotime($item->created_at)) }}</td>
-                                        <td>{{ $item->loan_amount }}</td>
-                                        <td>{{ $item->days_payable }}</td>
+                                        <td>{{ $item->loan_amount }} Php</td>
+                                        <td>{{ $item->days_payable }} Days</td>
                                         <td>
                                             {!! Form::open(['action' => ['LoanRequestsController@destroy', $item->id], 'method' => 'POST']) !!}
                                                 {{ Form::hidden('_method', 'DELETE') }}

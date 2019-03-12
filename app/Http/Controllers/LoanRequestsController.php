@@ -32,8 +32,6 @@ class LoanRequestsController extends Controller
             $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
 
             return view('users.member.requests')->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
-            
-            // return view('users.member.requests')->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         }
     }
 
@@ -65,7 +63,6 @@ class LoanRequestsController extends Controller
         $lr->loan_amount = $request->input('amount');
         $lr->days_payable = $request->input('days');
         $lr->get = 0;
-        $lr->description = $request->input('desc');
         $lr->user_id = Auth::user()->id;
         $lr->save();
 
