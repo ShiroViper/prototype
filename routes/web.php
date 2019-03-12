@@ -54,7 +54,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('/requests', 'LoanRequestsController', [
             'names' => [
                 'index' => 'member-requests',
-                'create' => 'member-create-request'
+                'create' => 'member-create-request',
+                'show' => 'member-loan'
             ]
         ]);
         Route::resource('/profile', 'ProfilesController',[

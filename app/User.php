@@ -30,6 +30,8 @@ class User extends Authenticatable
 
     /**
      * A User may have a lot of loan requests.
+     * 
+     * Alter if necessary
      */
     public function loanRequests()
     {
