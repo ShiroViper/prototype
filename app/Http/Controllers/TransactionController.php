@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use DB;
 use Auth;
 use App\Loan_Request;
+use App\Schedule;
+use Carbon\Carbon;
 
 class TransactionController extends Controller
 {
@@ -57,6 +59,16 @@ class TransactionController extends Controller
         $transact = New Transaction;
         $transact->member_id = $request->id;
         $transact->trans_type = $request->type;
+
+        $sched = new Schedule;
+        // $sched->transaction()->associate($transact);
+        // $sched->loan_request_id = null;
+        $sched->transaction_id = $request->id;
+        $sched->start_date = Carbon::now();
+        $sched->end_date = Carbon::now();
+        $sched->save();
+
+        return dd($sched);
         
         if($request->amount <= 49){
             return redirect()->route('transaction-collect')->with('active', 'collect')->with('error', 'Please pay above 50.00 Php');
@@ -136,7 +148,8 @@ class TransactionController extends Controller
         }else{
             // for deposit
         }
-       return redirect()->route('transaction-collect')->with('success', 'Successfully Transacted');
+
+        return redirect()->route('transaction-collect')->with('success', 'Successfully Transacted');
     }
 
     /**

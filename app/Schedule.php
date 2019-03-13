@@ -21,6 +21,15 @@ class Schedule extends Model
     public $timestamps = true;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    // protected $fillable = [
+    //     'transaction_id', 'start_date', 'end_date', 'created_at', 'updated_at'
+    // ];
+
+    /**
      * A Schedule has many Loan Request.
      * 
      * NOTE: This is prior to change!! 

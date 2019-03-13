@@ -13,10 +13,14 @@ class Transaction extends Model
     public $timestamps = true;
 
     // Primary key
-    public $primaryKey = 'member_id';
+    // public $primaryKey = 'id';
+
+    // protected $fillable = [
+    //     'created_at', 'updated_at'
+    // ];
 
     public function schedules() 
     {
-        return $this->hasMany('App\Schedule');
+        return $this->hasOne('App\Schedule');
     }
 }
