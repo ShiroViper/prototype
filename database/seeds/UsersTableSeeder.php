@@ -14,18 +14,46 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $admin = [
-            'lname' => Str::random(10),
-            'fname' => Str::random(10),
-            'mname' => Str::random(10),
-            'email' => Str::random(10).'@admin.com',
-            'cell_num' => Str::random(10),
-            'password' => bcrypt(123456),
-            'user_type' => 2,
-            'address' => Str::random(10),
-            'remember_token'=> Str::random(10)
+        $users = [
+            [
+                'lname' => Str::random(10),
+                'fname' => Str::random(10),
+                'mname' => Str::random(10),
+                'email' => Str::random(10).'@alkansya.com',
+                'cell_num' => Str::random(10),
+                'password' => bcrypt(123456),
+                'user_type' => 2,
+                'address' => Str::random(10),
+                'remember_token'=> Str::random(10),
+            ],
+            [
+                'id' => '190001',
+                'lname' => Str::random(10),
+                'fname' => Str::random(10),
+                'mname' => Str::random(10),
+                'email' => Str::random(10).'@alkansya.com',
+                'cell_num' => Str::random(10),
+                'password' => bcrypt(190001),
+                'user_type' => 0,
+                'address' => Str::random(10),
+                'remember_token'=> Str::random(10)
+            ],
+            [
+                'id' => '190002',
+                'lname' => Str::random(10),
+                'fname' => Str::random(10),
+                'mname' => Str::random(10),
+                'email' => Str::random(10).'@alkansya.com',
+                'cell_num' => Str::random(10),
+                'password' => bcrypt(190002),
+                'user_type' => 1,
+                'address' => Str::random(10),
+                'remember_token'=> Str::random(10)
+            ]
         ];
 
-        User::create($admin);
+        foreach($users as $user) {
+            User::create($user);
+        }
     }
 }
