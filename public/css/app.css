@@ -16526,7 +16526,8 @@ readers do not read off random characters that represent icons */
   }
 }
 
-.clickable-row {
+.clickable-row,
+.clickable {
   cursor: pointer;
 }
 

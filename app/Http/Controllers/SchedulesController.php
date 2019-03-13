@@ -30,13 +30,13 @@ class SchedulesController extends Controller
                 // 'Event ID # '.$schedule->loanRequest->loan_amount,
                 true,
                 new DateTime($schedule->start_date),
-                new DateTime($schedule->end_date),
-                // new DateTime($schedule->end_date.' +1 Day'),
+                // new DateTime($schedule->end_date),
+                new DateTime($schedule->end_date.' +1 Day'),
                 $key,
                 [
                     'color' => '#ff7043',
                     'textColor' => '#ff7043',
-                    'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.$schedule->end_date,
+                    'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
                     // 'userId' => 'User ID '.$schedule->userId
                 ]
             );
