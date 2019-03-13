@@ -26,33 +26,40 @@ class SchedulesController extends Controller
         $sched_list = [];
         foreach ($schedules as $key => $schedule) {
             $sched_list[] = Calendar::event(
-                'Event ID # '.$schedule->id,
+                '__',
+                // 'Event ID # '.$schedule->loanRequest->loan_amount,
                 true,
                 new DateTime($schedule->start_date),
+                // new DateTime($schedule->end_date),
                 new DateTime($schedule->end_date.' +1 Day'),
                 $key,
                 [
                     'color' => '#ff7043',
-                    'textColor' => 'white',
-                    // 'description' => 'Description here',
+                    'textColor' => '#ff7043',
+                    'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
                     // 'userId' => 'User ID '.$schedule->userId
                 ]
             );
         }
         $calendar_details = Calendar::addEvents($sched_list)->setCallbacks([
-            'eventLimit' => 4,
+            // 'eventLimit' => 4,
             'eventRender' => 'function(event, element) {
                 $(element).popover({
-                    title: "Event ID: "+event.id,
-                    content: "Description here",
+                    content: event.description,
                     trigger: "hover",
                     placement: "top",
                     container: "body"
                 });             
             }',
+        ])->setOptions([
+            'header' => [
+                // 'left' => 'prev,next today',
+                // 'center' => 'title',
+                // 'right' => 'month,agendaWeek,agendaDay',
+            ],
+            // 'eventLimit' => true,
+            'eventLimit' => 4,
         ]);
-
-        // return dd(Auth::user()->user_type);
 
         if (Auth::user()->user_type == 2) {
             return view('users.admin.calendar')->with(compact('calendar_details'))->with('active', 'sched');

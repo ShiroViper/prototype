@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
 use DB;
+use Carbon\Carbon;
+use App\Schedule;
 
 class LoanRequestsController extends Controller
 {
@@ -20,8 +22,13 @@ class LoanRequestsController extends Controller
     public function index()
     {
         if (Auth::user()->user_type == 2) {
-            $lr = DB::table('loan_request')->join('users', 'loan_request.user_id', '=', 'users.id')->select('loan_request.*', 'users.lname', 'users.fname', 'users.mname')->orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(10);
-            $pending = DB::table('loan_request')->join('users', 'loan_request.user_id', '=', 'users.id')->select('loan_request.*', 'users.lname', 'users.fname', 'users.mname')->orderBy('loan_request.created_at', 'desc')->whereNull('confirmed')->paginate(5);
+            // $lr = DB::table('loan_request')->join('users', 'loan_request.user_id', '=', 'users.id')->select('loan_request.*', 'users.lname', 'users.fname', 'users.mname')->orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(10);
+            // $pending = DB::table('loan_request')->join('users', 'loan_request.user_id', '=', 'users.id')->select('loan_request.*', 'users.lname', 'users.fname', 'users.mname')->orderBy('loan_request.created_at', 'desc')->whereNull('confirmed')->paginate(5);
+
+            $lr = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(10);
+            $pending = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNull('confirmed')->paginate(5);
+
+            // return dd( $pending);
 
             return view('users.admin.requests')->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         } else {
@@ -52,6 +59,7 @@ class LoanRequestsController extends Controller
      */
     public function store(Request $request)
     {
+        // return dd($request->input());
         $this->validate($request, [
             'amount' => ['required'],
             'days' => ['required']
@@ -73,9 +81,16 @@ class LoanRequestsController extends Controller
      * @param  \App\Loan_Request  $loan_Request
      * @return \Illuminate\Http\Response
      */
-    public function show(Loan_Request $loan_Request)
+    public function show($id)
     {
-        //
+        // $lr = Loan_Request::orderBy('updated_at', 'desc')->where('user_id', Auth::user()->id)->whereNotNull('confirmed')->paginate(10);
+        // $pending = Loan_Request::orderBy('created_at', 'desc')->where('user_id', Auth::user()->id)->paginate(5);
+
+        // $loan = Loan_Request::find($id);
+
+        // // return dd($loan);
+
+        // return view('users.member.requests')->with('loan', $loan)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
     }
 
     /**
@@ -118,6 +133,15 @@ class LoanRequestsController extends Controller
         $rq = Loan_Request::find($id);
         $rq->confirmed = true;
         $rq->save();
+        
+        $sched = new Schedule;
+        // A schedule belongs to a certain loan request (relationships)
+        $sched->loanRequest()->associate($rq);
+        $sched->loan_request_id = $sched->loanRequest->id;
+        $sched->start_date = Carbon::now();
+        $sched->end_date = Carbon::now()->addDays($sched->loanRequest->days_payable);
+        $sched->save();
+
         return redirect()->route('admin-requests')->with('success', 'Request Accepted');
     }
 
