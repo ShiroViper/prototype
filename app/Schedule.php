@@ -32,4 +32,9 @@ class Schedule extends Model
         return $this->belongsTo('App\Loan_Request');
     }
 
+    public function transaction() 
+    {
+        return $this->belongsTo('App\Transaction');
+    }
+
 }

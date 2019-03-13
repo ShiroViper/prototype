@@ -14,4 +14,9 @@ class Transaction extends Model
 
     // Primary key
     public $primaryKey = 'member_id';
+
+    public function schedules() 
+    {
+        return $this->hasMany('App\Schedule');
+    }
 }
