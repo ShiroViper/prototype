@@ -14,4 +14,12 @@ class Transaction extends Model
 
     // Primary key
     public $primaryKey = 'member_id';
+
+    public function loanRequests(){
+       return  $this->belongsTo('App\Loan_Request');
+    }
+    public function user(){
+       return  $this->belongsTo('App\User');
+    }
 }
+

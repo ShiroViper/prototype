@@ -48,8 +48,8 @@
                                             <td>Deposit</td>
                                         @endif
                 
-                                        <td>{{$trans->amount}}</td>
-                                        <td>{{$trans->balance}} </td>
+                                        <td>Php {{$trans->amount}}</td>
+                                        <td>Php {{$trans->balance}} </td>
                                     </tr>  
                                     @endforeach
                                 @else

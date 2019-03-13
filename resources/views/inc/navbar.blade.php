@@ -108,8 +108,11 @@
                         <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/collector/transaction">Transactions</a>
                     </li>
                     <li class="nav-item px-3 h6">
-                            <a class="nav-link{{ $active == 'collect' ? ' active callout' : '' }}" href="/collector/transaction/create">Collection</a>
-                        </li>
+                        <a class="nav-link{{ $active == 'collect' ? ' active callout' : '' }}" href="/collector/transaction/create">Collection</a>
+                    </li>
+                    <li class="nav-item px-3 h6">
+                        <a class="nav-link{{ $active == 'reports' ? ' active callout' : '' }}" href="/collector/transaction/report">Reports</a>
+                    </li>
                     <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'create' ? ' active callout' : '' }}" href="#">
                             <!-- <span class="sr-only">(current)</span> -->
