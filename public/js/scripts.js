@@ -47,6 +47,7 @@ $('#histReqModal').on('show.bs.modal', function (event) {
   var amount = button.data('amount');
   var dp = button.data('dp');
   var conf = button.data('conf');
+  var paid = button.data('paid');
   var desc = button.data('desc');
   var modal = $(this);
   modal.find('.loan-id').html(id);
@@ -57,6 +58,16 @@ $('#histReqModal').on('show.bs.modal', function (event) {
   modal.find('.loan-amount').html(amount);
   modal.find('.loan-dp').html(dp);
   modal.find('.loan-conf').html(conf);
+
+ if (paid.indexOf("Ongoing") !== -1) {
+   modal.find('.loan-unpaid').show();
+   modal.find('.loan-unpaid').html('<i class="fas fa-exclamation-circle"></i> Payment is still ongoing');
+   modal.find('.loan-paid').html(paid);
+ } else {
+  modal.find('.loan-unpaid').hide();
+  modal.find('.loan-paid').html(paid);
+ }
+
   modal.find('.loan-desc').html(desc);
 });
 

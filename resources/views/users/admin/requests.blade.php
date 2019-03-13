@@ -75,9 +75,9 @@
                             @if (count($requests) > 0)
                                 @foreach ($requests as $request)
                                     @if ($request->paid)
-                                    <tr data-toggle="modal" data-target="#histReqModal" data-id="{{ $request->id }}" data-cdate="{{ $request->created_at }}" data-mem="{{ $request->user->lname.', '.$request->user->fname.' '.$request->user->mname }}" data-memid="{{ $request->user->id }}" data-udate="{{ $request->updated_at }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}">
+                                    <tr class="clickable" data-toggle="modal" data-target="#histReqModal" data-id="{{ $request->id }}" data-cdate="{{ date('F d, Y H:i:s A', strtotime($request->created_at)) }}" data-mem="{{ $request->user->lname.', '.$request->user->fname.' '.$request->user->mname }}" data-memid="{{ $request->user->id }}" data-udate="{{ date('F d, Y H:i:s A', strtotime($request->updated_at)) }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}" data-paid="{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}">
                                     @else
-                                    <tr class="table-secondary font-weight-bold" data-toggle="modal" data-target="#histReqModal" data-id="{{ $request->id }}" data-cdate="{{ $request->created_at }}" data-mem="{{ $request->user->lname.', '.$request->user->fname.' '.$request->user->mname }}" data-memid="{{ $request->user->id }}" data-udate="{{ $request->updated_at }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}">
+                                    <tr class="table-secondary font-weight-bold clickable" data-toggle="modal" data-target="#histReqModal" data-id="{{ $request->id }}" data-cdate="{{ date('F d, Y H:i:s A', strtotime($request->created_at)) }}" data-mem="{{ $request->user->lname.', '.$request->user->fname.' '.$request->user->mname }}" data-memid="{{ $request->user->id }}" data-udate="{{ date('F d, Y H:i:s A', strtotime($request->updated_at)) }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}" data-paid="{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}">
                                     @endif
                                         <td>{{ date('F d, Y', strtotime($request->updated_at))}}</td>
                                         {{-- <td>{{ $request->user_id }}</td> --}}
@@ -164,6 +164,8 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="alert alert-warning loan-unpaid text-center">  
+                </div>
                 <div class="row">
                     <div class="col-4 text-right">
                         <span class="">Status: </span>
@@ -210,6 +212,14 @@
                     </div>
                     <div class="col">
                         <span class="font-weight-bold loan-dp"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 text-right">
+                        <span class="">Paid: </span>
+                    </div>
+                    <div class="col">
+                        <span class="font-weight-bold loan-paid"></span>
                     </div>
                 </div>
                 {{-- <div class="row">
