@@ -68,14 +68,18 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('collector')->group(function () {
-         Route::resource('/transaction','TransactionController',[
+        Route::get('/transaction/report', 'TransactionController@report')->name('collector-report');
+        
+        Route::resource('/transaction','TransactionController',[
             'names'=>[
                 'index'=>'collector-dashboard',
                 'create'=>'transaction-collect'
+                
             ]
         ]);
-
     });
+
+
     Route::view('/terms', 'terms', ['active' => 'terms']);
 });
 

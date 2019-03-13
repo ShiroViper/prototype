@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddGetToLoanRequest extends Migration
+class ChangeUserIdToFkInLoanRequestTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,12 @@ class AddGetToLoanRequest extends Migration
     public function up()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            $table->integer('get')->nullable()->after('confirmed');
-            $table->integer('paid')->nullable()->after('get');
+            $table->unsignedInteger('user_id')->change();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
@@ -27,8 +31,9 @@ class AddGetToLoanRequest extends Migration
     public function down()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            // $table->dropColumn('get');
-            // $table->dropColumn('paid');
+            Schema::disableForeignKeyConstraints();
+            Schema::dropIfExists('loan_request');
+            Schema::enableForeignKeyConstraints();
         });
     }
 }
