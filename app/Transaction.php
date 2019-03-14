@@ -12,7 +12,7 @@ class Transaction extends Model
     // Timestamps
     public $timestamps = true;
 
-    // Primary key
+    //Primary Key
     public $primaryKey = 'member_id';
 
     public function loanRequests(){

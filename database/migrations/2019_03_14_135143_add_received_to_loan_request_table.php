@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddGetToLoanRequest extends Migration
+class AddReceivedToLoanRequestTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddGetToLoanRequest extends Migration
     public function up()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            $table->integer('get')->nullable()->after('confirmed');
-            $table->integer('paid')->nullable()->after('get');
+            $table->integer('received')->nullable()->after('confirmed');
         });
     }
 
@@ -27,8 +26,7 @@ class AddGetToLoanRequest extends Migration
     public function down()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            $table->dropColumn('get');
-            $table->dropColumn('paid');
+            $table->dropColumn('received');
         });
     }
 }

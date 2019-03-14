@@ -19,7 +19,7 @@
                                 <th>User ID</th>
                                 <th>Name</th>
                                 <th>Loan Amount</th>
-                                <th>Days Payable</th>
+                                <th>Payables</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -32,7 +32,13 @@
                                         <td>{{ $item->user_id }}</td>
                                         <td>{{ $item->user->lname.', '. $item->user->fname.' '. $item->user->mname }}</td>
                                         <td>₱{{ $item->loan_amount }}</td>
-                                        <td>{{ $item->days_payable }} day/s</td>
+                                        @if($item->method == 2)
+                                            <td>{{ $item->days_payable / 30 }} Months</td>
+                                        @elseif($item->method == 1)
+                                            <td>{{ $item->days_payable /7 }} Weeks</td>
+                                        @else
+                                            <td>{{ $item->days_payable }} Days</td>
+                                        @endif
                                         <td class="d-flex flex-row">
                                             <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/requests/{{ $item->id }}/accept">Accept</a>
                                             <a class="btn btn-outline-secondary mx-2 no-modal" role="button" href="/admin/requests/{{ $item->id }}/reject">Decline</a>
@@ -66,8 +72,9 @@
                                 <th>Date Checked</th>
                                 <th>Name</th>
                                 <th>Loan Amount</th>
-                                <th>Days Payable</th>
+                                <th>Payables</th>
                                 <th>Status</th>
+                                <th>Money Received</th>
                                 <th>Paid</th>
                             </tr>
                         </thead>
@@ -83,8 +90,15 @@
                                         {{-- <td>{{ $request->user_id }}</td> --}}
                                         <td>{{ $request->user->lname.', '. $request->user->fname.' '. $request->user->mname }}</td>
                                         <td>₱{{ $request->loan_amount }}</td>
-                                        <td>{{ $request->days_payable }} day/s</td>
+                                        @if($request->method == 2)
+                                            <td>{{ $request->days_payable / 30 }} Months</td>
+                                        @elseif($request->method == 1)
+                                            <td>{{ $request->days_payable / 7 }} Weeks</td>
+                                        @else
+                                            <td>{{ $request->days_payable }} Days</td>
+                                        @endif
                                         <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
+                                        <td>{{$request->received ? 'Yes' : 'No'}} </td>
                                         <td>{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}</td>
                                     </tr>
                                 @endforeach

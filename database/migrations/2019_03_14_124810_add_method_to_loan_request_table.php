@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChangeUserIdToFkInLoanRequestTable extends Migration
+class AddMethodToLoanRequestTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +14,7 @@ class ChangeUserIdToFkInLoanRequestTable extends Migration
     public function up()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            $table->unsignedInteger('user_id')->change();
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->integer('method')->after('loan_amount');
         });
     }
 
@@ -31,9 +26,7 @@ class ChangeUserIdToFkInLoanRequestTable extends Migration
     public function down()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            Schema::disableForeignKeyConstraints();
-            Schema::dropIfExists('loan_request');
-            Schema::enableForeignKeyConstraints();
+            $table->dropColumn('method');
         });
     }
 }

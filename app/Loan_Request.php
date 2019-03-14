@@ -28,14 +28,11 @@ class Loan_Request extends Model
         return $this->belongsTo('App\User');
     }
 
-<<<<<<< HEAD
-=======
     public function transactions()
     {
         return $this->hasMany('App\Transaction');
     }
 
->>>>>>> 2f5d8637b7c6e00af732136696898873820fae9d
     /**
      * Get the Schedule of the Loan Request.
      */

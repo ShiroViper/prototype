@@ -15,38 +15,63 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function report(){
+    public function adminTransaction(){
+        $transactions = DB::table('transactions')
+            ->select('trans_type', 'transactions.created_at', 'lname', 'fname', 'amount', 'balance')
+            ->join('users', 'collector_id', '=', 'users.id')
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10);
 
-        $reports = DB::table('transactions')
-                        ->select('loan_request.created_at',DB::raw('ADDDATE(loan_request.created_at, 31) AS due_date') ,'days_payable', 'member_id', 'users.lname', 'users.fname', 'collector.lname as col_lname', 'collector.fname as col_fname', 'balance' )
-                        ->join('loan_request','user_id', '=', 'member_id')
-                        ->join('users', 'users.id', '=', 'member_id')
-                        ->join('users as collector', 'collector.id', '=', 'collector_id')
-                        ->whereIn('transactions.id', function($query){
-                            $query->select(DB::raw('MAX(transactions.id)'))
-                            ->from('transactions')
-                            ->groupby('member_id');
-                        })
-                        ->orderBy('transactions.created_at', 'desc')
-                        ->paginate(10);
+        return view('users.admin.dashboard')->with('active', 'dashboard')->with('transactions',$transactions);
+    }
+    public function memberTransaction(){
+        $transactions = DB::table('transactions')
+            ->select('trans_type', 'transactions.created_at', 'lname', 'fname', 'amount', 'balance')
+            ->join('loan_request','user_id', '=', 'member_id')
+            ->join('users as collector', 'collector.id', '=', 'collector_id')
+            ->where('member_id', Auth::user()->id)
+            ->orderBy('transactions.created_at', 'desc')
+            ->paginate(10);
+            // No Values if transactions table empty
 
-                        $now = date("M d Y",strtotime('2019-07-13 10:59:44'));
-                        // $now = date("M d Y",strtotime(NOW()));
-                        $past = date("M d Y", strtotime($reports[0]->due_date));
-                        // return $now. "<br>". $past;
-                        $try = "2019-07-13 10:59:44";
+        return view('users.member.transaction')->with('transactions', $transactions)->with('active', 'transactions');
+    }
+    public function failed(){
+        $failures = DB::table('transactions')
+            ->select(DB::raw('ADDDATE(loan_request.created_at, days_payable) AS due_date') , 'member_id', 'users.lname', 'users.fname', 'collector.lname as col_lname', 'collector.fname as col_fname', 'balance' )
+            ->join('loan_request','user_id', '=', 'member_id')
+            ->join('users', 'users.id', '=', 'member_id')
+            ->join('users as collector', 'collector.id', '=', 'collector_id')
+            ->whereIn('transactions.id', function($query){
+                $query->select(DB::raw('MAX(transactions.id)'))
+                ->from('transactions')
+                ->groupby('member_id');
+            })
+            ->where(DB::raw('ADDDATE(loan_request.created_at, days_payable)'), '<', NOW())
+            ->orderBy('transactions.created_at', 'desc')
+            ->paginate(10);
+            // No Values if transactions table empty
 
-                        if($try < $reports[0]->due_date){
-                            return NOW(). " is more than ".$reports[0]->due_date;
-                        }
-                        
-                        return dd($past);
+        return view('users.collector.failed-deposit')->with('failures', $failures)->with('active', 'failed');
+    }
+    public function deliquent(){
 
-                        // $stop_date = NOW();
-                        // $stop_date = date('Y-m-d', strtotime($stop_date . ' +30 day'));
-                        // return dd ($stop_date);
+        $deliquents = DB::table('transactions')
+            ->select(DB::raw('ADDDATE(loan_request.created_at, 30) AS due_date') , 'member_id', 'users.lname', 'users.fname', 'collector.lname as col_lname', 'collector.fname as col_fname', 'balance' )
+            ->join('loan_request','user_id', '=', 'member_id')
+            ->join('users', 'users.id', '=', 'member_id')
+            ->join('users as collector', 'collector.id', '=', 'collector_id')
+            ->whereIn('transactions.id', function($query){
+                $query->select(DB::raw('MAX(transactions.id)'))
+                ->from('transactions')
+                ->groupby('member_id');
+            })
+            ->where(DB::raw('ADDDATE(loan_request.created_at, 30)'), '<', NOW())
+            ->orderBy('transactions.created_at', 'desc')
+            ->paginate(10);
+            // No Values if transactions table empty
 
-        return view('users.collector.reports')->with('reports', $reports)->with('active', 'reports');
+        return view('users.collector.deliquent')->with('deliquents', $deliquents)->with('active', 'deliquent');
     }
     public function index()
     {
@@ -128,7 +153,7 @@ class TransactionController extends Controller
                 return redirect()->route('transaction-collect')->with('error', 'Member ID: '.$request->id. ' Not Found');
             }
             if($temp <= 0){                    
-                return redirect()->route('transaction-collect')->with('error', 'You already paid the loan');
+                return redirect()->route('transaction-collect')->with('error', 'Member ID: '. $request->id. ' already paid the loan');
             }
             
 
@@ -139,7 +164,7 @@ class TransactionController extends Controller
             ->update(['get'=>1]);
 
                 if($temp < $request->amount){
-                    $msg = 'Your payment should not above '.$temp.' Php';
+                    $msg = 'Payment for Member ID: ' .$request->id. ' should not above '.$temp.' Php';
                     return redirect()->route('transaction-collect')->with('error', $msg);
                 }
                     
@@ -175,7 +200,7 @@ class TransactionController extends Controller
         }else{
             // for deposit
         }
-       return redirect()->route('transaction-collect')->with('success', 'Successfully Transacted');
+       return redirect()->route('transaction-collect')->with('success', 'Member ID: '.$request->id. ' Successfully Transacted');
     }
 
     /**

@@ -28,7 +28,7 @@ class LoanRequestsController extends Controller
             $lr = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(10);
             $pending = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNull('confirmed')->paginate(5);
 
-            // return dd( $pending);
+            // return dd( $lr[0]->method == 1);
 
             return view('users.admin.requests')->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         } else {
@@ -62,12 +62,23 @@ class LoanRequestsController extends Controller
         // return dd($request->input());
         $this->validate($request, [
             'amount' => ['required'],
+            'method' => ['required'],
             'days' => ['required']
         ]);
 
         $lr = new Loan_Request;
         $lr->loan_amount = $request->input('amount');
-        $lr->days_payable = $request->input('days');
+        $lr->method = $request->input('method');
+        
+        if($request->method == 2){
+            $days = $request->days * 30;
+        }else if($request->method == 1){
+            $days = $request->days * 7;
+        }else{
+            $days = $request->days;
+        }
+
+        $lr->days_payable = $days;
         $lr->get = 0;
         $lr->user_id = Auth::user()->id;
         $lr->save();

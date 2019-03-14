@@ -28,7 +28,7 @@
                             <tr>
                                 <th>Date</th>
                                 <th>Loan Amount</th>
-                                <th>Days Payable</th>
+                                <th>Payables</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -39,7 +39,13 @@
                                     <tr>
                                         <td>{{ date('F d, Y', strtotime($item->created_at)) }}</td>
                                         <td>{{ $item->loan_amount }} Php</td>
-                                        <td>{{ $item->days_payable }} Days</td>
+                                        @if($item->method == 2)
+                                            <td>{{ $item->days_payable / 30 }} Months</td>
+                                        @elseif($item->method == 1)
+                                            <td>{{ $item->days_payable /7 }} Weeks</td>
+                                        @else
+                                            <td>{{ $item->days_payable }} Days</td>
+                                        @endif
                                         <td>
                                             {!! Form::open(['action' => ['LoanRequestsController@destroy', $item->id], 'method' => 'POST']) !!}
                                                 {{ Form::hidden('_method', 'DELETE') }}
@@ -74,8 +80,9 @@
                             <tr>
                                 <th>Date</th>
                                 <th>Loan Amount</th>
-                                <th>Days Payable</th>
+                                <th>Payables</th>
                                 <th>Status</th>
+                                <th>Money Received</th>
                                 <th>Paid</th>
                             </tr>
                         </thead>
@@ -89,8 +96,15 @@
                                     @endif
                                         <td>{{ date('F d, Y', strtotime($request->updated_at)) }}</td>
                                         <td>{{ $request->loan_amount }} Php</td>
-                                        <td>{{ $request->days_payable }} days</td>
+                                        @if($request->method == 2)
+                                            <td>{{ $request->days_payable / 30 }} Months</td>
+                                        @elseif($request->method == 1)
+                                            <td>{{ $request->days_payable / 7 }} Weeks</td>
+                                        @else
+                                            <td>{{ $request->days_payable }} Days</td>
+                                        @endif
                                         <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
+                                        <td>{{ $request->received ? 'Yes' : 'No'}}</td>
                                         <td>{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}</td>
                                     </tr>
                                 @endforeach

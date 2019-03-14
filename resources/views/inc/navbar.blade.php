@@ -36,12 +36,25 @@
         <div class="current-user-container ml-auto">
             <div class="dropdown">
                 <a class="h6 text-decoration-none text-capitalize dropdown-toggle" href="#" role="button" id="currentUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{ Auth::user()->lname }}, {{ Auth::user()->fname }} 
+                    @if(Auth::user()->user_type == 2)
+                    Admin
+                    @elseif(Auth::user()->user_type == 1)
+                    Collector
+                    @else
+                    Member 
+                    @endif ID: {{Auth::user()->id}} Name: {{ Auth::user()->lname }}, {{ Auth::user()->fname }} 
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="currentUser">
                     {{-- <a href="/admin/terms" class="dropdown-item">Terms and Conditions</a> --}}
                     {{-- <a href="" class="dropdown-item">Settings</a> --}}
                     {{-- <div class="dropdown-divider"></div> --}}
+                    @if(Auth::user()->user_type == 2)
+                        <a class="dropdown-item" href="/admin/profile">Profile</a>
+                    @elseif(Auth::user()->user_type == 1)
+                        <a class="dropdown-item" href="/collector/profile">Profile</a>
+                    @else
+                        <a class="dropdown-item" href="/member/profile">Profile</a>
+                    @endif
                     <a class="dropdown-item" href="{{ route('logout') }}"
                     onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">
@@ -71,10 +84,6 @@
                         <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/admin/dashboard">Transactions</a>
                     </li>
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'profile' ? ' active callout' : '' }}" href="/admin/profile ">Profile 
-                        </a>
-                    </li>
-                    <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'create' ? ' active callout' : '' }}" href="/admin/users/create">
                             <!-- <span class="sr-only">(current)</span> -->
                             Add Member
@@ -96,10 +105,16 @@
                         </a>
                     </li>
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link" href="#">Reports</a>
+                        <a class="nav-link{{ $active == 'process' ? ' active callout' : '' }}" href="/admin/process/create">Loan Process</a>
                     </li>
                     <li class="nav-item px-3 h6">
                         <a class="nav-link" href="#">Receipts</a>
+                    </li>
+                    <li class="nav-item px-3 h6">
+                        <a class="nav-link" href="/admin/deliquent">Deliquent</a>
+                    </li>
+                    <li class="nav-item px-3 h6">
+                        <a class="nav-link" href="/admin/failed">Failed Deposit</a>
                     </li>
                     
                 {{-- COLLECTOR --}}
@@ -111,16 +126,13 @@
                         <a class="nav-link{{ $active == 'collect' ? ' active callout' : '' }}" href="/collector/transaction/create">Collection</a>
                     </li>
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'reports' ? ' active callout' : '' }}" href="/collector/transaction/report">Reports</a>
+                        <a class="nav-link{{ $active == 'deliquent' ? ' active callout' : '' }}" href="/collector/deliquent">Deliquent</a>
                     </li>
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'create' ? ' active callout' : '' }}" href="#">
-                            <!-- <span class="sr-only">(current)</span> -->
-                            Collector 2
-                        </a>
+                        <a class="nav-link{{ $active == 'failed' ? ' active callout' : '' }}" href="/collector/failed">Failed Deposit</a>
                     </li>
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'manage' ? ' active callout' : '' }}" href="#">Collector 3</a>
+                        <a class="nav-link{{ $active == 'receipt' ? ' active callout' : '' }}" href="/collector/failed">Receipts</a>
                     </li>
                 {{-- MEMBER --}}
                 @else
@@ -128,16 +140,25 @@
                         <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/member/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'profile' ? ' active callout' : '' }}" href="/member/profile">Profile</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'transactions' ? ' active callout' : '' }}" href="/member/transactions">Transactions</a>
+                        <a class="nav-link{{ $active == 'transactions' ? ' active callout' : '' }}" href="/member/transaction">Transactions</a>
                     </li>
                     <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/requests/create">Loan</a>
                     </li>
                     <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/member/requests">Requests</a>
+                    </li>
+                    <li class="nav-item px-3 h6">
+                        <a class="nav-link{{ $active == 'account' ? ' active callout' : '' }}" href="/member/profile">My Account</a>
+                    </li>
+                    <li class="nav-item px-3 h6">
+                        <a class="nav-link{{ $active == 'patronage' ? ' active callout' : '' }}" href="/member/profile">Patronage Refund</a>
+                    </li>
+                    <li class="nav-item px-3 h6">
+                        <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/profile">My Loan</a>
+                    </li>
+                    <li class="nav-item px-3 h6">
+                        <a class="nav-link{{ $active == 'saving' ? ' active callout' : '' }}" href="/member/profile">Savings</a>
                     </li>
                 @endif
             {{-- END IF STATEMENT --}}

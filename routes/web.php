@@ -25,7 +25,7 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->group(function () {
-        Route::get('/dashboard', 'AdminController@index')->name('admin-dashboard');
+        Route::get('/dashboard', 'TransactionController@adminTransaction')->name('admin-dashboard');
         Route::resource('/users', 'UsersController', [
             'names' => [
                 'index' => 'users-index'
@@ -46,11 +46,27 @@ Route::middleware(['auth'])->group(function () {
                 'show' => 'profile-show'
             ]
         ]);
+        Route::get('/failed', 'TransactionController@failed')->name('collector-failed');
+        Route::get('/deliquent', 'TransactionController@deliquent')->name('collector-deliquent');
+        Route::resource('/transaction','TransactionController',[
+            'names'=>[
+                'index'=>'collector-dashboard',
+                'create'=>'transaction-collect'
+                
+            ]
+        ]);
+        Route::resource('/process', 'LoanProcessController', [
+            'names' => [
+                'index' => 'admin-process',
+                'create' => 'admin-create'
+            ]
+        ]);
         Route::get('/calendar', 'SchedulesController@index')->name('admin-calendar');
     });
 
     Route::prefix('member')->group(function () {
         Route::get('/dashboard', 'SchedulesController@index')->name('member-dashboard');
+        Route::get('/transaction', 'TransactionController@memberTransaction')->name('member-transaction');
         Route::resource('/requests', 'LoanRequestsController', [
             'names' => [
                 'index' => 'member-requests',
@@ -64,17 +80,24 @@ Route::middleware(['auth'])->group(function () {
                 'show' => 'profile-show'
             ]
         ]);
-        Route::view('/transactions','users.admin.dashboard',['active'=>'transactions'])->name('member-transactions');
+        // Route::view('/transactions','users.admin.dashboard',['active'=>'transactions'])->name('member-transactions');
     });
 
     Route::prefix('collector')->group(function () {
-        Route::get('/transaction/report', 'TransactionController@report')->name('collector-report');
+        Route::get('/failed', 'TransactionController@failed')->name('collector-failed');
+        Route::get('/deliquent', 'TransactionController@deliquent')->name('collector-deliquent');
         
         Route::resource('/transaction','TransactionController',[
             'names'=>[
                 'index'=>'collector-dashboard',
                 'create'=>'transaction-collect'
                 
+            ]
+        ]);
+        Route::resource('/profile', 'ProfilesController',[
+            'names' => [
+                'index' => 'profile-index',
+                'show' => 'profile-show'
             ]
         ]);
     });
