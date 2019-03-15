@@ -12,7 +12,8 @@ use DateTime;
 use DatePeriod;
 use DateInterval;
 use Calendar;
-//Make a model
+use App\User;
+use App\Deposit;
 
 class SchedulesController extends Controller
 {
@@ -23,6 +24,23 @@ class SchedulesController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->user_type == 0) {
+            /**
+             * If a member didn't set-up his/her payment
+             * method yet
+             */
+
+            // Get the member ID
+            $dp = Deposit::find(Auth::user()->id);
+
+            // return dd('yes');
+            if ($dp == null) {
+                    return view('users.member.dashboard')->with('setup', 'setup')->with('active', 'sched');
+            } else {
+                echo 'there is';
+            }
+        }
+
         $schedules = Schedule::get();
         $sched_list = [];
         foreach ($schedules as $key => $schedule) {
@@ -61,8 +79,6 @@ class SchedulesController extends Controller
         }
 
         else {
-
-
             return view('users.member.dashboard')->with(compact('calendar_details'))->with('active', 'dashboard');
         }
     }
