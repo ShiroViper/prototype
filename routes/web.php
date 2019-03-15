@@ -58,7 +58,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('/process', 'LoanProcessController', [
             'names' => [
                 'index' => 'admin-process',
-                'create' => 'admin-create'
+                'create' => 'admin-create',
+                'store' => 'admin-process-store'
             ]
         ]);
         Route::get('/calendar', 'SchedulesController@index')->name('admin-calendar');
@@ -80,6 +81,15 @@ Route::middleware(['auth'])->group(function () {
                 'show' => 'profile-show'
             ]
         ]);
+        Route::get('/receive/{id}/accept', 'LoanProcessController@accept')->name('member-accept');
+        // Route::get('/process/{id}/edit', 'LoanProcessController@col_edit')->name('member-process');
+        Route::resource('/process', 'LoanProcessController', [
+            'names' => [
+                'index' => 'member-process',
+                'create' => 'member-create',
+                'store' => 'member-process-store'
+            ]
+        ]);
         // Route::view('/transactions','users.admin.dashboard',['active'=>'transactions'])->name('member-transactions');
     });
 
@@ -98,6 +108,15 @@ Route::middleware(['auth'])->group(function () {
             'names' => [
                 'index' => 'profile-index',
                 'show' => 'profile-show'
+            ]
+        ]);
+        Route::get('/receive/{id}/accept', 'LoanProcessController@accept')->name('collector-accept');
+        Route::get('/process/{id}/edit', 'LoanProcessController@col_edit')->name('collector-process');
+        Route::resource('/process', 'LoanProcessController', [
+            'names' => [
+                'index' => 'collector-requests',
+                'create' => 'collector-create',
+                'store' => 'collector-process-store'
             ]
         ]);
     });

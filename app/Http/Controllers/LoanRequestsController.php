@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Loan_Request;
+use App\Loan_Process;
 use Illuminate\Http\Request;
 
 // Add-on (just testing)
@@ -27,16 +28,37 @@ class LoanRequestsController extends Controller
 
             $lr = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(10);
             $pending = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNull('confirmed')->paginate(5);
+            
+            // For Money Transferred To collector table
+            $transferred = DB::table('loan_process')
+                ->select('loan_process.updated_at','request_id', 'lname', 'fname', 'collector_id', 'loan_amount', 'transfer')
+                ->join('users', 'users.id', '=', 'collector_id')
+                ->join('loan_request','loan_request.id', '=', 'request_id')
+                ->where('transfer','>=', 2)
+                ->paginate(5);
+            
+            // return dd($lr);
 
-            // return dd( $lr[0]->method == 1);
-
-            return view('users.admin.requests')->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
+            return view('users.admin.requests')->with('transferred', $transferred)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         } else {
             $lr = Loan_Request::orderBy('updated_at', 'desc')->where('user_id', Auth::user()->id)->whereNotNull('confirmed')->paginate(10);
             $pending = Loan_Request::orderBy('created_at', 'desc')->where('user_id', Auth::user()->id)->where('confirmed', NULL)->paginate(5);
             $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
+            
+            // for transferring money to member
+            $transferring = DB::table('loan_process')
+                ->join('loan_request', 'loan_request.id', '=', 'request_id')
+                ->join('users', 'users.id', '=', 'collector_id')
+                ->select('loan_process.id', 'transfer', 'request_id', 'collector_id', 'loan_process.updated_at',
+                    'lname', 'fname', 'loan_amount')
+                ->where('user_id', Auth::user()->id)
+                ->where('transfer', 3)
+                ->paginate(5);
+                
+            
+            // return dd($transferring);
            
-            return view('users.member.requests')->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
+            return view('users.member.requests')->with('transferring',$transferring)->with('transferring', $transferring)->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         }
     }
 
@@ -62,23 +84,12 @@ class LoanRequestsController extends Controller
         // return dd($request->input());
         $this->validate($request, [
             'amount' => ['required'],
-            'method' => ['required'],
             'days' => ['required']
         ]);
 
         $lr = new Loan_Request;
         $lr->loan_amount = $request->input('amount');
-        $lr->method = $request->input('method');
-        
-        if($request->method == 2){
-            $days = $request->days * 30;
-        }else if($request->method == 1){
-            $days = $request->days * 7;
-        }else{
-            $days = $request->days;
-        }
-
-        $lr->days_payable = $days;
+        $lr->days_payable = $request->input('days');
         $lr->get = 0;
         $lr->user_id = Auth::user()->id;
         $lr->save();

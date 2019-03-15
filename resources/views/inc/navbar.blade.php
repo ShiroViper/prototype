@@ -104,9 +104,9 @@
                             @endif
                         </a>
                     </li>
-                    <li class="nav-item px-3 h6">
+                    {{-- <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'process' ? ' active callout' : '' }}" href="/admin/process/create">Loan Process</a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item px-3 h6">
                         <a class="nav-link" href="#">Receipts</a>
                     </li>
@@ -127,6 +127,9 @@
                     </li>
                     <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'deliquent' ? ' active callout' : '' }}" href="/collector/deliquent">Deliquent</a>
+                    </li>
+                    <li class="nav-item px-3 h6">
+                        <a class="nav-link{{ $active == 'request' ? ' active callout' : '' }}" href="/collector/process">Requests</a>
                     </li>
                     <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'failed' ? ' active callout' : '' }}" href="/collector/failed">Failed Deposit</a>

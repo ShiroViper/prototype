@@ -22,9 +22,9 @@ class ChangeCollectoIdMemberIdToFkInLoanProcess extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->unsignedInteger('member_id')->change();
-            $table->foreign('member_id')
-                ->references('user_id')
+            $table->unsignedInteger('request_id')->change();
+            $table->foreign('request_id')
+                ->references('id')
                 ->on('loan_request')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -45,10 +45,8 @@ class ChangeCollectoIdMemberIdToFkInLoanProcess extends Migration
      */
     public function down()
     {
-        Schema::table('loan_process', function (Blueprint $table) {
-            // Schema::disableForeignKeys();
-            // Schema::dropIfExists('loan_process');
-            // Schema::enableForeignKeys();
-        });
+            Schema::disableForeignKeyConstraints();
+            Schema::dropIfExists('loan_process');
+            Schema::enableForeignKeyConstraints();
     }
 }

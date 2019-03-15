@@ -14,13 +14,9 @@
                 {{ Form::label('amount', 'Loan Amount') }}
                     {{ Form::number('amount', '', ['class' => 'form-control', 'placeholder' => 'Enter amount (e.g. 1000.50)', 'step' => '0.01', 'required']) }}
             </div>
-            {{ Form::label('', 'Payment Method') }}
+            {{ Form::label('', 'Days Payables') }}
                 <div class="form-group">
-                    {{ Form::select('method', [0 => 'Daily', 1 => 'Weekly', 2 => 'Monthly'], '', ['class' => 'form-control']) }}
-                </div>
-            {{ Form::label('', 'Payable [Daily, Weekly, Monthly]') }}
-                <div class="form-group">
-                {{ Form::number('days', '', ['class' => 'form-control', 'placeholder' => 'Number of [days, weeks, months]', 'required']) }}
+                {{ Form::number('days', '', ['class' => 'form-control', 'placeholder' => 'Days Payables', 'required']) }}
                 </div>
             <div class="form-group">
                 <div class="form-check">

@@ -200,6 +200,7 @@ class TransactionController extends Controller
         }else{
             // for deposit
         }
+
        return redirect()->route('transaction-collect')->with('success', 'Member ID: '.$request->id. ' Successfully Transacted');
     }
 

@@ -13,7 +13,6 @@ class Transaction extends Model
     public $timestamps = true;
 
     //Primary Key
-    public $primaryKey = 'member_id';
 
     public function loanRequests(){
        return  $this->belongsTo('App\Loan_Request');
