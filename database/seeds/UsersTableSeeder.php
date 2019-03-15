@@ -16,7 +16,7 @@ class UsersTableSeeder extends Seeder
     {
         $users = [
             [
-                'lname' => Str::random(10),
+                'lname' => 'Admin',
                 'fname' => Str::random(10),
                 'mname' => Str::random(10),
                 'email' => Str::random(10).'@alkansya.com',
@@ -28,7 +28,7 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 'id' => '190001',
-                'lname' => Str::random(10),
+                'lname' => 'Member',
                 'fname' => Str::random(10),
                 'mname' => Str::random(10),
                 'email' => Str::random(10).'@alkansya.com',
@@ -40,7 +40,7 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 'id' => '190002',
-                'lname' => Str::random(10),
+                'lname' => 'Collector',
                 'fname' => Str::random(10),
                 'mname' => Str::random(10),
                 'email' => Str::random(10).'@alkansya.com',

@@ -12,6 +12,7 @@ use DateTime;
 use DatePeriod;
 use DateInterval;
 use Calendar;
+//Make a model
 
 class SchedulesController extends Controller
 {
@@ -42,7 +43,6 @@ class SchedulesController extends Controller
             );
         }
         $calendar_details = Calendar::addEvents($sched_list)->setCallbacks([
-            // 'eventLimit' => 4,
             'eventRender' => 'function(event, element) {
                 $(element).popover({
                     content: event.description,
@@ -52,12 +52,7 @@ class SchedulesController extends Controller
                 });             
             }',
         ])->setOptions([
-            'header' => [
-                // 'left' => 'prev,next today',
-                // 'center' => 'title',
-                // 'right' => 'month,agendaWeek,agendaDay',
-            ],
-            // 'eventLimit' => true,
+            'header' => [],
             'eventLimit' => 4,
         ]);
 
@@ -66,6 +61,8 @@ class SchedulesController extends Controller
         }
 
         else {
+
+
             return view('users.member.dashboard')->with(compact('calendar_details'))->with('active', 'dashboard');
         }
     }
