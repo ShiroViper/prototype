@@ -29,6 +29,13 @@ class User extends Authenticatable
     ];
 
     /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = ['user_type'];
+
+    /**
      * A User may have a lot of loan requests.
      * 
      * Alter if necessary
@@ -38,7 +45,8 @@ class User extends Authenticatable
         return $this->hasMany('App\Loan_Request');
     }
     
-    public function transactions(){
+    public function transactions()
+    {
         return $this->hasMany('App\Transaction');
     }
 

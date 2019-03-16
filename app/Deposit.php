@@ -20,8 +20,16 @@ class Deposit extends Model
      */
     public $timestamps = true;
 
-
     public $primaryKey = 'id';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'parment_method', 'start_date',
+    ];
 
     /**
      * A deposit belongs to a user.
@@ -33,5 +41,10 @@ class Deposit extends Model
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+
+    public function schedule()
+    {
+        return $this->hasOne('App\Schedule');
     }
 }

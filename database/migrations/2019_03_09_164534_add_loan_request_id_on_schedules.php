@@ -13,14 +13,14 @@ class AddLoanRequestIdOnSchedules extends Migration
      */
     public function up()
     {
-        Schema::table('schedules', function (Blueprint $table) {
-            $table->unsignedInteger('loan_request_id')->nullable()->after('id');
-            $table->foreign('loan_request_id')
-                ->references('id')
-                ->on('loan_request')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-        });
+        // Schema::table('schedules', function (Blueprint $table) {
+        //     $table->unsignedInteger('loan_request_id')->nullable()->after('id');
+        //     $table->foreign('loan_request_id')
+        //         ->references('id')
+        //         ->on('loan_request')
+        //         ->onUpdate('cascade')
+        //         ->onDelete('cascade');
+        // });
     }
 
     /**
@@ -33,8 +33,8 @@ class AddLoanRequestIdOnSchedules extends Migration
         /**
          * Drop the table containing the foreign key
          */
-        Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('schedules');
-        Schema::enableForeignKeyConstraints();
+        // Schema::disableForeignKeyConstraints();
+        // Schema::dropIfExists('schedules');
+        // Schema::enableForeignKeyConstraints();
     }
 }

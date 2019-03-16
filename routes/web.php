@@ -51,6 +51,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('member')->group(function () {
         Route::get('/dashboard', 'SchedulesController@index')->name('member-dashboard');
+        Route::post('/dashboard/setup', 'DepositController@create')->name('member-setup');
         Route::resource('/requests', 'LoanRequestsController', [
             'names' => [
                 'index' => 'member-requests',
