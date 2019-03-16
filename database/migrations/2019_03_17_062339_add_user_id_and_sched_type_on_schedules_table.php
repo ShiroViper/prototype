@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUserIdOnSchedulesTable extends Migration
+class AddUserIdAndSchedTypeOnSchedulesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,6 +15,7 @@ class AddUserIdOnSchedulesTable extends Migration
     {
         Schema::table('schedules', function (Blueprint $table) {
             $table->unsignedInteger('user_id')->after('id');
+            $table->unsignedInteger('sched_type')->after('user_id');
         });
     }
 
@@ -26,7 +27,7 @@ class AddUserIdOnSchedulesTable extends Migration
     public function down()
     {
         Schema::table('schedules', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+            $table->dropColumn('user_id', 'sched_type');
         });
     }
 }
