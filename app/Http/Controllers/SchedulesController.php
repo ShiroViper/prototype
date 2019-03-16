@@ -11,6 +11,7 @@ use Validator;
 use DateTime;
 use DatePeriod;
 use DateInterval;
+use Carbon\Carbon;
 use Calendar;
 use App\User;
 use App\Deposit;
@@ -28,21 +29,43 @@ class SchedulesController extends Controller
         $schedules = Schedule::get();
         $sched_list = [];
         foreach ($schedules as $key => $schedule) {
-            $sched_list[] = Calendar::event(
-                '__',
-                // 'Event ID # '.$schedule->loanRequest->loan_amount,
-                true,
-                new DateTime($schedule->start_date),
-                // new DateTime($schedule->end_date),
-                new DateTime($schedule->end_date.' +1 Day'),
-                $key,
-                [
-                    'color' => '#ff7043',
-                    'textColor' => '#ff7043',
-                    'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
-                    // 'userId' => 'User ID '.$schedule->userId
-                ]
-            );
+            // $numOfWeek = $start->diffInWeeks($end);
+            $interval = new DateInterval('P7D');
+            // $dayOfWeek = Carbon::parse($start)->dayOfWeek;
+            $start = new Carbon($schedule->start_date);
+            $end = new Carbon($schedule->end_date.' +1 Day');
+            $period = new DatePeriod($start, $interval, $end);
+            foreach ($period as $key => $date) {
+                // echo "<pre>".$key." ".$date->format('Y-m-d')."</pre>";
+                $sched_list[] = Calendar::event(
+                    '__',
+                    true,
+                    $date->format('Y-m-d'),
+                    $date->format('Y-m-d'),
+                    $key,
+                    [
+                        'color' => '#ff7043',
+                        'textColor' => '#ff7043',
+                        // 'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
+                        'description' => 'Wala',
+                        // 'userId' => 'User ID '.$schedule->userId
+                    ]
+                );
+            }
+            // $sched_list[] = Calendar::event(
+            //     '__',
+            //     true,
+            //     new Carbon($schedule->start_date),
+            //     new Carbon($schedule->end_date.' +1 Day'),
+            //     $key,
+            //     [
+            //         'color' => '#ff7043',
+            //         'textColor' => '#ff7043',
+            //         // 'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
+            //         'description' => 'Wala',
+            //         // 'userId' => 'User ID '.$schedule->userId
+            //     ]
+            // );
         }
         $calendar_details = Calendar::addEvents($sched_list)->setCallbacks([
             'eventRender' => 'function(event, element) {

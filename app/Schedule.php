@@ -34,7 +34,7 @@ class Schedule extends Model
 
     public function deposit()
     {
-        return $this->belongsTo('App\Deposit');
+        return $this->belongsTo('App\Deposit', 'id');
     }
 
 }
