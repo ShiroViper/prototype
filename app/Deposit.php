@@ -28,7 +28,16 @@ class Deposit extends Model
      * @var array
      */
     protected $fillable = [
-        'parment_method', 'start_date',
+        'payment_method', 'start_date', 'sched_type',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'sched_type'
     ];
 
     /**

@@ -50,15 +50,18 @@ class DepositController extends Controller
 
         $schedule->start_date =  $start;
         $schedule->end_date = $end;
+
+        // Schedule type as Deposit Schedule [1]
+        $schedule->sched_type = 1;
         $schedule->save();
 
-        $numOfWeek = $start->diffInWeeks($end);
-        $interval = new DateInterval('P7D');
-        $dayOfWeek = Carbon::parse($start)->dayOfWeek;
-        $period = new DatePeriod($start, $interval, $end);
-        foreach ($period as $key => $date) {
-            echo "<pre>".$key." ".$date->format('Y-m-d')."</pre>";
-        }
+        // $numOfWeek = $start->diffInWeeks($end);
+        // $interval = new DateInterval('P7D');
+        // $dayOfWeek = Carbon::parse($start)->dayOfWeek;
+        // $period = new DatePeriod($start, $interval, $end);
+        // foreach ($period as $key => $date) {
+        //     echo "<pre>".$key." ".$date->format('Y-m-d')."</pre>";
+        // }
 
         // return dd($schedule, $numOfWeek, $dayOfWeek);
         
