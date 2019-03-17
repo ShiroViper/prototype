@@ -22,7 +22,7 @@
     </div>
     <div class="form-group">
         {{ Form::label('amount', 'Amount Received') }}
-        {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control']) }}
+        {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'step' => '0.01']) }}
          @if ($errors->has('amount'))
             <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
         @endif

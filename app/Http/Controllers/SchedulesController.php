@@ -29,7 +29,7 @@ class SchedulesController extends Controller
         $schedules = Schedule::get();
         $sched_list = [];
         foreach ($schedules as $key => $schedule) {
-            // Deposit Schedule type [1]
+            // [1] Deposit Schedule type
             if ($schedule->sched_type == 1) {
                 $method = Deposit::where('member_id', '=', Auth::user()->id)->first();
                 // return dd($schedule->payment_method);
@@ -44,10 +44,10 @@ class SchedulesController extends Controller
                             new Carbon($schedule->end_date.' +1 Day'),
                             $key,
                             [
-                                'color' => '#ff7043',
-                                'textColor' => '#ff7043',
+                                'color' => '#EF5450',
+                                'textColor' => '#EF5450',
                                 // 'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
-                                'description' => 'Wala',
+                                'description' => 'Daily Payment Deposit',
                                 // 'userId' => 'User ID '.$schedule->userId
                             ]
                         );
@@ -68,21 +68,21 @@ class SchedulesController extends Controller
                                 $date->format('Y-m-d'),
                                 $key,
                                 [
-                                    'color' => '#ff7043',
-                                    'textColor' => '#ff7043',
+                                    'color' => '#EF5450',
+                                    'textColor' => '#EF5450',
                                     // 'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
-                                    'description' => 'Wala',
+                                    'description' => 'Weekly Payment Deposit',
                                     // 'userId' => 'User ID '.$schedule->userId
                                 ]
                             );
                         }
                     break;
                     case 3:
-                       return dd('yearrr');
+                       return dd('monthly');
                     break;
                 }
-            } else {
-                // Loan Schedule type [2]
+            } else if ($schedule->sched_type == 2) {
+                // [2] Show Loan Schedule
                 $sched_list[] = Calendar::event(
                     '__',
                     true,
@@ -90,10 +90,26 @@ class SchedulesController extends Controller
                     new Carbon($schedule->end_date.' +1 Day'),
                     $key,
                     [
-                        'color' => '#ff7043',
-                        'textColor' => '#ff7043',
+                        'color' => '#EF9950',
+                        'textColor' => '#EF9950',
                         // 'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
-                        'description' => 'Wala',
+                        'description' => 'Loan Date',
+                        // 'userId' => 'User ID '.$schedule->userId
+                    ]
+                );
+            } else {
+                // [3] Show Paid Loan Schedule
+                $sched_list[] = Calendar::event(
+                    '__',
+                    true,
+                    new Carbon($schedule->start_date),
+                    new Carbon($schedule->end_date.' +1 Day'),
+                    $key,
+                    [
+                        'color' => '#3FBC47',
+                        'textColor' => '#3FBC47',
+                        // 'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
+                        'description' => 'Paid Date',
                         // 'userId' => 'User ID '.$schedule->userId
                     ]
                 );

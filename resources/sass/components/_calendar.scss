@@ -1,7 +1,13 @@
 
-$pay: #ff7043;
-$current: #fff59d;
-$paid: #7befb2;
+// $pay: #ff7043;
+// $current: #fff59d;
+// $paid: #7befb2;
+// $loan: #ef5350;
+
+$pay: #EF5450;
+$current: #83CACD;
+$paid: #3FBC47;
+$loan: #EF9950;
 
 // .lighted a{
 //     background-color : $color !important;
@@ -27,6 +33,10 @@ $paid: #7befb2;
 
   .pay-dates {
       background: $pay;
+  }
+
+  .loan-dates {
+      background: $loan;
   }
 
   .paid-dates {

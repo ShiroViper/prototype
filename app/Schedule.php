@@ -29,7 +29,7 @@ class Schedule extends Model
      */
     public function loanRequest()
     {
-        return $this->belongsTo('App\Loan_Request');
+        return $this->belongsTo('App\Loan_Request', 'id');
     }
 
     public function deposit()

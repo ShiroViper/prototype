@@ -70,6 +70,8 @@ class LoanRequestsController extends Controller
         $lr->days_payable = $request->input('days');
         $lr->get = 0;
         $lr->user_id = Auth::user()->id;
+        $lr->balance = $request->input('amount');
+        // return dd($lr);
         $lr->save();
 
         return redirect()->action('LoanRequestsController@index');
@@ -134,13 +136,15 @@ class LoanRequestsController extends Controller
         $rq->confirmed = true;
         $rq->save();
         
-        $sched = new Schedule;
         // A schedule belongs to a certain loan request (relationships)
-        $sched->loanRequest()->associate($rq);
-        $sched->loan_request_id = $sched->loanRequest->id;
+        $sched = new Schedule;
         $sched->start_date = Carbon::now();
-        $sched->end_date = Carbon::now()->addDays($sched->loanRequest->days_payable);
+        $sched->end_date = Carbon::now()->addDays($rq->days_payable);
+        $sched->sched_type = 2;
+        $sched->user_id = $rq->user_id;
         $sched->save();
+
+        // return dd($sched);
 
         return redirect()->route('admin-requests')->with('success', 'Request Accepted');
     }

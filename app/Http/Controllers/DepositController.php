@@ -51,7 +51,7 @@ class DepositController extends Controller
         $schedule->start_date =  $start;
         $schedule->end_date = $end;
 
-        // Schedule type as Deposit Schedule [1]
+        // Schedule type as Deposit Schedule [1], Loan Schedule [2]
         $schedule->sched_type = 1;
         $schedule->save();
 
