@@ -52,14 +52,25 @@ class TransactionController extends Controller
     }
     public function index()
     {
-        $transactions = DB::table('transactions')
-                        ->join('users','users.id', '=', 'transactions.member_id')
-                        ->select('*')
-                        ->where('transactions.collector_id', Auth::user()->id)
-                        ->orderBy('transactions.created_at', 'DESC')
-                        ->paginate(10);
+        if ( Auth::user()->user_type == 2 ) {
+            $transactions = Transaction::orderBy('id', 'desc')->paginate(10);
+            return view('users.admin.dashboard')->with('transactions', $transactions)->with('active', 'transactions');
+        } else if ( Auth::user()->user_type == 1 ) {
+            // return dd($transactions);
+            $transactions = Transaction::where('collector_id', '=', Auth::user()->id)->orderBy('created_at', 'DESC')->paginate(10);
+            return view('users.collector.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
+        } else {
+            $transactions = Transaction::where('member_id', '=', Auth::user()->id)->paginate(10);
+            return view('users.member.transactions')->with('transactions', $transactions)->with('active', 'transactions');
+        }
+        // $transactions = DB::table('transactions')
+        //                 ->join('users','users.id', '=', 'transactions.member_id')
+        //                 ->select('*')
+        //                 ->where('transactions.collector_id', Auth::user()->id)
+        //                 ->orderBy('transactions.created_at', 'DESC')
+        //                 ->paginate(10);
 
-        return view('users.collector.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
+        // return view('users.collector.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
     }
 
     /**
@@ -79,7 +90,6 @@ class TransactionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-        
         $messages = [
             'required' => 'This field is required',
             'alpha' => 'Please use only alphabetic characters'
@@ -100,14 +110,18 @@ class TransactionController extends Controller
         $transact->amount = $request->amount;
 
     // ***************************      Start           ***************************
-         if ($transact->trans_type==0) { 
-            // If the transaction is a Loan
-            return dd('Loan');
+         if ($transact->trans_type == 1) { 
+            // If the transaction is a Deposit
+            return dd('Deposittt');
         } 
         
-        else if ($transact->trans_type==1) {
-            // If the transaction is a Loan Payment
-
+        else if ($transact->trans_type == 2) {
+            // If the transaction is a Loan
+            return dd('Loan');
+        }
+        
+        else {
+            // If the transaction is a Loan Payment [ $trans_type = 3 ]
             if (Transaction::where('member_id', '=', $transact->member_id)->first() == NULL) {
                 // If this is the first transaction made by the member
                 $loan_request = Loan_Request::where([
@@ -141,11 +155,6 @@ class TransactionController extends Controller
                 }
                 $loan_request->save();
             }
-        }
-        
-        else {
-            // If the transaction is a Deposit
-            return dd('Deposittt');
         }     
 
         $transact->get = 1;     // Serves as the basis for the next transaction?

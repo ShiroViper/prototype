@@ -6,11 +6,10 @@
 
 @section('content')
     @if (is_null($setup))
-        <h3 class="header mt-3">My Calendar</h3>
         <div class="row">
             <div class="col-md-8 my-3">
-                <div class="card">
-                    <div class="card-header">Calendar</div>
+                <div class="card shadow">
+                    <!-- <div class="card-header">Calendar</div> -->
                     <div class="card-body">
                         <div class="d-flex justify-content-center">
                             <div class="spinner-border text-primary p-5 m-5" role="status">
@@ -49,7 +48,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.js"></script>
         {!! $calendar_details->script() !!}
     @else
-        <h3 class="header mt-3">Please setup your Account first</h3>
+        <h3 class="header mt-3">Please setup your account first</h3>
         <div class="row">
             <div class="col-sm-10 col-md-7 col-lg-5 my-3">
                 <form action="{{ route('member-setup') }}" method="POST">
