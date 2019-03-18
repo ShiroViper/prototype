@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use DB;
 use Auth;
 use App\Loan_Request;
+use Codedge\Fpdf\Fpdf\Fpdf;
+use App\User;
 
 class TransactionController extends Controller
 {
@@ -149,10 +151,10 @@ class TransactionController extends Controller
                     ->where('get',0)
                     ->sum('transactions.balance');
                 
-            if(!Transaction::find($request->id)){
+            if(!Transaction::where('member_id', '=', $request->id)->first()){
                 return redirect()->route('transaction-collect')->with('error', 'Member ID: '.$request->id. ' Not Found');
             }
-            if($temp <= 0){                    
+            if($temp <= 0){               
                 return redirect()->route('transaction-collect')->with('error', 'Member ID: '. $request->id. ' already paid the loan');
             }
             
@@ -177,7 +179,10 @@ class TransactionController extends Controller
                 
             }
 
-           
+            if($temp < $request->amount){
+                $msg = 'Payment for Member ID: ' .$request->id. ' should not above '.$temp.' Php';
+                return redirect()->route('transaction-collect')->with('error', $msg);
+            }
 
             $deduct = $temp - $request->amount;
             if($deduct == 0){
@@ -196,6 +201,11 @@ class TransactionController extends Controller
                 ->where('confirmed', 1)
                 ->where('get',0)
                 ->update(['get' => 1]);
+
+            // $m_name = User::where('id',$request->id)->first();
+            // $c_name = User::where('id',Auth::user()->id)->first();
+
+            // $this->generatepdf($transact, $m_name, $c_name);
 
         }else{
             // for deposit
@@ -247,5 +257,67 @@ class TransactionController extends Controller
     public function destroy(Collector $collector)
     {
         //
+    }
+    public function generatepdf($m, $m_name, $c_name){
+
+        $pdf = new FPDF('L','mm',array(100,150));		// can set the layout of the PDF 
+		$pdf->AddPage();			//can add another page
+		$pdf->SetFont('Arial','',12); //set font of your PDF
+		$margin = 10;
+		$x = 150;
+
+		//header
+		$text = 'Sinking Fund';
+		$pdf->Text($x*0.45, $margin, $text);
+
+		$text = 'Poblacion Compostela Cebu';
+		$pdf->Text($x*0.35, 20, $text);
+
+		//Partial Details
+		$text = 'Member ID:';
+        $pdf->Text($margin, 35, $text);
+        $text = $m->member_id;
+		$pdf->Text($margin + 40, 35, $text);
+
+		$text = 'Date: ';
+        $pdf->Text($x*0.65, 35, $text);
+        $text = date('M d, Y', strtotime($m->created_at));
+        $pdf->Text($x*0.75, 35, $text);
+
+        $text = 'Time: ';
+        $pdf->Text($x*0.65, 40, $text);
+        $text = date('h:i:s A', strtotime($m->created_at));
+		$pdf->Text($x*0.75, 40, $text);
+
+		//Full Details
+		$text = 'Complete Name:';
+        $pdf->Text($margin, 50, $text);
+        $text = $m_name->lname. ', '. $m_name->fname;
+		$pdf->Text($margin + 40, 50, $text);
+
+		$text = 'Type:';
+        $pdf->Text($margin, 60, $text);
+        if($m->trans_type == 0){
+            $text = 'Loan Widthdraw';
+        }else if ($m->trans_type == 1){
+            $text = 'Loan Payment';
+        }else{
+            $text = 'Deposit';
+        }
+		$pdf->Text($margin + 40, 60, $text);
+
+		$text = 'Amount:';
+        $pdf->Text($margin, 70, $text);
+        $text = 'Php '.$m->amount;
+        $pdf->Text($margin + 40, 70, $text);
+
+        $text = 'Receive By: ';
+        $pdf->Text($margin, 80, $text);
+        $text = $c_name->lname.', '.$c_name->fname;
+        $pdf->Text($margin + 40, 80, $text);
+        
+        $filename = "receipt/Receipt.pdf";
+        $pdf->Output('F', $filename, True);		//to close document
+                
     }
 }

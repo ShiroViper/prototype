@@ -78,16 +78,17 @@ class LoanProcessController extends Controller
                 return redirect()->route('collector-requests')->with('success', 'Successfully transfer to Member ID: '.$request->m_id);
             }
 
-            $check = User::find($request->c_id);
-            if(!$check){
-                return redirect()->back()->with('error', 'Collector ID: '. $request->c_id . ' Not found');
+            $check = User::where('id',$request->c_id)->where('user_type',1)->first();
+            if ($check){
+                $process = New Loan_Process;
+                $process->transfer = 1;
+                $process->request_id = $request->id;
+                $process->admin_id = Auth::user()->id;
+                $process->collector_id = $request->c_id;
+                $process->save();
+            }else{
+                return redirect()->route('admin-requests')->with('error', 'Collector ID: '. $request->c_id . ' Not found');
             }
-            $process = New Loan_Process;
-            $process->transfer = 1;
-            $process->request_id = $request->id;
-            $process->admin_id = Auth::user()->id;
-            $process->collector_id = $request->c_id;
-            $process->save();
             return redirect()->route('admin-requests')->with('success', 'Successfully transfer to Collector ID: '.$request->c_id);
         }
     }
