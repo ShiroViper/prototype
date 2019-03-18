@@ -39,7 +39,7 @@
         {{ Form::text('member',, ['class' => 'form-control', 'readonly']) }}
     </div> --}}
 
-    {{ Form::submit('Submit', ['class' => 'btn btn-primary']) }}
+    {{ Form::submit('Pay', ['class' => 'btn btn-primary', 'target'=>'_blank']) }}
 
       {!!Form::close()!!}
     </div>

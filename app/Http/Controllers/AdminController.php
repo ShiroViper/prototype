@@ -24,6 +24,44 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function failed(){
+        $failures = DB::table('transactions')
+            ->select(DB::raw('ADDDATE(loan_request.created_at, days_payable) AS due_date') , 'member_id', 'users.lname', 'users.fname', 'collector.lname as col_lname', 'collector.fname as col_fname', 'balance' )
+            ->join('loan_request','user_id', '=', 'member_id')
+            ->join('users', 'users.id', '=', 'member_id')
+            ->join('users as collector', 'collector.id', '=', 'collector_id')
+            ->whereIn('transactions.id', function($query){
+                $query->select(DB::raw('MAX(transactions.id)'))
+                ->from('transactions')
+                ->groupby('member_id');
+            })
+            ->orderBy('transactions.created_at', 'desc')
+            ->paginate(10);
+            // return dd($deliquents);
+            // No Values if transactions table empty
+
+        return view('users.collector.failed-deposit')->with('failures', $failures)->with('active', 'failed');
+    }
+    public function deliquent(){
+
+        $deliquents = DB::table('transactions')
+            ->select(DB::raw('ADDDATE(loan_request.created_at, 30) AS due_date') , 'member_id', 'users.lname', 'users.fname', 'collector.lname as col_lname', 'collector.fname as col_fname', 'balance' )
+            ->join('loan_request','user_id', '=', 'member_id')
+            ->join('users', 'users.id', '=', 'member_id')
+            ->join('users as collector', 'collector.id', '=', 'collector_id')
+            ->whereIn('transactions.id', function($query){
+                $query->select(DB::raw('MAX(transactions.id)'))
+                ->from('transactions')
+                ->groupby('member_id');
+            })
+            ->where('collector_id', Auth::user()->id)
+            ->orderBy('transactions.created_at', 'desc')
+            ->paginate(10);
+            
+            // No Values if transactions table empty
+
+        return view('users.collector.deliquent')->with('deliquents', $deliquents)->with('active', 'deliquents');
+    }
     public function index()
     {
         // $user = User::find(Auth::user()->id);

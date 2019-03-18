@@ -9,6 +9,8 @@ use Auth;
 use App\Loan_Request;
 use App\Schedule;
 use Carbon\Carbon;
+use Codedge\Fpdf\Fpdf\Fpdf;
+use App\User;
 
 class TransactionController extends Controller
 {
@@ -17,38 +19,63 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function report(){
+    public function adminTransaction(){
+        $transactions = DB::table('transactions')
+            ->select('trans_type', 'transactions.created_at', 'lname', 'fname', 'amount', 'balance')
+            ->join('users', 'collector_id', '=', 'users.id')
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10);
 
-        $reports = DB::table('transactions')
-                        ->select('loan_request.created_at',DB::raw('ADDDATE(loan_request.created_at, 31) AS due_date') ,'days_payable', 'member_id', 'users.lname', 'users.fname', 'collector.lname as col_lname', 'collector.fname as col_fname', 'balance' )
-                        ->join('loan_request','user_id', '=', 'member_id')
-                        ->join('users', 'users.id', '=', 'member_id')
-                        ->join('users as collector', 'collector.id', '=', 'collector_id')
-                        ->whereIn('transactions.id', function($query){
-                            $query->select(DB::raw('MAX(transactions.id)'))
-                            ->from('transactions')
-                            ->groupby('member_id');
-                        })
-                        ->orderBy('transactions.created_at', 'desc')
-                        ->paginate(10);
+        return view('users.admin.dashboard')->with('active', 'dashboard')->with('transactions',$transactions);
+    }
+    public function memberTransaction(){
+        $transactions = DB::table('transactions')
+            ->select('trans_type', 'transactions.created_at', 'lname', 'fname', 'amount', 'balance')
+            ->join('loan_request','user_id', '=', 'member_id')
+            ->join('users as collector', 'collector.id', '=', 'collector_id')
+            ->where('member_id', Auth::user()->id)
+            ->orderBy('transactions.created_at', 'desc')
+            ->paginate(10);
+            // No Values if transactions table empty
 
-                        $now = date("M d Y",strtotime('2019-07-13 10:59:44'));
-                        // $now = date("M d Y",strtotime(NOW()));
-                        $past = date("M d Y", strtotime($reports[0]->due_date));
-                        // return $now. "<br>". $past;
-                        $try = "2019-07-13 10:59:44";
+        return view('users.member.transaction')->with('transactions', $transactions)->with('active', 'transactions');
+    }
+    public function failed(){
+        $failures = DB::table('transactions')
+            ->select(DB::raw('ADDDATE(loan_request.created_at, days_payable) AS due_date') , 'member_id', 'users.lname', 'users.fname', 'collector.lname as col_lname', 'collector.fname as col_fname', 'balance' )
+            ->join('loan_request','user_id', '=', 'member_id')
+            ->join('users', 'users.id', '=', 'member_id')
+            ->join('users as collector', 'collector.id', '=', 'collector_id')
+            ->whereIn('transactions.id', function($query){
+                $query->select(DB::raw('MAX(transactions.id)'))
+                ->from('transactions')
+                ->groupby('member_id');
+            })
+            ->where(DB::raw('ADDDATE(loan_request.created_at, days_payable)'), '<', NOW())
+            ->orderBy('transactions.created_at', 'desc')
+            ->paginate(10);
+            // No Values if transactions table empty
 
-                        if($try < $reports[0]->due_date){
-                            return NOW(). " is more than ".$reports[0]->due_date;
-                        }
-                        
-                        return dd($past);
+        return view('users.collector.failed-deposit')->with('failures', $failures)->with('active', 'failed');
+    }
+    public function deliquent(){
 
-                        // $stop_date = NOW();
-                        // $stop_date = date('Y-m-d', strtotime($stop_date . ' +30 day'));
-                        // return dd ($stop_date);
+        $deliquents = DB::table('transactions')
+            ->select(DB::raw('ADDDATE(loan_request.created_at, 30) AS due_date') , 'member_id', 'users.lname', 'users.fname', 'collector.lname as col_lname', 'collector.fname as col_fname', 'balance' )
+            ->join('loan_request','user_id', '=', 'member_id')
+            ->join('users', 'users.id', '=', 'member_id')
+            ->join('users as collector', 'collector.id', '=', 'collector_id')
+            ->whereIn('transactions.id', function($query){
+                $query->select(DB::raw('MAX(transactions.id)'))
+                ->from('transactions')
+                ->groupby('member_id');
+            })
+            ->where(DB::raw('ADDDATE(loan_request.created_at, 30)'), '<', NOW())
+            ->orderBy('transactions.created_at', 'desc')
+            ->paginate(10);
+            // No Values if transactions table empty
 
-        return view('users.collector.reports')->with('reports', $reports)->with('active', 'reports');
+        return view('users.collector.deliquent')->with('deliquents', $deliquents)->with('active', 'deliquent');
     }
     public function index()
     {
@@ -203,35 +230,38 @@ class TransactionController extends Controller
     //                 ->where('get',0)
     //                 ->sum('transactions.balance');
                 
-    //         if(!Transaction::find($request->id)){
+    //         if(!Transaction::where('member_id', '=', $request->id)->first()){
     //             return redirect()->route('transaction-collect')->with('error', 'Member ID: '.$request->id. ' Not Found');
     //         }
-    //         if($temp <= 0){                    
-    //             return redirect()->route('transaction-collect')->with('error', 'You already paid the loan');
+    //         if($temp <= 0){               
+    //             return redirect()->route('transaction-collect')->with('error', 'Member ID: '. $request->id. ' already paid the loan');
     //         }
             
 
-    //         DB::table('transactions')
-    //         ->where('member_id', $request->id)
-    //         ->where('get',0)
-    //         ->where('balance', '<=', 0)
-    //         ->update(['get'=>1]);
+    // //         DB::table('transactions')
+    // //         ->where('member_id', $request->id)
+    // //         ->where('get',0)
+    // //         ->where('balance', '<=', 0)
+    // //         ->update(['get'=>1]);
 
     //             if($temp < $request->amount){
-    //                 $msg = 'Your payment should not above '.$temp.' Php';
+    //                 $msg = 'Payment for Member ID: ' .$request->id. ' should not above '.$temp.' Php';
     //                 return redirect()->route('transaction-collect')->with('error', $msg);
     //             }
                     
-    //             if($temp > 0){
-    //                 $t= DB::table('transactions')
-    //                 ->where('member_id', $request->id)
-    //                 ->where('get',0)
-    //                 ->update(['get'=>1]);
-    //             }
+    // //             if($temp > 0){
+    // //                 $t= DB::table('transactions')
+    // //                 ->where('member_id', $request->id)
+    // //                 ->where('get',0)
+    // //                 ->update(['get'=>1]);
+    // //             }
                 
-    //         }
+    // //         }
 
-           
+    //         if($temp < $request->amount){
+    //             $msg = 'Payment for Member ID: ' .$request->id. ' should not above '.$temp.' Php';
+    //             return redirect()->route('transaction-collect')->with('error', $msg);
+    //         }
 
     //         $deduct = $temp - $request->amount;
     //         if($deduct == 0){
@@ -251,13 +281,16 @@ class TransactionController extends Controller
     //             ->where('get',0)
     //             ->update(['get' => 1]);
 
+    //         // $m_name = User::where('id',$request->id)->first();
+    //         // $c_name = User::where('id',Auth::user()->id)->first();
+
+    //         // $this->generatepdf($transact, $m_name, $c_name);
+
     //     }else{
     //         // for deposit
     //     }
-    //    return redirect()->route('transaction-collect')->with('success', 'Successfully Transacted');
 
-
-    // ***************************          END         ***************************
+    //    return redirect()->route('transaction-collect')->with('success', 'Member ID: '.$request->id. ' Successfully Transacted');
     }
 
     /**
@@ -303,5 +336,67 @@ class TransactionController extends Controller
     public function destroy(Collector $collector)
     {
         //
+    }
+    public function generatepdf($m, $m_name, $c_name){
+
+        $pdf = new FPDF('L','mm',array(100,150));		// can set the layout of the PDF 
+		$pdf->AddPage();			//can add another page
+		$pdf->SetFont('Arial','',12); //set font of your PDF
+		$margin = 10;
+		$x = 150;
+
+		//header
+		$text = 'Sinking Fund';
+		$pdf->Text($x*0.45, $margin, $text);
+
+		$text = 'Poblacion Compostela Cebu';
+		$pdf->Text($x*0.35, 20, $text);
+
+		//Partial Details
+		$text = 'Member ID:';
+        $pdf->Text($margin, 35, $text);
+        $text = $m->member_id;
+		$pdf->Text($margin + 40, 35, $text);
+
+		$text = 'Date: ';
+        $pdf->Text($x*0.65, 35, $text);
+        $text = date('M d, Y', strtotime($m->created_at));
+        $pdf->Text($x*0.75, 35, $text);
+
+        $text = 'Time: ';
+        $pdf->Text($x*0.65, 40, $text);
+        $text = date('h:i:s A', strtotime($m->created_at));
+		$pdf->Text($x*0.75, 40, $text);
+
+		//Full Details
+		$text = 'Complete Name:';
+        $pdf->Text($margin, 50, $text);
+        $text = $m_name->lname. ', '. $m_name->fname;
+		$pdf->Text($margin + 40, 50, $text);
+
+		$text = 'Type:';
+        $pdf->Text($margin, 60, $text);
+        if($m->trans_type == 0){
+            $text = 'Loan Widthdraw';
+        }else if ($m->trans_type == 1){
+            $text = 'Loan Payment';
+        }else{
+            $text = 'Deposit';
+        }
+		$pdf->Text($margin + 40, 60, $text);
+
+		$text = 'Amount:';
+        $pdf->Text($margin, 70, $text);
+        $text = 'Php '.$m->amount;
+        $pdf->Text($margin + 40, 70, $text);
+
+        $text = 'Receive By: ';
+        $pdf->Text($margin, 80, $text);
+        $text = $c_name->lname.', '.$c_name->fname;
+        $pdf->Text($margin + 40, 80, $text);
+        
+        $filename = "receipt/Receipt.pdf";
+        $pdf->Output('F', $filename, True);		//to close document
+                
     }
 }
