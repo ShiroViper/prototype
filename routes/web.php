@@ -26,6 +26,7 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', 'TransactionController@index')->name('admin-dashboard');
+        // Route::get('/dashboard', 'TransactionController@adminTransaction')->name('admin-dashboard');
         Route::resource('/users', 'UsersController', [
             'names' => [
                 'index' => 'users-index'
@@ -46,6 +47,22 @@ Route::middleware(['auth'])->group(function () {
                 'show' => 'profile-show'
             ]
         ]);
+        Route::get('/failed', 'TransactionController@failed')->name('collector-failed');
+        Route::get('/deliquent', 'TransactionController@deliquent')->name('collector-deliquent');
+        Route::resource('/transaction','TransactionController',[
+            'names'=>[
+                'index'=>'collector-dashboard',
+                'create'=>'transaction-collect'
+                
+            ]
+        ]);
+        Route::resource('/process', 'LoanProcessController', [
+            'names' => [
+                'index' => 'admin-process',
+                'create' => 'admin-create',
+                'store' => 'admin-process-store'
+            ]
+        ]);
         Route::get('/calendar', 'SchedulesController@index')->name('admin-calendar');
     });
 
@@ -53,6 +70,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', 'SchedulesController@index')->name('member-dashboard');
         // When the user has not yet setup his account [The calendar wont show]
         Route::post('/dashboard/setup', 'DepositController@create')->name('member-setup');
+        Route::get('/transaction', 'TransactionController@memberTransaction')->name('member-transaction');
         Route::resource('/requests', 'LoanRequestsController', [
             'names' => [
                 'index' => 'member-requests',
@@ -67,10 +85,21 @@ Route::middleware(['auth'])->group(function () {
             ]
         ]);
         Route::get('/transactions', 'TransactionController@index')->name('member-transactions');
+        Route::get('/receive/{id}/accept', 'LoanProcessController@accept')->name('member-accept');
+        // Route::get('/process/{id}/edit', 'LoanProcessController@col_edit')->name('member-process');
+        Route::resource('/process', 'LoanProcessController', [
+            'names' => [
+                'index' => 'member-process',
+                'create' => 'member-create',
+                'store' => 'member-process-store'
+            ]
+        ]);
+        // Route::view('/transactions','users.admin.dashboard',['active'=>'transactions'])->name('member-transactions');
     });
 
     Route::prefix('collector')->group(function () {
-        Route::get('/transaction/report', 'TransactionController@report')->name('collector-report');
+        Route::get('/failed', 'TransactionController@failed')->name('collector-failed');
+        Route::get('/deliquent', 'TransactionController@deliquent')->name('collector-deliquent');
         
         Route::resource('/transaction','TransactionController',[
             'names'=>[
@@ -79,6 +108,21 @@ Route::middleware(['auth'])->group(function () {
             ]
         ]);
         Route::get('/transaction', 'TransactionController@index')->name('collector-dashboard');
+        Route::resource('/profile', 'ProfilesController',[
+            'names' => [
+                'index' => 'profile-index',
+                'show' => 'profile-show'
+            ]
+        ]);
+        Route::get('/receive/{id}/accept', 'LoanProcessController@accept')->name('collector-accept');
+        Route::get('/process/{id}/edit', 'LoanProcessController@col_edit')->name('collector-process');
+        Route::resource('/process', 'LoanProcessController', [
+            'names' => [
+                'index' => 'collector-requests',
+                'create' => 'collector-create',
+                'store' => 'collector-process-store'
+            ]
+        ]);
     });
 
 
