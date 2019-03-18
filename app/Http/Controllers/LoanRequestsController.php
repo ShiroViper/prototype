@@ -59,7 +59,6 @@ class LoanRequestsController extends Controller
      */
     public function store(Request $request)
     {
-        // return dd($request->input());
         $this->validate($request, [
             'amount' => ['required'],
             'days' => ['required']
@@ -71,6 +70,9 @@ class LoanRequestsController extends Controller
         $lr->get = 0;
         $lr->user_id = Auth::user()->id;
         $lr->balance = $request->input('amount');
+
+        // sched_id is NULL for now since it still hasn't been approved
+        $lr->sched_id = null;
         // return dd($lr);
         $lr->save();
 
@@ -131,10 +133,10 @@ class LoanRequestsController extends Controller
         return redirect()->route('member-requests')->with('success', 'Request removed successfully');
     }
 
-    public function accept($id) {
+    public function accept($id) 
+    {
         $rq = Loan_Request::find($id);
         $rq->confirmed = true;
-        $rq->save();
         
         // A schedule belongs to a certain loan request (relationships)
         $sched = new Schedule;
@@ -144,12 +146,15 @@ class LoanRequestsController extends Controller
         $sched->user_id = $rq->user_id;
         $sched->save();
 
-        // return dd($sched);
+        // Save $sched first and $rq get its ID
+        $rq->sched_id = $sched->id;
+        $rq->save();
 
         return redirect()->route('admin-requests')->with('success', 'Request Accepted');
     }
 
-    public function reject($id) {
+    public function reject($id) 
+    {
         $rq = Loan_Request::find($id);
         $rq->confirmed = false;
         $rq->paid = 1;

@@ -54,7 +54,7 @@ class TransactionController extends Controller
     {
         if ( Auth::user()->user_type == 2 ) {
             $transactions = Transaction::orderBy('id', 'desc')->paginate(10);
-            return view('users.admin.dashboard')->with('transactions', $transactions)->with('active', 'transactions');
+            return view('users.admin.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
         } else if ( Auth::user()->user_type == 1 ) {
             // return dd($transactions);
             $transactions = Transaction::where('collector_id', '=', Auth::user()->id)->orderBy('created_at', 'DESC')->paginate(10);
@@ -133,13 +133,12 @@ class TransactionController extends Controller
                 $loan_request->get = 1;
                 $loan_request->save();
             } else {
-                // return dd('2nd transaction made by the user');
+                // Member is continuing to pay his/her loan
                 $loan_request = Loan_Request::where([
                     ['user_id', '=', $transact->member_id],
                     ['confirmed', '=', 1],
                     ['paid', '=', null]
                 ])->first();        // Get the latest update of the loan_request
-                // return dd($loan_request, 'No more payments needed');
                 if (is_null($loan_request)) {
                     // There are no more loan payments by the user
                     return redirect()->route('transaction-collect')->with('error', "User doesn't have any payments");
@@ -156,10 +155,8 @@ class TransactionController extends Controller
                 $loan_request->save();
             }
         }     
-
         $transact->get = 1;     // Serves as the basis for the next transaction?
         $transact->collector_id = Auth::user()->id;
-        $transact->save();
 
         // Create a paid date
         $sched = new Schedule;
@@ -168,6 +165,10 @@ class TransactionController extends Controller
         $sched->start_date = Carbon::now()->format('Y-m-d');
         $sched->end_date = Carbon::now()->format('Y-m-d');
         $sched->save();
+
+        // Get the sched_id
+        $transact->sched_id = $sched->id;
+        $transact->save();
 
         return redirect()->route('transaction-collect')->with('success', 'Transaction Successful');
 

@@ -31,7 +31,7 @@ class DepositController extends Controller
         $deposit->member_id = Auth::user()->id;
         $deposit->payment_method = $request->input('payment_method');
         $deposit->start_date =  $request->input('start_date');
-        $deposit->save();
+        
 
         $schedule = new Schedule;
         $schedule->deposit()->associate($deposit);
@@ -54,17 +54,14 @@ class DepositController extends Controller
         // Schedule type as Deposit Schedule [1], Loan Schedule [2]
         $schedule->sched_type = 1;
         $schedule->save();
-
-        // $numOfWeek = $start->diffInWeeks($end);
-        // $interval = new DateInterval('P7D');
-        // $dayOfWeek = Carbon::parse($start)->dayOfWeek;
-        // $period = new DatePeriod($start, $interval, $end);
-        // foreach ($period as $key => $date) {
-        //     echo "<pre>".$key." ".$date->format('Y-m-d')."</pre>";
-        // }
-
-        // return dd($schedule, $numOfWeek, $dayOfWeek);
         
+        /**
+         * Schedule should be saved first in order for
+         * the deposit to get its ID
+         */
+        $deposit->sched_id = $schedule->id;
+        $deposit->save();
+
         return redirect()->action('SchedulesController@index');
     }
 }

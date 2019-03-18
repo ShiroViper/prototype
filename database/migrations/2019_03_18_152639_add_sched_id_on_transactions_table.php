@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDepositsTable extends Migration
+class AddSchedIdOnTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,11 @@ class CreateDepositsTable extends Migration
      */
     public function up()
     {
-        Schema::create('deposits', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('member_id');
-            $table->unsignedInteger('sched_id');
-            $table->timestamp('start_date');
-            $table->tinyInteger('payment_method');
-            $table->timestamps();
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->unsignedInteger('sched_id')->after('amount');
             $table->foreign('sched_id')
                 ->references('id')
                 ->on('schedules')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->foreign('member_id')
-                ->references('id')
-                ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
@@ -41,7 +31,7 @@ class CreateDepositsTable extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('deposits');
+        Schema::dropIfExists('transactions');
         Schema::enableForeignKeyConstraints();
     }
 }
