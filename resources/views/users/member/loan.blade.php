@@ -6,7 +6,7 @@
 
 @section('content')
 @if(!$unpaid)
-    <h3 class="header mt-3">Request Loan</h3>
+    <h3 class="header">Request Loan</h3>
     <div class="row">
         <div class="col-sm-10 col-md-7 col-lg-5 my-3">  
             {!! Form::open(['action' => 'LoanRequestsController@store', 'method' => 'POST']) !!}

@@ -72,6 +72,11 @@ $('#histReqModal').on('show.bs.modal', function (event) {
 });
 
 $(function () {
+  /**
+   * Spinner for calendar
+   */
+  $('div[role="status"]').toggle();
+
   $('[data-toggle="tooltip"]').tooltip();
 
   // $('#reqModal').on('show.bs.modal', function (e) {

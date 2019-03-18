@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChangeUserIdToFkInLoanRequestTable extends Migration
+class AddSchedIdOnLoanRequestTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,10 @@ class ChangeUserIdToFkInLoanRequestTable extends Migration
     public function up()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            $table->unsignedInteger('user_id')->change();
-            $table->foreign('user_id')
+            $table->unsignedInteger('sched_id')->nullable()->after('paid');
+            $table->foreign('sched_id')
                 ->references('id')
-                ->on('users')
+                ->on('schedules')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
@@ -30,9 +30,6 @@ class ChangeUserIdToFkInLoanRequestTable extends Migration
      */
     public function down()
     {
-        /**
-         * Drop the table containing the foreign key
-         */
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('loan_request');
         Schema::enableForeignKeyConstraints();

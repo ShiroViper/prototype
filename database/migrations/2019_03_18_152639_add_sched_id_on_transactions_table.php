@@ -4,20 +4,20 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddLoanRequestIdOnSchedules extends Migration
+class AddSchedIdOnTransactionsTable extends Migration
 {
-        /**
+    /**
      * Run the migrations.
      *
      * @return void
      */
     public function up()
     {
-        Schema::table('schedules', function (Blueprint $table) {
-            $table->unsignedInteger('loan_request_id')->nullable()->after('id');
-            $table->foreign('loan_request_id')
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->unsignedInteger('sched_id')->after('amount');
+            $table->foreign('sched_id')
                 ->references('id')
-                ->on('loan_request')
+                ->on('schedules')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
@@ -30,11 +30,8 @@ class AddLoanRequestIdOnSchedules extends Migration
      */
     public function down()
     {
-        /**
-         * Drop the table containing the foreign key
-         */
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('schedules');
+        Schema::dropIfExists('transactions');
         Schema::enableForeignKeyConstraints();
     }
 }

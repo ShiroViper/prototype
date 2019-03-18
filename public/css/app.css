@@ -16395,19 +16395,23 @@ readers do not read off random characters that represent icons */
 }
 
 .pay-dates {
-  background: #ff7043;
+  background: #EF5450;
+}
+
+.loan-dates {
+  background: #EF9950;
 }
 
 .paid-dates {
-  background: #7befb2;
+  background: #3FBC47;
 }
 
 .current-date {
-  background: #fff59d;
+  background: #83CACD;
 }
 
 .fc-unthemed td.fc-today {
-  background: #fff59d !important;
+  background: #83CACD !important;
 }
 
 .main-login-container {

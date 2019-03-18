@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col mt-3">
+    <div class="col">
         <div class="float-left">
             <h3 class="header">Requests</h3>
         </div>
@@ -23,7 +23,7 @@
             <h6 class="card-header">Pending Requests</h6>
             <div class="container">
                 <div class="table-responsive">
-                    <table class="table table-hover" style="text-align: center">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>Date</th>

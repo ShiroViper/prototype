@@ -8,13 +8,13 @@
 <div class="row">
     <div class="col-sm col-md-10 col-xl-8">
         <h3>View {{$user->fname}}'s Information</h3>
-        <div class="py-3">
+        <div class="d-flex align-items-center py-3">
             @if(Auth::user()->user_type == 2)
-                <a href="/admin/profile/{{$user->id}}/edit" class="btn btn-success float-right edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a><br>
+                <a href="/admin/profile/{{$user->id}}/edit" class="btn btn-success edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a><br>
             @elseif(Auth::user()->user_type == 1)
-                <a href="/collector/profile/{{$user->id}}/edit" class="btn btn-success float-right edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a><br>
+                <a href="/collector/profile/{{$user->id}}/edit" class="btn btn-success edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a><br>
             @else
-                <a href="/member/profile/{{$user->id}}/edit" class="btn btn-success float-right edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a><br>
+                <a href="/member/profile/{{$user->id}}/edit" class="btn btn-success edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a><br>
             @endif
             <br>
         </div>

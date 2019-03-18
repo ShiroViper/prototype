@@ -25,7 +25,7 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->group(function () {
-        Route::get('/dashboard', 'AdminController@index')->name('admin-dashboard');
+        Route::get('/dashboard', 'TransactionController@index')->name('admin-dashboard');
         Route::resource('/users', 'UsersController', [
             'names' => [
                 'index' => 'users-index'
@@ -51,6 +51,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('member')->group(function () {
         Route::get('/dashboard', 'SchedulesController@index')->name('member-dashboard');
+        // When the user has not yet setup his account [The calendar wont show]
+        Route::post('/dashboard/setup', 'DepositController@create')->name('member-setup');
         Route::resource('/requests', 'LoanRequestsController', [
             'names' => [
                 'index' => 'member-requests',
@@ -64,7 +66,7 @@ Route::middleware(['auth'])->group(function () {
                 'show' => 'profile-show'
             ]
         ]);
-        Route::view('/transactions','users.admin.dashboard',['active'=>'transactions'])->name('member-transactions');
+        Route::get('/transactions', 'TransactionController@index')->name('member-transactions');
     });
 
     Route::prefix('collector')->group(function () {
@@ -72,11 +74,11 @@ Route::middleware(['auth'])->group(function () {
         
         Route::resource('/transaction','TransactionController',[
             'names'=>[
-                'index'=>'collector-dashboard',
-                'create'=>'transaction-collect'
-                
+                // 'index'=>'collector-dashboard',
+                'create'=>'transaction-collect' 
             ]
         ]);
+        Route::get('/transaction', 'TransactionController@index')->name('collector-dashboard');
     });
 
 

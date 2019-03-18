@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChangeUserIdToFkInLoanRequestTable extends Migration
+class MakeUserIdOnSchedulesTableForeignKey extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,7 @@ class ChangeUserIdToFkInLoanRequestTable extends Migration
      */
     public function up()
     {
-        Schema::table('loan_request', function (Blueprint $table) {
-            $table->unsignedInteger('user_id')->change();
+        Schema::table('schedules', function (Blueprint $table) {
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
@@ -31,7 +30,7 @@ class ChangeUserIdToFkInLoanRequestTable extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('loan_request');
+        Schema::dropIfExists('schedules');
         Schema::enableForeignKeyConstraints();
     }
 }

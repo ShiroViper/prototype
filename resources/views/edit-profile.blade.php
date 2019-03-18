@@ -8,21 +8,19 @@
 @section('content')
 <div class="row">
     <div class="col-sm col-md-10 col-xl-8">
-        <h3 style="text-align:center;">Update {{$user->fname}}'s Information</h3>
+        <h3 class="header">Update {{$user->fname}}'s Information</h3>
         {!! Form::open(['action' => ['ProfilesController@update', $user->id], 'method' => 'POST']) !!}
         <div class="py-3">
+            {{Form::hidden('_method', 'PUT')}}
+            {{ Form::submit('Save Changes', ['class' => 'btn btn-success edit-button']) }}
+            @csrf
             @if(Auth::user()->user_type == 2)
-                <a class="btn btn-outline-danger mr-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/admin/profile"><i class="fas fa-times fa-lg"></i></a>
+                <a class="btn btn-outline-danger ml-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/admin/profile"><i class="fas fa-times fa-lg"></i></a>
             @elseif(Auth::user()->user_type == 1)
-                <a class="btn btn-outline-danger mr-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/collector/profile"><i class="fas fa-times fa-lg"></i></a>
+                <a class="btn btn-outline-danger ml-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/collector/profile"><i class="fas fa-times fa-lg"></i></a>
             @else
-                <a class="btn btn-outline-danger mr-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/member/profile"><i class="fas fa-times fa-lg"></i></a>
+                <a class="btn btn-outline-danger ml-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/member/profile"><i class="fas fa-times fa-lg"></i></a>
             @endif
-            <div class="float-right">
-                {{Form::hidden('_method', 'PUT')}}
-                {{ Form::submit('Save Changes', ['class' => 'btn btn-success edit-button']) }}
-                @csrf
-            </div>
         </div>
         <div class="card">
             <h6 class="card-header">User information</h6>
