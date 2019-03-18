@@ -26,8 +26,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $user = User::find(Auth::user()->id);
-        return view('users.admin.dashboard')->with('active','dashboard')->with('user', $user);
+        // $user = User::find(Auth::user()->id);
+        // return view('users.admin.dashboard')->with('active','dashboard')->with('user', $user);
     }
 
     /**
