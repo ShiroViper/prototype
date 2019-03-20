@@ -44,7 +44,7 @@
         {{ Form::number('transfer', $process->transfer, ['hidden']) }}
         {{ Form::number('type', 1, ['hidden']) }}
 
-        {{ Form::submit('Transfer', ['class' => 'btn btn-primary']) }}
+        {{ Form::submit('Transfer to Member', ['class' => 'btn btn-primary']) }}
     @endif
     
     <br><hr>

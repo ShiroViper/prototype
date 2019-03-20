@@ -39,13 +39,7 @@
                                     <tr>
                                         <td>{{ date('F d, Y', strtotime($item->created_at)) }}</td>
                                         <td>₱ {{ $item->loan_amount }}</td>
-                                        @if($item->method == 2)
-                                            <td>{{ $item->days_payable / 30 }} Months</td>
-                                        @elseif($item->method == 1)
-                                            <td>{{ $item->days_payable /7 }} Weeks</td>
-                                        @else
-                                            <td>{{ $item->days_payable }} Days</td>
-                                        @endif
+                                        <td>{{ $item->days_payable }} Days</td>
                                         <td>
                                             {!! Form::open(['action' => ['LoanRequestsController@destroy', $item->id], 'method' => 'POST']) !!}
                                                 {{ Form::hidden('_method', 'DELETE') }}
@@ -76,7 +70,7 @@
             <h6 class="card-header">Pending Money</h6>
             <div class="container">
                 <div class="table-responsive">
-                    <table class="table table-hover" style="text-align: center">
+                    <table class="table table-hover" >
                         <thead>
                             <tr>
                                 <th>Collector ID</th>

@@ -142,27 +142,26 @@
                     <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/member/dashboard">Dashboard</a>
                     </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'transactions' ? ' active callout' : '' }}" href="/member/transaction">Transactions</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/requests/create">Loan</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/member/requests">Requests</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'account' ? ' active callout' : '' }}" href="/member/profile">My Account</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'patronage' ? ' active callout' : '' }}" href="/member/profile">Patronage Refund</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/profile">My Loan</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'saving' ? ' active callout' : '' }}" href="/member/profile">Savings</a>
-                    </li>
+                    @if(Auth::user()->setup != NULL)
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'transactions' ? ' active callout' : '' }}" href="/member/transaction">Transactions</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/requests/create">Loan</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/member/requests">Requests</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'patronage' ? ' active callout' : '' }}" href="/member/patronage">Patronage Refund</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/loan">My Loan</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'saving' ? ' active callout' : '' }}" href="/member/saving">Savings</a>
+                        </li>
+                    @endif
                 @endif
             {{-- END IF STATEMENT --}}
             </ul>

@@ -38,17 +38,13 @@
             {{ Form::date('date',\Carbon\Carbon::now(), ['class' => 'form-control', 'readonly']) }}
         </div>
         <div class="form-group">
-            {{ Form::label('type', 'Type') }}
-            {{ Form::select('type', [0=>'Widthdraw', 1=>'Loan Transfer'], 1, ['class' => 'form-control']) }}
-        </div>
-        <div class="form-group">
             {{ Form::label('c_id', 'Collector ID') }}
             {{ Form::number('c_id', '', ['class' => $errors->has('c_id') ? 'form-control is-invalid' : 'form-control']) }}
             @if ($errors->has('c_id'))
                 <div class="invalid-feedback">{{ $errors->first('c_id') }}</div>
             @endif
         </div>
-        {{ Form::submit('Transfer', ['class' => 'btn btn-primary']) }}
+        {{ Form::submit('Transfer to Collector', ['class' => 'btn btn-primary']) }}
     @endif
     
     <br><hr>

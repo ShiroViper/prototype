@@ -74,20 +74,19 @@ class ProfilesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $messages = [
-        //     'required' => 'This field is required',
-        //     'alpha' => 'Please use only alphabetic characters'
-        // ];
+        $messages = [
+            'required' => 'This field is required',
+            'alpha' => 'Please use only alphabetic characters'
+        ];
 
-        // $this->validate($request, [
-        //     'lname' => ['required', 'string', 'alpha'],
-        //     'fname' => ['required', 'string', 'alpha'],
-        //     'mname' => ['required', 'string', 'alpha'],
-        //     'cell_num'=>['required', 'string', 'numeric'],
-        //     'email' => ['required', 'string', 'email', Rule::unique('users')->ignore($id)],
-        //     'user_type' => ['required'],
-        //     'address' => ['required', 'string'],
-        // ], $messages);
+        $this->validate($request, [
+            'lname' => ['required', 'string', 'alpha'],
+            'fname' => ['required', 'string', 'alpha'],
+            'mname' => ['required', 'string', 'alpha'],
+            'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
+            'email' => ['required', 'string', 'unique:users', 'email'],
+            'address' => ['required', 'string'],
+        ], $messages);
         
         $user = User::find($id);
         $user->lname = $request->lname;

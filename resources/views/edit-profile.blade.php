@@ -79,7 +79,7 @@
                     <div class="row">
                         <div class="col">Cell Number</div>
                         <div class="col font-weight-bold">
-                            {{ Form::text('cell_num', $user->cell_num, ['class' => 'form-control']) }}
+                            {{ Form::number('cell_num', $user->cell_num, ['class' => 'form-control']) }}
                             @if ($errors->has('cell_num'))
                                 <div class="invalid-feedback">{{ $errors->first('cell_num') }}</div>
                             @endif

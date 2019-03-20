@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<h3>View User Information > Edit User</h3>
+<h3>View {{$user->lname}}'s Information > Edit User</h3>
 <div class="row">
     <div class="col-sm col-md-10 col-xl-8">
         {!! Form::open(['action' => ['UsersController@update', $user->id], 'method' => 'POST']) !!}
@@ -75,10 +75,11 @@
                     <div class="row">
                         <div class="col">Cell Num</div>
                         <div class="col font-weight-bold">
-                            {{ Form::text('cell_num', $user->cell_num, ['class' => 'form-control']) }}
+                            {{ Form::number('cell_num', $user->cell_num, ['class' => 'form-control']) }}
                              @if ($errors->has('cell_num'))
                                 <div class="invalid-feedback">{{ $errors->first('cell_num') }}</div>
                             @endif
+                            {{ $errors->first('cell_num') }}
                         </div>
                     </div>
                 </li>

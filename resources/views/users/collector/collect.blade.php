@@ -18,7 +18,7 @@
     </div>
     <div class="form-group">
         {{ Form::label('type', 'Type') }}
-        {{ Form::select('type', [1=>'Deposit', 2=>'Loan', 3=>'Loan Payment'], 3, ['class' => 'form-control']) }}
+        {{ Form::select('type', [1=>'Deposit', 3=>'Loan Payment'], 3, ['class' => 'form-control']) }}
     </div>
     <div class="form-group">
         {{ Form::label('amount', 'Amount Received') }}

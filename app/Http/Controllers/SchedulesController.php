@@ -30,10 +30,17 @@ class SchedulesController extends Controller
         $sched_list = [];
         foreach ($schedules as $key => $schedule) {
             // [1] Deposit Schedule type
-            if ($schedule->sched_type == 1) {
+            // return dd($schedule);
+            if ($schedule->sched_type == 1 && ($schedule->user_id == Auth::user()->id) ) {
                 $method = Deposit::where('member_id', '=', Auth::user()->id)->first();
                 // return dd($schedule->payment_method);
                 // Get the deposit table row of the logged in user
+
+                // If method user acccount is not found, redirect to setting up account
+                if(!$method){
+                    return view('users.member.dashboard')->with('setup', 'Please setup your account first')->with('active', 'dashboard');
+                }
+
                 switch ($method->payment_method) {
                     // Daily deposit payment basis
                     case 1:

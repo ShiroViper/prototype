@@ -14,19 +14,19 @@ class ChangeMemberIdCollectorIdToFkInTransactionsTable extends Migration
     public function up()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->unsignedInteger('member_id')->change();
-            $table->foreign('member_id')
-                ->references('user_id')
-                ->on('loan_request')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            // $table->unsignedInteger('member_id')->change();
+            // $table->foreign('member_id')
+            //     ->references('user_id')
+            //     ->on('loan_request')
+            //     ->onUpdate('cascade')
+            //     ->onDelete('cascade');
 
-            $table->unsignedInteger('collector_id')->change();
-            $table->foreign('collector_id')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            // $table->unsignedInteger('collector_id')->change();
+            // $table->foreign('collector_id')
+            //     ->references('id')
+            //     ->on('users')
+            //     ->onUpdate('cascade')
+            //     ->onDelete('cascade');
         });
     }
 

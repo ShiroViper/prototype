@@ -26,7 +26,7 @@ class LoanRequestsController extends Controller
             // $lr = DB::table('loan_request')->join('users', 'loan_request.user_id', '=', 'users.id')->select('loan_request.*', 'users.lname', 'users.fname', 'users.mname')->orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(10);
             // $pending = DB::table('loan_request')->join('users', 'loan_request.user_id', '=', 'users.id')->select('loan_request.*', 'users.lname', 'users.fname', 'users.mname')->orderBy('loan_request.created_at', 'desc')->whereNull('confirmed')->paginate(5);
 
-            $lr = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(10);
+            $lr = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(5);
             $pending = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNull('confirmed')->paginate(5);
             
             // For Money Transferred To collector table
@@ -36,12 +36,10 @@ class LoanRequestsController extends Controller
                 ->join('loan_request','loan_request.id', '=', 'request_id')
                 ->where('transfer','>=', 2)
                 ->paginate(5);
-            
-            // return dd($lr);
 
             return view('users.admin.requests')->with('transferred', $transferred)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         } else {
-            $lr = Loan_Request::orderBy('updated_at', 'desc')->where('user_id', Auth::user()->id)->whereNotNull('confirmed')->paginate(10);
+            $lr = Loan_Request::orderBy('updated_at', 'desc')->where('user_id', Auth::user()->id)->whereNotNull('confirmed')->paginate(5);
             $pending = Loan_Request::orderBy('created_at', 'desc')->where('user_id', Auth::user()->id)->where('confirmed', NULL)->paginate(5);
             $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
             
@@ -56,7 +54,7 @@ class LoanRequestsController extends Controller
                 ->paginate(5);
                 
             
-            // return dd($transferring);
+            // return dd($pending);
            
             return view('users.member.requests')->with('transferring',$transferring)->with('transferring', $transferring)->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         }
@@ -91,7 +89,9 @@ class LoanRequestsController extends Controller
         $lr->days_payable = $request->input('days');
         $lr->get = 0;
         $lr->user_id = Auth::user()->id;
-        $lr->balance = $request->input('amount');
+
+        // Compute for Compound Interest
+        $lr->balance = $request->input('amount')*1.06;
 
         // sched_id is NULL for now since it still hasn't been approved
         $lr->sched_id = null;

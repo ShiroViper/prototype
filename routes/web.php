@@ -26,7 +26,7 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', 'TransactionController@index')->name('admin-dashboard');
-        // Route::get('/dashboard', 'TransactionController@adminTransaction')->name('admin-dashboard');
+        Route::get('/adminTrans', 'TransactionController@adminTransaction')->name('admin-trans');
         Route::resource('/users', 'UsersController', [
             'names' => [
                 'index' => 'users-index'
@@ -94,6 +94,9 @@ Route::middleware(['auth'])->group(function () {
                 'store' => 'member-process-store'
             ]
         ]);
+        Route::get('/patronage', 'StatusController@index_patronage')->name('member-patronage');
+        Route::get('/loan', 'StatusController@index_loan')->name('member-loan');
+        Route::get('/saving', 'StatusController@index_saving')->name('member-saving');
         // Route::view('/transactions','users.admin.dashboard',['active'=>'transactions'])->name('member-transactions');
     });
 
