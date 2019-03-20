@@ -28,6 +28,15 @@
             {{ Form::submit('Request', ['class' => 'btn btn-primary']) }}
             {!! Form::close() !!}
         </div>
+        <div class="col-sm-10 col-md-7 col-lg-5 my-3">  
+               Note: <br>
+               Php 50 below pay for 1 week <br>
+               Php 200 below pay for 1 month <br>
+               Php 201 above depend on the system computation <br>
+
+               Update: <br>
+               Mangutana ta ni miss pila ka months/weeks ang duration sa ila loan.
+            </div>
     </div>
 @else
     <h3 class="header mt-3 text-center">Request Loan Not Available</h3>

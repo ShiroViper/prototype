@@ -27,8 +27,9 @@ class AddGetToLoanRequest extends Migration
     public function down()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            $table->dropColumn('get');
-            $table->dropColumn('paid');
+            // table deleted
+            // $table->dropColumn('get');
+            // $table->dropColumn('paid');
         });
     }
 }

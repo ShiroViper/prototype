@@ -26,18 +26,18 @@ class LoanRequestsController extends Controller
             // $lr = DB::table('loan_request')->join('users', 'loan_request.user_id', '=', 'users.id')->select('loan_request.*', 'users.lname', 'users.fname', 'users.mname')->orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(10);
             // $pending = DB::table('loan_request')->join('users', 'loan_request.user_id', '=', 'users.id')->select('loan_request.*', 'users.lname', 'users.fname', 'users.mname')->orderBy('loan_request.created_at', 'desc')->whereNull('confirmed')->paginate(5);
 
-            $lr = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(5);
+            // $lr = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(5);
+            // dd ($lr);
             $pending = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNull('confirmed')->paginate(5);
-            
-            // For Money Transferred To collector table
-            $transferred = DB::table('loan_process')
-                ->select('loan_process.updated_at','request_id', 'lname', 'fname', 'collector_id', 'loan_amount', 'transfer')
-                ->join('users', 'users.id', '=', 'collector_id')
-                ->join('loan_request','loan_request.id', '=', 'request_id')
-                ->where('transfer','>=', 2)
+
+            // This code use for transfer button in request history:
+            $lr = DB::table('loan_request')
+                ->join('loan_process', 'loan_process.request_id', '=', 'loan_request.id')
+                ->join('users', 'users.id', '=', 'user_id')
+                ->select('loan_request.updated_at', 'lname', 'fname', 'mname', 'loan_amount', 'days_payable', 'confirmed', 'received', 'paid', 'loan_request.id', 'transfer')
                 ->paginate(5);
 
-            return view('users.admin.requests')->with('transferred', $transferred)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
+            return view('users.admin.requests')->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         } else {
             $lr = Loan_Request::orderBy('updated_at', 'desc')->where('user_id', Auth::user()->id)->whereNotNull('confirmed')->paginate(5);
             $pending = Loan_Request::orderBy('created_at', 'desc')->where('user_id', Auth::user()->id)->where('confirmed', NULL)->paginate(5);
@@ -79,13 +79,19 @@ class LoanRequestsController extends Controller
      */
     public function store(Request $request)
     {
+        $messages = [
+            'required' => 'This field is required',
+            'alpha' => 'Please use only alphabetic characters'
+        ];
+
         $this->validate($request, [
             'amount' => ['required'],
             'days' => ['required']
-        ]);
+        ], $messages);
 
         $lr = new Loan_Request;
-        $lr->loan_amount = $request->input('amount');
+        //  Store the Computed Compound Interest  ex: 6% 
+        $lr->loan_amount = $request->input('amount') * 0.94;
         $lr->days_payable = $request->input('days');
         $lr->get = 0;
         $lr->user_id = Auth::user()->id;
@@ -151,6 +157,10 @@ class LoanRequestsController extends Controller
     public function destroy($id)
     {
         $rq = Loan_Request::find($id);
+        // if $rq is equal to null redirect and return error otherwise continue
+        if ($rq == NULL){            
+            return redirect()->route('member-requests')->with('error', 'Loan Request Not Found');
+        }
         $rq->delete();
         return redirect()->route('member-requests')->with('success', 'Request removed successfully');
     }

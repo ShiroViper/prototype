@@ -82,9 +82,7 @@ class ProfilesController extends Controller
         $this->validate($request, [
             'lname' => ['required', 'string', 'alpha'],
             'fname' => ['required', 'string', 'alpha'],
-            'mname' => ['required', 'string', 'alpha'],
             'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
-            'email' => ['required', 'string', 'unique:users', 'email'],
             'address' => ['required', 'string'],
         ], $messages);
         

@@ -26,7 +26,8 @@ class DeleteBalanceColumnOnTransactionsTable extends Migration
     public function down()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->decimal('balance', 10, 2);
+            // table deleted
+            // $table->decimal('balance', 10, 2);
         });
     }
 }

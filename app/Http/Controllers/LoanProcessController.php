@@ -11,6 +11,12 @@ use Auth;
 
 class LoanProcessController extends Controller
 {
+    /* 
+    * Transfer == 1: Money transferring to collector
+    *             2: Money successfully transferred to collector
+    *             3: Money transferring to Member
+    *             4: Money successfully transferred to member
+    */
     /**
      * Display a listing of the resource.
      *
@@ -69,26 +75,38 @@ class LoanProcessController extends Controller
      */
     public function store(Request $request)
     {
+        // This will check first if transfer == 2 otherwise create new loan_process row
+        // execute this function if the money is being transfer from collector to member
         if($request->transfer == 2){
             $check = User::find($request->m_id);
             $process = Loan_Process::where('request_id', '=', $request->id)->first();
             $process->transfer = 3;
             $process->save();
-            return redirect()->route('collector-requests')->with('success', 'Waiting to Accept Member ID: '.$request->m_id);
+            return redirect()->route('collector-requests')->with('success', 'Waiting to Accept Member: '.$request->m_id);
         }
-        // this check if the inputted id is found or not else redirect and throw an error;
-        $check = User::where('id',$request->c_id)->where('user_type',1)->first();
-        if ($check){
-            $process = New Loan_Process;
-            $process->transfer = 1;
-            $process->request_id = $request->id;
-            $process->admin_id = Auth::user()->id;
-            $process->collector_id = $request->c_id;
-            $process->save();
-        }else{
-            return redirect()->back()->with('error', 'Collector ID: '. $request->c_id . ' Not found');
+
+        
+        $messages = [
+            'required' => 'This field is required',
+            'alpha' => 'Please use only alphabetic characters'
+        ];
+        $this->validate($request, [
+            'name' => ['required', 'string', 'alpha'],
+        ], $messages);
+        // this check if the inputted collector name is found or not else redirect and throw an error;
+        // name or username?
+        $check = User::where('lname',$request->name)->where('user_type',1)->first();
+        if (!$check){
+            return redirect()->back()->with('error', 'Collector: '. $request->name. ' Not found');
         }
-        return redirect()->route('admin-requests')->with('success', 'Wating to Accept Collector ID: '.$request->c_id);
+        // create a new row that the money is being transfer to collector
+        $process = New Loan_Process;
+        $process->transfer = 1;
+        $process->request_id = $request->id;
+        $process->admin_id = Auth::user()->id;
+        $process->collector_id = $check->id;
+        $process->save();
+        return redirect()->route('admin-requests')->with('success', 'Wating to Accept Collector: '.$check->lname. ' '.$check->fname);
     }
 
     /**
@@ -110,28 +128,31 @@ class LoanProcessController extends Controller
      */
     public function edit($id)
     {
+        // find any request in loan_request and any Loan_process table based on request id
         $process = Loan_Request::find($id);
         $trans = Loan_Process::where('request_id', '=', $id)->first();
+        $user = User::where('id', $process->user_id)->first();
+
+        // This function fix $trans not defined
         if($trans == NULL ){
             $trans = NULL;
         }   
-        // return dd($id);
 
-        return view ('users.admin.process')->with('trans',$trans)->with('active', 'requests')->with('process',$process);
+        return view ('users.admin.process')->with('user', $user)->with('trans',$trans)->with('active', 'requests')->with('process',$process);
     }
     
+    // Collector Loan Process 
     public function col_edit($id)
     {
+        // This code Check if $id has any data in Loan_process use for updating transfer column
         $process = Loan_Process::where('id',$id)->first();
         if($process != NULL){
             $request = Loan_Request::where('id', '=', $process->request_id)->first();
+            $user = User::where('id', $request->user_id)->first();
         }else{
             $process = NULL;
-        }
-
-        // return dd ($process);
-
-        return view ('users.collector.process')->with('request',$request)->with('active', 'request')->with('process',$process);
+        }   
+        return view ('users.collector.process')->with('user', $user)->with('request',$request)->with('active', 'request')->with('process',$process);
     }
 
 

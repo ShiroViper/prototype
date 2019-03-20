@@ -15,9 +15,9 @@
                     <table class="table table-hover mt-3">
                         <thead>
                             <tr>
-                                <th>Request Date</th>
-                                <th>User ID</th>
+                                <th>Date Requested</th>
                                 <th>Name</th>
+                                <th>Requested Money</th>
                                 <th>Loan Amount</th>
                                 <th>Payables</th>
                                 <th>Action</th>
@@ -29,9 +29,9 @@
                                     {{-- <tr data-toggle="modal" data-target="#LoanModal"> --}}
                                     <tr >
                                         <td>{{ date("F d, Y", strtotime($item->created_at)) }}</td>
-                                        <td>{{ $item->user_id }}</td>
                                         <td>{{ $item->user->lname.', '. $item->user->fname.' '. $item->user->mname }}</td>
-                                        <td>₱{{ $item->loan_amount }}</td>
+                                        <td>₱{{ number_format($item->loan_amount/0.94, 2) }}</td>
+                                        <td>₱{{ number_format($item->loan_amount, 2) }}</td>
                                         @if($item->method == 2)
                                             <td>{{ $item->days_payable / 30 }} Months</td>
                                         @elseif($item->method == 1)
@@ -70,9 +70,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Date Approve</th>
-                                    <th>Request ID</th>
-                                    <th>Member ID</th>
+                                    <th>Date Approved</th>
                                     <th>Name</th>
                                     <th>Loan Amount</th>
                                     <th>Payables</th>
@@ -92,16 +90,18 @@
                                         @endif --}}
                                         <tr >
                                             <td>{{ $request->updated_at}}</td>
-                                            <td>{{ $request->id }}</td>
-                                            <td>{{$request->user->id}} </td>
-                                            <td>{{ $request->user->lname.', '. $request->user->fname.' '. $request->user->mname }}</td>
+                                            {{-- <td>{{ $request->user->lname.', '. $request->user->fname.' '. $request->user->mname }}</td> --}}
+                                            <td>{{$request->lname}}, {{$request->fname}} {{$request->mname}} </td>
                                             <td>₱ {{ $request->loan_amount }}</td>
                                             <td>{{ $request->days_payable }} Days</td>
                                             <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
-                                            <td>{{$request->received ? 'Yes' : 'No'}} </td>  
-                                            <td>{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}</td>
-                                            @if($request->received != 1)
+                                            <td>{{$request->received ? 'Yes' : ($request->confirmed ? 'No': 'N/A')}} </td>  
+                                            <td>{{ $request->confirmed ? ($request->paid ? 'Yes' : 'Ongoing') : 'N/A' }}</td>
+                                            {{-- if status is declined skip this function otherwise execur --}}
+                                            @if($request->received != 1 && $request->confirmed != 0 && $request->transfer < 2)
                                                 <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/process/{{ $request->id }}/edit">Transfer</a></td>
+                                            @elseif($request->transfer < 4)
+                                                <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/process/{{ $request->id }}/edit">Details</a></td>
                                             @else
                                                 <td>N/A</td>
                                             @endif

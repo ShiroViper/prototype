@@ -47,8 +47,12 @@ class LoginController extends Controller
      * Member ID and to avoid future errors of not
      * logging in using ID
      */
+    /* 
+     * Our adviser want to change from using ID to email or 
+     * username since the user is easily to remember their email or username
+    */
     public function username()
     {
-        return 'id';
+        return 'email';
     }
 }

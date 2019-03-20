@@ -36,13 +36,7 @@
         <div class="current-user-container ml-auto">
             <div class="dropdown">
                 <a class="h6 text-decoration-none text-capitalize dropdown-toggle" href="#" role="button" id="currentUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    @if(Auth::user()->user_type == 2)
-                    Admin
-                    @elseif(Auth::user()->user_type == 1)
-                    Collector
-                    @else
-                    Member 
-                    @endif ID: {{Auth::user()->id}} Name: {{ Auth::user()->lname }}, {{ Auth::user()->fname }} 
+                   Name: {{ Auth::user()->lname }}, {{ Auth::user()->fname }} 
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="currentUser">
                     {{-- <a href="/admin/terms" class="dropdown-item">Terms and Conditions</a> --}}

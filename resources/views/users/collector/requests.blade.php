@@ -16,8 +16,6 @@
                     <table class="table table-hover mt-3">
                         <thead>
                             <tr>
-                                <th>Admin ID</th>
-                                <th>Name</th>
                                 <th>Money to Receive</th>
                                 <th>Action</th>
                             </tr>
@@ -28,9 +26,7 @@
                                     @if($item->transfer == 1)
                                         {{-- <tr data-toggle="modal" data-target="#LoanModal"> --}}
                                         <tr >
-                                            <td>{{ $item->admin_id }}</td>
-                                            <td>{{ $item->lname.', '. $item->fname }}</td>
-                                            <td>₱{{ $item->loan_amount }}</td>
+                                            <td>₱ {{ $item->loan_amount }}</td>
                                             <td class="d-flex flex-row">
                                                 <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/collector/receive/{{ $item->request_id }}/accept">Accept</a>
                                             </td>
@@ -64,8 +60,6 @@
                         <thead>
                             <tr>
                                 <th>Received Date</th>
-                                <th>Request ID</th>
-                                <th>Admin ID</th>
                                 <th>Name</th>
                                 <th>Amount</th>
                                 <th>Action</th>
@@ -76,10 +70,8 @@
                                 @foreach ($received as $item)
                                      <tr>
                                         <td>{{$item->updated_at}} </td>
-                                        <td>{{$item->request_id}} </td>
-                                        <td>{{ $item->admin_id }}</td>
                                         <td>{{ $item->lname.', '. $item->fname }}</td>
-                                        <td>₱{{ $item->loan_amount }}</td>
+                                        <td>₱ {{ $item->loan_amount }}</td>
                                         <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/collector/process/{{ $item->id }}/edit">Transfer</a></td>
                                     </tr>
                                 @endforeach
