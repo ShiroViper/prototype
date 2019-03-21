@@ -74,4 +74,51 @@
       {!!Form::close()!!}
     </div>
 </div>
+<script>
+    var collectors = [];
+    @foreach ($collectors as $collector)
+        collectors.push(
+            ['{!! $collector->id !!}', '{!! $collector->lname !!}', '{!! $collector->fname !!}', '{!! $collector->mname !!}']
+        );
+    @endforeach
+    console.log(collectors);
+
+    var collector = [];
+    for (var key in collectors) {
+        // skip loop if the property is from prototype
+        if (!collectors.hasOwnProperty(key)) continue;
+        var object = collectors[key];
+        // collector.push(object[0]+", "+object[1]+" "+object[2]+" "+object[3]);
+        // for (var property in object) {
+        //     // skip loop if the property is from prototype
+        //     if (!object.hasOwnProperty(property)) continue;
+
+        //     console.log(property + " = " + object[property]);
+        // }
+        console.log("value"+ collectors[key]);
+    }
+
+    // Fron PHP to JSON 
+    // var collect = @json($collectors);
+    // console.log(collect);
+
+    //  var collect = {!! json_encode($collectors) !!};
+    // var stringified = JSON.stringify(collect);
+    // var obj = jQuery.parseJSON(stringified);
+
+    // Looping inside an Javascript object 
+    // for (var key in collectors) {
+    //     // skip loop if the property is from prototype
+    //     if (!collectors.hasOwnProperty(key)) continue;
+
+    //     var object = collectors[key];
+    //     for (var property in object) {
+    //         // skip loop if the property is from prototype
+    //         if (!object.hasOwnProperty(property)) continue;
+
+    //         console.log(property + " = " + object[property]);
+    //     }
+    // }
+
+</script>
 @endsection

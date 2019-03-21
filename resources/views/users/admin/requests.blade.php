@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<h3 class="header mt-3">Requests</h3>
+<h3 class="header mt-2">Requests</h3>
 <div class="row pt-3">
     <div class="col">
         <div class="card">

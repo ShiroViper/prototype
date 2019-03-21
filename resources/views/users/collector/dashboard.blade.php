@@ -7,9 +7,9 @@
 @section('content')
 <div class="row">
     <div class="col">
-        <h3 class="header">Transactions</h3>
+        <h3 class="header mt-2">Transactions</h3>
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped mt-3">
                 <thead>
                     <tr>
                         <th>Time</th>
