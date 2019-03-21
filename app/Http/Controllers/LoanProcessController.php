@@ -138,7 +138,12 @@ class LoanProcessController extends Controller
             $trans = NULL;
         }   
 
-        return view ('users.admin.process')->with('user', $user)->with('trans',$trans)->with('active', 'requests')->with('process',$process);
+        // Gets collector info
+        $collectors = User::where('user_type', '=', 1)->select('id','lname','fname','mname')->orderBy('id', 'desc')->get();
+
+        // return dd($collectors);
+
+        return view ('users.admin.process')->with('user', $user)->with('trans',$trans)->with('active', 'requests')->with('process',$process)->with(compact('collectors'));
     }
     
     // Collector Loan Process 

@@ -70,7 +70,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', 'SchedulesController@index')->name('member-dashboard');
         // When the user has not yet setup his account [The calendar wont show]
         Route::post('/dashboard/setup', 'DepositController@create')->name('member-setup');
-        Route::get('/transaction', 'TransactionController@memberTransaction')->name('member-transaction');
         Route::resource('/requests', 'LoanRequestsController', [
             'names' => [
                 'index' => 'member-requests',
@@ -84,7 +83,10 @@ Route::middleware(['auth'])->group(function () {
                 'show' => 'profile-show'
             ]
         ]);
+        // TWO REDUNDUNDANT REDIRECTS???
+        Route::get('/transaction', 'TransactionController@memberTransaction')->name('member-transaction');
         Route::get('/transactions', 'TransactionController@index')->name('member-transactions');
+
         Route::get('/receive/{id}/accept', 'LoanProcessController@accept')->name('member-accept');
         // Route::get('/process/{id}/edit', 'LoanProcessController@col_edit')->name('member-process');
         Route::resource('/process', 'LoanProcessController', [
