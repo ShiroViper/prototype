@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddSchedIdOnTransactionsTable extends Migration
+class AddFkSchedIdOnTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -30,8 +30,8 @@ class AddSchedIdOnTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('transactions');
-        Schema::enableForeignKeyConstraints();
+        Schema::table('transactions', function (Blueprint $table) {
+            //
+        });
     }
 }
