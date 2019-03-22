@@ -32,6 +32,8 @@ class CreateTransactionsTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('transactions');
+        Schema::enableForeignKeyConstraints();
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddSchedIdOnLoanRequestTable extends Migration
+class AddFkSchedIdOnLoanRequestTable extends Migration
 {
     /**
      * Run the migrations.
@@ -30,8 +30,8 @@ class AddSchedIdOnLoanRequestTable extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('loan_request');
-        Schema::enableForeignKeyConstraints();
+        Schema::table('loan_request', function (Blueprint $table) {
+            //
+        });
     }
 }

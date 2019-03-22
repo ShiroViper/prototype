@@ -30,6 +30,8 @@ class CreateLoanRequestTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('loan_request');
+        Schema::enableForeignKeyConstraints();
     }
 }
