@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddBalanceColumnOnLoanRequestTable extends Migration
+class AddSetupToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddBalanceColumnOnLoanRequestTable extends Migration
      */
     public function up()
     {
-        Schema::table('loan_request', function (Blueprint $table) {
-            $table->decimal('balance', 10, 2);
+        Schema::table('users', function (Blueprint $table) {
+            $table->integer('setup')->nullable()->after('cell_num');
         });
     }
 
@@ -25,9 +25,8 @@ class AddBalanceColumnOnLoanRequestTable extends Migration
      */
     public function down()
     {
-        Schema::table('loan_request', function (Blueprint $table) {
-            // table deleted
-            // $table->dropColumn('balance');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('setup');
         });
     }
 }

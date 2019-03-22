@@ -5,9 +5,9 @@
 @endsection
 
 @section('content')
-<h3 class="header">Dashboard</h3>
+<h3 class="header mt-2">Dashboard</h3>
 <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped mt-3">
         <thead>
             <tr>
                 <th>Time</th>

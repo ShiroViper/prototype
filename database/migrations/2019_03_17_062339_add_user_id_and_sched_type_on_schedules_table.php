@@ -14,8 +14,8 @@ class AddUserIdAndSchedTypeOnSchedulesTable extends Migration
     public function up()
     {
         Schema::table('schedules', function (Blueprint $table) {
-            $table->unsignedInteger('user_id')->after('id');
-            $table->unsignedInteger('sched_type')->after('user_id');
+            $table->unsignedInteger('user_id')->change();
+            $table->unsignedInteger('sched_type')->change();
         });
     }
 
@@ -27,7 +27,8 @@ class AddUserIdAndSchedTypeOnSchedulesTable extends Migration
     public function down()
     {
         Schema::table('schedules', function (Blueprint $table) {
-            $table->dropColumn('user_id', 'sched_type');
+            // Table Schedules already deleted 
+            // $table->dropColumn('user_id', 'sched_type');
         });
     }
 }

@@ -26,7 +26,8 @@ class AddReceivedToLoanRequestTable extends Migration
     public function down()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            $table->dropColumn('received');
+            // table deleted
+            // $table->dropColumn('received');
         });
     }
 }

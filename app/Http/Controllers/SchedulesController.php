@@ -30,10 +30,16 @@ class SchedulesController extends Controller
         $sched_list = [];
         foreach ($schedules as $key => $schedule) {
             // [1] Deposit Schedule type
-            if ($schedule->sched_type == 1) {
+            if ($schedule->sched_type == 1 && ($schedule->user_id == Auth::user()->id) ) {
                 $method = Deposit::where('member_id', '=', Auth::user()->id)->first();
                 // return dd($schedule->payment_method);
                 // Get the deposit table row of the logged in user
+
+                // If method user acccount is not found, redirect to setting up account
+                if(!$method){
+                    return view('users.member.dashboard')->with('setup', 'Please setup your account first')->with('active', 'dashboard');
+                }
+
                 switch ($method->payment_method) {
                     // Daily deposit payment basis
                     case 1:
@@ -97,8 +103,9 @@ class SchedulesController extends Controller
                         // 'userId' => 'User ID '.$schedule->userId
                     ]
                 );
-            } else {
+            } else if ($schedule->sched_type == 3) {
                 // [3] Show Paid Loan Schedule
+                return dd(' sched type = 3');
                 $sched_list[] = Calendar::event(
                     '__',
                     true,
@@ -113,6 +120,59 @@ class SchedulesController extends Controller
                         // 'userId' => 'User ID '.$schedule->userId
                     ]
                 );
+            } else {
+                // kanang wala na juy choice
+                $methods = Deposit::all();
+                foreach ($methods as $method) {
+                    switch ($method->payment_method) {
+                        // Daily deposit payment basis
+                        case 1:
+                            $sched_list[] = Calendar::event(
+                                '__',
+                                true,
+                                new Carbon($schedule->start_date),
+                                new Carbon($schedule->end_date.' +1 Day'),
+                                $key,
+                                [
+                                    'color' => '#EF5450',
+                                    'textColor' => '#EF5450',
+                                    // 'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
+                                    'description' => 'Daily Payment Deposit',
+                                    // 'userId' => 'User ID '.$schedule->userId
+                                ]
+                            );
+                        break;
+                        case 2:
+                            // $numOfWeek = $start->diffInWeeks($end);
+                            $interval = new DateInterval('P7D');
+                            // $dayOfWeek = Carbon::parse($start)->dayOfWeek;
+                            $start = new Carbon($schedule->start_date);
+                            $end = new Carbon($schedule->end_date.' +1 Day');
+                            $period = new DatePeriod($start, $interval, $end);
+                            foreach ($period as $key => $date) {
+                                // return dd($schedule);
+                                // echo "<pre>".$key." ".$date->format('Y-m-d')."</pre>";
+                                $sched_list[] = Calendar::event(
+                                    '__',
+                                    true,
+                                    $date->format('Y-m-d'),
+                                    $date->format('Y-m-d'),
+                                    $key,
+                                    [
+                                        'color' => '#EF5450',
+                                        'textColor' => '#EF5450',
+                                        // 'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
+                                        'description' => 'Weekly Payment Deposit',
+                                        // 'userId' => 'User ID '.$schedule->userId
+                                    ]
+                                );
+                            }
+                        break;
+                        case 3:
+                           return dd('monthly');
+                        break;
+                    }
+                }
             }
         }
         $calendar_details = Calendar::addEvents($sched_list)->setCallbacks([

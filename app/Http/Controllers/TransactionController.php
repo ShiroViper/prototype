@@ -140,14 +140,7 @@ class TransactionController extends Controller
          if ($transact->trans_type == 1) { 
             // If the transaction is a Deposit
             return dd('Deposittt');
-        } 
-        
-        else if ($transact->trans_type == 2) {
-            // If the transaction is a Loan
-            return dd('Loan');
-        }
-        
-        else {
+        } else if ($transact->trans_type == 3) {
             // If the transaction is a Loan Payment [ $trans_type = 3 ]
             if (Transaction::where('member_id', '=', $transact->member_id)->first() == NULL) {
                 // If this is the first transaction made by the member
@@ -181,7 +174,9 @@ class TransactionController extends Controller
                 }
                 $loan_request->save();
             }
-        }     
+        } else {
+            return redirect()->back()->with('error', 'Pick a valid Transaction Type');
+        }
         $transact->get = 1;     // Serves as the basis for the next transaction?
         $transact->collector_id = Auth::user()->id;
 

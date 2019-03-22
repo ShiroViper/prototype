@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<h3>View User Information > Edit User</h3>
+<h3 class="header mt-2">Edit User</h3>
 <div class="row">
     <div class="col-sm col-md-10 col-xl-8">
         {!! Form::open(['action' => ['UsersController@update', $user->id], 'method' => 'POST']) !!}
@@ -27,11 +27,13 @@
                         <div class="col font-weight-bold">{{ $user->id }}</div>
                     </div>
                 </li>
+                
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col">Last Name</div>
                         <div class="col font-weight-bold">
-                            {{ Form::text('lname', $user->lname, ['class' => 'form-control']) }}
+                            {{ Form::text('lname', $user->lname, ['class' => $errors->has('lname') ? 'form-control is-invalid' : 'form-control']) }}
+                            {{-- <input name="lname" type="text" class="form-control{{ $errors->has('lname') ? ' is-invalid' : '' }}" value="{{ $errors->has('lname') ? old('lname') : $user->lname }}" required> --}}
                             @if ($errors->has('lname'))
                                 <div class="invalid-feedback">{{ $errors->first('lname') }}</div>
                             @endif
@@ -42,7 +44,8 @@
                     <div class="row">
                         <div class="col">First Name</div>
                         <div class="col font-weight-bold">
-                            {{ Form::text('fname', $user->fname, ['class' => 'form-control']) }}
+                            {{ Form::text('fname', $user->fname, ['class' => $errors->has('fname') ? 'form-control is-invalid' : 'form-control']) }}
+                            {{-- <input name="fname" type="text" class="form-control{{ $errors->has('fname') ? ' is-invalid' : '' }}" value="{{ $errors->has('fname') ? old('fname') : $user->fname }}" required> --}}
                              @if ($errors->has('fname'))
                                 <div class="invalid-feedback">{{ $errors->first('fname') }}</div>
                             @endif
@@ -53,8 +56,9 @@
                     <div class="row">
                         <div class="col">Middle Name</div>
                         <div class="col font-weight-bold">
-                            {{ Form::text('mname', $user->mname, ['class' => 'form-control']) }}
-                             @if ($errors->has('mname'))
+                            {{ Form::text('mname', $user->mname, ['class' => $errors->has('mname') ? 'form-control is-invalid' : 'form-control']) }}
+                            {{-- <input name="mname" type="text" class="form-control{{ $errors->has('mname') ? ' is-invalid' : '' }}" value="{{ $errors->has('mname') ? old('mname') : $user->mname }}"> --}}
+                            @if ($errors->has('mname'))
                                 <div class="invalid-feedback">{{ $errors->first('mname') }}</div>
                             @endif
                         </div>
@@ -64,7 +68,8 @@
                     <div class="row">
                         <div class="col">Email</div>
                         <div class="col font-weight-bold">
-                            {{ Form::email('email', $user->email, ['class' => 'form-control']) }}
+                            {{ Form::email('email', $user->email, ['class' => $errors->has('email') ? 'form-control is-invalid' : 'form-control']) }}
+                             {{-- <input name="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ $errors->has('email') ? old('email') : $user->email }}" required> --}}
                              @if ($errors->has('email'))
                                 <div class="invalid-feedback">{{ $errors->first('email') }}</div>
                             @endif
@@ -75,10 +80,12 @@
                     <div class="row">
                         <div class="col">Cell Num</div>
                         <div class="col font-weight-bold">
-                            {{ Form::text('cell_num', $user->cell_num, ['class' => 'form-control']) }}
+                            {{ Form::number('cell_num', $user->cell_num, ['class' => $errors->has('cell_num') ? 'form-control is-invalid' : 'form-control']) }}
+                             {{-- <input name="cell_num" type="text" class="form-control{{ $errors->has('cell_num') ? ' is-invalid' : '' }}" value="{{ $errors->has('cell_num') ? old('cell_num') : $user->cell_num }}" required> --}}
                              @if ($errors->has('cell_num'))
                                 <div class="invalid-feedback">{{ $errors->first('cell_num') }}</div>
                             @endif
+                            {{-- {{ $errors->first('cell_num') }} --}}
                         </div>
                     </div>
                 </li>
@@ -117,6 +124,10 @@
                 {{ Form::hidden('_method', 'PUT') }}
                 {{ Form::submit('Update', ['class' => 'btn btn-primary btn-block edit-button']) }}
             </div>
+        </div> --}}
+        {{-- <div class="d-flex justify-content-lg-center pt-3">
+            <a class="btn btn-outline-danger mr-3 px-3" role="button" title="Discard Changes" href="/admin/users/{{ $user->id }}">Cancel</a>
+            {{ Form::submit('Save Changes', ['class' => 'btn btn-success edit-button px-3']) }}
         </div> --}}
         {!! Form::close() !!}
     </div>

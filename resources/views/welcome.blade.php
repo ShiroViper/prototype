@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col">
                     <div class="text-primary">
-                        <span class="welcome-title pr-2">Welcome to</span> <span class="brand-title-header">ALKANSYA</span>
+                        <span class="welcome-title header pr-2">Welcome to</span> <span class="brand-title-header">ALKANSYA</span>
                     </div>
                     <div class="featured-desc my-3">
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut earum doloremque quas a maiores amet expedita modi, ea magnam quis eum corrupti, deleniti quia tenetur eligendi illum tempora nemo eos?</p>

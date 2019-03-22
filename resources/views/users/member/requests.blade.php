@@ -7,8 +7,9 @@
 @section('content')
 <div class="row">
     <div class="col">
-        <div class="float-left">
-            <h3 class="header">Requests</h3>
+        <div class="">
+            <h3 class="header float-left">Requests</h3>
+            <p class="float-right">* Compound Interest: 6%</p>
         </div>
         @if(!$unpaid)
             <div class="float-right">
@@ -26,7 +27,8 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Date</th>
+                                <th>Date Requested</th>
+                                <th>Requested Loan</th>
                                 <th>Loan Amount</th>
                                 <th>Payables</th>
                                 <th>Action</th>
@@ -38,14 +40,9 @@
                                     {{-- <tr data-toggle="modal" data-target="#reqModal" data-id="{{ $item->id }}" data-ca="{{ $item->created_at }}" data-la="{{ $item->loan_amount }}" data-dp="{{ $item->days_payable }}" data-desc="{{ $item->description }}"> --}}
                                     <tr>
                                         <td>{{ date('F d, Y', strtotime($item->created_at)) }}</td>
-                                        <td>₱ {{ $item->loan_amount }}</td>
-                                        @if($item->method == 2)
-                                            <td>{{ $item->days_payable / 30 }} Months</td>
-                                        @elseif($item->method == 1)
-                                            <td>{{ $item->days_payable /7 }} Weeks</td>
-                                        @else
-                                            <td>{{ $item->days_payable }} Days</td>
-                                        @endif
+                                        <td>₱ {{ number_format($item->loan_amount/0.94,2) }}</td>
+                                        <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
+                                        <td>{{ $item->days_payable }} Days</td>
                                         <td>
                                             {!! Form::open(['action' => ['LoanRequestsController@destroy', $item->id], 'method' => 'POST']) !!}
                                                 {{ Form::hidden('_method', 'DELETE') }}
@@ -76,13 +73,11 @@
             <h6 class="card-header">Pending Money</h6>
             <div class="container">
                 <div class="table-responsive">
-                    <table class="table table-hover" style="text-align: center">
+                    <table class="table table-hover" >
                         <thead>
                             <tr>
-                                <th>Collector ID</th>
                                 <th>Name</th>
                                 <th>Money To Receive</th>
-                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -90,10 +85,8 @@
                             @if (count($transferring) > 0)
                                 @foreach ($transferring as $item)
                                 <tr>
-                                    <td>{{$item->collector_id}} </td>
                                     <td>{{$item->lname}}, {{$item->fname}} </td>
                                     <td>{{$item->loan_amount}} </td>
-                                    <td>Transferring </td>
                                     <td class="d-flex flex-row">
                                         <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/receive/{{ $item->request_id }}/accept">Accept</a>
                                     </td>

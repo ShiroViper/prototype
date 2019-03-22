@@ -171,7 +171,7 @@
                     @if ($message = Session::get('error'))
                         <div class="text-center pt-2">
                             <span class="text-danger text-center"><strong>{{ $message }}</strong></span><br>
-                            <small class="text-danger">Incorrect Member ID or Password</small>
+                            <small class="text-danger">Incorrect Email or Password</small>
                         </div>
                     @endif
 
@@ -179,11 +179,11 @@
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
                             <div class="form-group">
-                                <small>Member ID</small>
-                            <input name="id" type="text" class="form-control{{ $errors->has('id') ? ' is-invalid' : '' }}" name="id" value="{{ old('id') }}" required autofocus>
+                                <small>Email</small>
+                            <input name="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
 
-                            @if ( $errors->has('id') )
-                                <div class="invalid-feedback">{{ $errors->first('id') }}</div>
+                            @if ( $errors->has('email') )
+                                <div class="invalid-feedback">{{ $errors->first('email') }}</div>
                             @endif
 
                             </div>

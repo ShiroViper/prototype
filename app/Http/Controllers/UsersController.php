@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\User;
 use Hash;
+use Validator;
 
 class UsersController extends Controller
 {
@@ -95,8 +96,8 @@ class UsersController extends Controller
         $this->validate($request, [
             'lname' => ['required', 'string', 'alpha'],
             'fname' => ['required', 'string', 'alpha'],
-            'mname' => ['required', 'string', 'alpha'],
-            'cell_num' => ['required', 'string', 'numeric'],
+            'mname' => ['nullable', 'string', 'alpha'],
+            'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
             'email' => ['required', 'string', 'unique:users', 'email'],
             'address' => ['required', 'string'],
         ], $messages);
@@ -125,6 +126,7 @@ class UsersController extends Controller
     public function show($id)
     {
         $user = User::find($id);
+        // return dd($user);
         return view('users.admin.view')->with('user', $user)->with('active', 'manage');
     }
 
@@ -149,16 +151,36 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // return dd($request);
+        $messages = [
+            'required' => 'This field is required',
+            'alpha' => 'Please use only alphabetic characters'
+        ];
+
         // $this->validate($request, [
         //     'lname' => ['required', 'string', 'alpha'],
         //     'fname' => ['required', 'string', 'alpha'],
-        //     'mname' => ['required', 'string', 'alpha'],
-        //     'cell_num'=>['required', 'string', 'numeric'],
-        //     'email' => ['required', 'string', 'email', Rule::unique('users')->ignore($id)],
-        //     'user_type' => ['required'],
+        //     'mname' => ['nullable', 'string', 'alpha'],
+        //     'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
+        //     'email' => ['required', 'string', 'exists:users', 'email'],
         //     'address' => ['required', 'string'],
-        // ]);
+        // ], $messages);
+
+        $validator = Validator::make($request->all(), [
+            'lname' => ['required', 'string', 'alpha'],
+            'fname' => ['required', 'string', 'alpha'],
+            'mname' => ['nullable', 'string', 'alpha'],
+            'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
+            'email' => ['required', 'string', 'exists:users', 'email'],
+            'address' => ['required', 'string'],
+        ], $messages);
+
+        if ($validator->fails()) {
+            // return redirect('admin/users/'.$id.'/edit')
+            //             ->withErrors($validator)
+            //             ->withInput();
+            // return dd('failed');
+            return back()->withInput()->withErrors($validator->errors());
+        }
 
         $user = User::find($id);
         $user->user_type = $request->input('user_type');

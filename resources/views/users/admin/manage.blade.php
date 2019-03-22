@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<h3 class="mt-3">Manage Accounts</h3>
+<h3 class="mt-2">Manage Accounts</h3>
 <div class="table-responsive">
     <table class="table table-hover mt-3">
         <thead>

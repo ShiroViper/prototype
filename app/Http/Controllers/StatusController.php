@@ -2,19 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Report;
+use App\Status;
 use Illuminate\Http\Request;
 
-class ReportController extends Controller
+class StatusController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index_patronage()
     {
-        //
+        return view('users.member.status')->with('active', 'patronage');
+    }
+    public function index_loan()
+    {
+        return view('users.member.status')->with('active', 'loan');
+    }
+    public function index_saving()
+    {
+        return view('users.member.status')->with('active', 'saving');
     }
 
     /**
@@ -41,10 +49,10 @@ class ReportController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Report  $report
+     * @param  \App\Status  $status
      * @return \Illuminate\Http\Response
      */
-    public function show(Report $report)
+    public function show(Status $status)
     {
         //
     }
@@ -52,10 +60,10 @@ class ReportController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Report  $report
+     * @param  \App\Status  $status
      * @return \Illuminate\Http\Response
      */
-    public function edit(Report $report)
+    public function edit(Status $status)
     {
         //
     }
@@ -64,10 +72,10 @@ class ReportController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Report  $report
+     * @param  \App\Status  $status
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Report $report)
+    public function update(Request $request, Status $status)
     {
         //
     }
@@ -75,10 +83,10 @@ class ReportController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Report  $report
+     * @param  \App\Status  $status
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Report $report)
+    public function destroy(Status $status)
     {
         //
     }

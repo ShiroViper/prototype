@@ -36,13 +36,7 @@
         <div class="current-user-container ml-auto">
             <div class="dropdown">
                 <a class="h6 text-decoration-none text-capitalize dropdown-toggle" href="#" role="button" id="currentUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    @if(Auth::user()->user_type == 2)
-                    Admin
-                    @elseif(Auth::user()->user_type == 1)
-                    Collector
-                    @else
-                    Member 
-                    @endif ID: {{Auth::user()->id}} Name: {{ Auth::user()->lname }}, {{ Auth::user()->fname }} 
+                   Name: {{ Auth::user()->lname }}, {{ Auth::user()->fname }} 
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="currentUser">
                     {{-- <a href="/admin/terms" class="dropdown-item">Terms and Conditions</a> --}}
@@ -142,27 +136,26 @@
                     <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/member/dashboard">Dashboard</a>
                     </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'transactions' ? ' active callout' : '' }}" href="/member/transaction">Transactions</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/requests/create">Loan</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/member/requests">Requests</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'account' ? ' active callout' : '' }}" href="/member/profile">My Account</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'patronage' ? ' active callout' : '' }}" href="/member/profile">Patronage Refund</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/profile">My Loan</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'saving' ? ' active callout' : '' }}" href="/member/profile">Savings</a>
-                    </li>
+                    @if(Auth::user()->setup != NULL)
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'transactions' ? ' active callout' : '' }}" href="/member/transaction">Transactions</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/requests/create">Loan</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/member/requests">Requests</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'patronage' ? ' active callout' : '' }}" href="/member/patronage">Patronage Refund</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/loan">My Loan</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'saving' ? ' active callout' : '' }}" href="/member/saving">Savings</a>
+                        </li>
+                    @endif
                 @endif
             {{-- END IF STATEMENT --}}
             </ul>

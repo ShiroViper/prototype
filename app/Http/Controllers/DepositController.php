@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\User;
 use App\Deposit;
 use App\Schedule;
 use Calendar;
@@ -61,6 +62,11 @@ class DepositController extends Controller
          */
         $deposit->sched_id = $schedule->id;
         $deposit->save();
+
+        /* Users Table update setup column after the user setup his/her account: use for toggleable navbar  */
+        $setup = User::where('id', Auth::user()->id)->first();
+        $setup->setup = 1;
+        $setup->save();
 
         return redirect()->action('SchedulesController@index');
     }

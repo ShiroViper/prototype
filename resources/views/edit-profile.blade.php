@@ -38,7 +38,7 @@
                             {{ Form::text('lname', $user->lname, ['class' => 'form-control']) }}
                             @if ($errors->has('lname'))
                                 <div class="invalid-feedback">{{ $errors->first('lname') }}</div>
-                            @endif
+                            @endif{{ $errors->first('email') }}
                         </div>
                     </div>
                 </li>
@@ -57,29 +57,28 @@
                     <div class="row">
                         <div class="col">Middle Name</div>
                         <div class="col font-weight-bold">
+                            <small class="danger">*Optional</small>
                             {{ Form::text('mname', $user->mname, ['class' => 'form-control']) }}
                             @if ($errors->has('mname'))
                                 <div class="invalid-feedback">{{ $errors->first('mname') }}</div>
                             @endif
+                            {{ $errors->first('mname') }}
                         </div>
                     </div>
                 </li>
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col">Email</div>
-                        <div class="col font-weight-bold">
-                            {{ Form::email('email', $user->email, ['class' => 'form-control']) }}
-                            @if ($errors->has('email'))
-                                <div class="invalid-feedback">{{ $errors->first('email') }}</div>
-                            @endif
-                        </div>
+                        <div class="col font-weight-bold">{{ $user->email }}</div>
+                        {{ Form::email('email', $user->email, ['class' => 'form-control', 'hidden']) }}
                     </div>
                 </li>
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col">Cell Number</div>
+                        <div class="col">Contact Number</div>
                         <div class="col font-weight-bold">
-                            {{ Form::text('cell_num', $user->cell_num, ['class' => 'form-control']) }}
+                            <small>*11 Digits</small>
+                            {{ Form::number('cell_num', $user->cell_num, ['class' => 'form-control']) }}
                             @if ($errors->has('cell_num'))
                                 <div class="invalid-feedback">{{ $errors->first('cell_num') }}</div>
                             @endif

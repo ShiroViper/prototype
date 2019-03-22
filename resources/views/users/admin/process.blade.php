@@ -6,29 +6,34 @@
 
 @section('content')
 
-<h3>Loan Process</h3>
+<h3>Loan Process: Transfer Money</h3>
 <div class="row">
     <div class="col-sm-10 col-md-7 col-lg-5 my-3">  
       {!!Form::open(['action'=> 'LoanProcessController@store', 'method'=>'POST']) !!}
       @csrf
-    
+    {{-- Request ID --}}
+    {{ Form::text('id', $process->id, ['hidden']) }}
       
     @if($trans != NULL)
         @if($trans->transfer == 1)
             <div class="form-group">
-                {{ Form::label('date', 'Date Sent') }}
-                {{ Form::date('date',$trans->created_at, ['class' => 'form-control', 'readonly']) }}
+                <label>Date Sent</label>      
+                <div class="col font-weight-bold">{{ $trans->updated_at }}</div>       
             </div>
             <div class="alert alert-success  text-center " role="alert">
                 <strong>Transferring Money</strong>
             </div>
         @elseif($trans->transfer >= 2)
             <div class="form-group">
-                {{ Form::label('date', 'Date Received') }}
-                {{ Form::date('date',$trans->created_at, ['class' => 'form-control', 'readonly']) }}
+                <label>Date Transferred</label>      
+                <div class="col font-weight-bold">{{ $trans->updated_at }}</div>       
             </div>
             <div class="alert alert-success  text-center " role="alert">
-                <strong>Money Transferred to Collector </strong>
+                @if($trans->transfer == 2)
+                    <strong>Money Transferred to Collector </strong>
+                @elseif($trans->transfer == 4)
+                    <strong>Money Transferred to Member </strong>
+                @endif
             </div>
         @endif 
     @endif
@@ -38,39 +43,27 @@
             {{ Form::date('date',\Carbon\Carbon::now(), ['class' => 'form-control', 'readonly']) }}
         </div>
         <div class="form-group">
-            {{ Form::label('type', 'Type') }}
-            {{ Form::select('type', [0=>'Widthdraw', 1=>'Loan Transfer'], 1, ['class' => 'form-control']) }}
-        </div>
-        <div class="form-group">
-            {{ Form::label('c_id', 'Collector ID') }}
-            {{ Form::number('c_id', '', ['class' => $errors->has('c_id') ? 'form-control is-invalid' : 'form-control']) }}
-            @if ($errors->has('c_id'))
-                <div class="invalid-feedback">{{ $errors->first('c_id') }}</div>
+            {{ Form::label('name', 'Collector Name') }}
+            {{ Form::text('name', '', ['class' => $errors->has('name') ? 'form-control is-invalid' : 'form-control']) }}
+            @if ($errors->has('name'))
+                <div class="invalid-feedback">{{ $errors->first('name') }}</div>
             @endif
         </div>
-        {{ Form::submit('Transfer', ['class' => 'btn btn-primary']) }}
+        {{ Form::submit('Transfer to Collector', ['class' => 'btn btn-primary']) }}
     @endif
     
     <br><hr>
     <div class="form-group">
-        {{ Form::label('id', 'Request ID') }}
-        {{ Form::number('id', $process->id, ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'readonly']) }}
-      
+        <label>Member Name</label>      
+        <div class="col font-weight-bold">{{ $user->lname }}, {{$user->fname}} {{$user->mname}} </div>       
     </div>
     <div class="form-group">
-        {{ Form::label('amount', 'Amount Loaned') }}
-        {{ Form::number('amount', $process->loan_amount, ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'readonly']) }}
-      
+        <label>Amount to Loan</label>      
+        <div class="col font-weight-bold">{{ $process->loan_amount }}</div>       
     </div>
     <div class="form-group">
-        {{ Form::label('days', 'Days Payable') }}
-        {{ Form::number('days', $process->days_payable, ['class' => $errors->has('days') ? 'form-control is-invalid' : 'form-control', 'readonly']) }}
-        
-    </div>
-    <div class="form-group">
-        {{ Form::label('m_id', 'Member ID') }}
-        {{ Form::number('m_id', $process->user_id, ['class' => $errors->has('m_id') ? 'form-control is-invalid' : 'form-control', 'readonly']) }}
-       
+        <label>Days Payable</label>      
+        <div class="col font-weight-bold">{{ $process->days_payable }}</div>       
     </div>
     {{-- <div class="form-group">
         {{ Form::label('member', 'Member Name') }}
@@ -81,4 +74,51 @@
       {!!Form::close()!!}
     </div>
 </div>
+<script>
+    var collectors = [];
+    @foreach ($collectors as $collector)
+        collectors.push(
+            ['{!! $collector->id !!}', '{!! $collector->lname !!}', '{!! $collector->fname !!}', '{!! $collector->mname !!}']
+        );
+    @endforeach
+    console.log(collectors);
+
+    var collector = [];
+    for (var key in collectors) {
+        // skip loop if the property is from prototype
+        if (!collectors.hasOwnProperty(key)) continue;
+        var object = collectors[key];
+        // collector.push(object[0]+", "+object[1]+" "+object[2]+" "+object[3]);
+        // for (var property in object) {
+        //     // skip loop if the property is from prototype
+        //     if (!object.hasOwnProperty(property)) continue;
+
+        //     console.log(property + " = " + object[property]);
+        // }
+        console.log("value"+ collectors[key]);
+    }
+
+    // Fron PHP to JSON 
+    // var collect = @json($collectors);
+    // console.log(collect);
+
+    //  var collect = {!! json_encode($collectors) !!};
+    // var stringified = JSON.stringify(collect);
+    // var obj = jQuery.parseJSON(stringified);
+
+    // Looping inside an Javascript object 
+    // for (var key in collectors) {
+    //     // skip loop if the property is from prototype
+    //     if (!collectors.hasOwnProperty(key)) continue;
+
+    //     var object = collectors[key];
+    //     for (var property in object) {
+    //         // skip loop if the property is from prototype
+    //         if (!object.hasOwnProperty(property)) continue;
+
+    //         console.log(property + " = " + object[property]);
+    //     }
+    // }
+
+</script>
 @endsection
