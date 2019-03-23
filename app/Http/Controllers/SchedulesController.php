@@ -105,7 +105,7 @@ class SchedulesController extends Controller
                 );
             } else if ($schedule->sched_type == 3) {
                 // [3] Show Paid Loan Schedule
-                return dd(' sched type = 3');
+                // return dd(' sched type = 3');
                 $sched_list[] = Calendar::event(
                     '__',
                     true,

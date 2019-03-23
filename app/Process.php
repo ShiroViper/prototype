@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Loan_Process extends Model
+class Process extends Model
 {
     // Table 
-    protected $table = 'loan_process';
+    protected $table = 'processes';
     // Primary Key
     // public $table = '';
 

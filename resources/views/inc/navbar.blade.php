@@ -36,7 +36,7 @@
         <div class="current-user-container ml-auto">
             <div class="dropdown">
                 <a class="h6 text-decoration-none text-capitalize dropdown-toggle" href="#" role="button" id="currentUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                   Name: {{ Auth::user()->lname }}, {{ Auth::user()->fname }} 
+                   {{ Auth::user()->lname }}, {{ Auth::user()->fname }} 
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="currentUser">
                     {{-- <a href="/admin/terms" class="dropdown-item">Terms and Conditions</a> --}}
@@ -138,7 +138,7 @@
                     </li>
                     @if(Auth::user()->setup != NULL)
                         <li class="nav-item px-3 h6">
-                            <a class="nav-link{{ $active == 'transactions' ? ' active callout' : '' }}" href="/member/transaction">Transactions</a>
+                            <a class="nav-link{{ $active == 'transactions' ? ' active callout' : '' }}" href="/member/transactions">Transactions</a>
                         </li>
                         <li class="nav-item px-3 h6">
                             <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/requests/create">Loan</a>

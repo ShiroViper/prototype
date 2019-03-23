@@ -36,7 +36,8 @@
         </div>
     </main>
     @include('inc.footer')
+    @stack('scripts')
 </body>
     {{-- Additional Scripts --}}
-    @include('inc.scripts')
+    {{-- @include('inc.scripts') --}}
 </html>

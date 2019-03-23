@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLoanProcessTable extends Migration
+class CreateReportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateLoanProcessTable extends Migration
      */
     public function up()
     {
-        Schema::create('loan_process', function (Blueprint $table) {
+        Schema::create('reports', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('transfer')->nullable();
+            $table->integer('member_id');
             $table->integer('request_id');
-            $table->integer('admin_id');
             $table->integer('collector_id');
+            $table->decimal('total_amount', 10, 2);
             $table->timestamps();
         });
     }
@@ -30,8 +30,6 @@ class CreateLoanProcessTable extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('loan_process');
-        Schema::enableForeignKeyConstraints();
+        Schema::dropIfExists('reports');
     }
 }

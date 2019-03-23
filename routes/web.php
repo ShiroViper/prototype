@@ -23,8 +23,8 @@ Route::middleware(['guest'])->group(function () {
     Route::view('/terms', 'terms', ['active' => 'terms']);
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::prefix('admin')->group(function () {
+Route::middleware(['auth', 'prevent-back-history'])->group(function () {
+    Route::prefix('admin')->middleware('admin-routes')->group(function () {
         Route::get('/dashboard', 'TransactionController@index')->name('admin-dashboard');
         Route::get('/adminTrans', 'TransactionController@adminTransaction')->name('admin-trans');
         Route::resource('/users', 'UsersController', [
@@ -56,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
                 
             ]
         ]);
-        Route::resource('/process', 'LoanProcessController', [
+        Route::resource('/process', 'ProcessController', [
             'names' => [
                 'index' => 'admin-process',
                 'create' => 'admin-create',
@@ -83,13 +83,13 @@ Route::middleware(['auth'])->group(function () {
                 'show' => 'profile-show'
             ]
         ]);
-        // TWO REDUNDUNDANT REDIRECTS???
-        Route::get('/transaction', 'TransactionController@memberTransaction')->name('member-transaction');
+        // TWO REDUNDUNDANT REDIRECTS??? : okay na
         Route::get('/transactions', 'TransactionController@index')->name('member-transactions');
-
-        Route::get('/receive/{id}/accept', 'LoanProcessController@accept')->name('member-accept');
-        // Route::get('/process/{id}/edit', 'LoanProcessController@col_edit')->name('member-process');
-        Route::resource('/process', 'LoanProcessController', [
+        Route::get('/sent/{id}/accept', 'TransactionController@accept')->name('loan-payment-accept');
+        
+        Route::get('/receive/{id}/accept', 'ProcessController@accept')->name('member-accept');
+        // Route::get('/process/{id}/edit', 'ProcessController@col_edit')->name('member-process');
+        Route::resource('/process', 'ProcessController', [
             'names' => [
                 'index' => 'member-process',
                 'create' => 'member-create',
@@ -99,7 +99,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/patronage', 'StatusController@index_patronage')->name('member-patronage');
         Route::get('/loan', 'StatusController@index_loan')->name('member-loan');
         Route::get('/saving', 'StatusController@index_saving')->name('member-saving');
-        // Route::view('/transactions','users.admin.dashboard',['active'=>'transactions'])->name('member-transactions');
     });
 
     Route::prefix('collector')->group(function () {
@@ -119,9 +118,9 @@ Route::middleware(['auth'])->group(function () {
                 'show' => 'profile-show'
             ]
         ]);
-        Route::get('/receive/{id}/accept', 'LoanProcessController@accept')->name('collector-accept');
-        Route::get('/process/{id}/edit', 'LoanProcessController@col_edit')->name('collector-process');
-        Route::resource('/process', 'LoanProcessController', [
+        Route::get('/receive/{id}/accept', 'ProcessController@accept')->name('collector-accept');
+        Route::get('/process/{id}/edit', 'ProcessController@col_edit')->name('collector-process');
+        Route::resource('/process', 'ProcessController', [
             'names' => [
                 'index' => 'collector-requests',
                 'create' => 'collector-create',

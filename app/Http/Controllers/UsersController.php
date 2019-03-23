@@ -90,13 +90,14 @@ class UsersController extends Controller
     {
         $messages = [
             'required' => 'This field is required',
-            'alpha' => 'Please use only alphabetic characters'
+            'alpha' => 'Please use only alphabetic characters',
+            'regex' => 'Numeric characters and symbols are not allowed'
         ];
 
         $this->validate($request, [
-            'lname' => ['required', 'string', 'alpha'],
-            'fname' => ['required', 'string', 'alpha'],
-            'mname' => ['nullable', 'string', 'alpha'],
+            'lname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
+            'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
+            'mname' => ['nullable', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
             'email' => ['required', 'string', 'unique:users', 'email'],
             'address' => ['required', 'string'],
@@ -108,7 +109,7 @@ class UsersController extends Controller
         $user->lname = $request->input('lname');
         $user->fname = $request->input('fname');
         $user->mname = $request->input('mname');
-        $user->password = Hash::make($user->id);
+        $user->password = Hash::make(123456);
         $user->email = $request->input('email');
         $user->cell_num = $request->input('cell_num');
         $user->address = $request->input('address');
@@ -153,7 +154,8 @@ class UsersController extends Controller
     {
         $messages = [
             'required' => 'This field is required',
-            'alpha' => 'Please use only alphabetic characters'
+            'alpha' => 'Please use only alphabetic characters',
+            'regex' => 'Numeric characters and symbols are not allowed'
         ];
 
         // $this->validate($request, [
@@ -166,11 +168,11 @@ class UsersController extends Controller
         // ], $messages);
 
         $validator = Validator::make($request->all(), [
-            'lname' => ['required', 'string', 'alpha'],
-            'fname' => ['required', 'string', 'alpha'],
-            'mname' => ['nullable', 'string', 'alpha'],
+            'lname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
+            'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
+            'mname' => ['nullable', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
-            'email' => ['required', 'string', 'exists:users', 'email'],
+            'email' => ['required', Rule::unique('users')->ignore($id)],
             'address' => ['required', 'string'],
         ], $messages);
 
@@ -192,7 +194,8 @@ class UsersController extends Controller
         $user->address = $request->input('address');
         $user->save();
         
-        return redirect()->route('users-index')->with('success', 'User updated successfully');
+        // return redirect()->route('users-index')->with('success', 'User updated successfully');
+        return redirect()->action('UsersController@show', ['id' => $id])->with('success', 'User updated successfully');
     }
 
     /**

@@ -23,19 +23,8 @@ class LoanRequestsController extends Controller
     public function index()
     {
         if (Auth::user()->user_type == 2) {
-            // $lr = DB::table('loan_request')->join('users', 'loan_request.user_id', '=', 'users.id')->select('loan_request.*', 'users.lname', 'users.fname', 'users.mname')->orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(10);
-            // $pending = DB::table('loan_request')->join('users', 'loan_request.user_id', '=', 'users.id')->select('loan_request.*', 'users.lname', 'users.fname', 'users.mname')->orderBy('loan_request.created_at', 'desc')->whereNull('confirmed')->paginate(5);
-
-            // $lr = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(5);
-            // dd ($lr);
+            $lr = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(5);
             $pending = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNull('confirmed')->paginate(5);
-
-            // This code use for transfer button in request history:
-            $lr = DB::table('loan_request')
-                ->join('loan_process', 'loan_process.request_id', '=', 'loan_request.id')
-                ->join('users', 'users.id', '=', 'user_id')
-                ->select('loan_request.updated_at', 'lname', 'fname', 'mname', 'loan_amount', 'days_payable', 'confirmed', 'received', 'paid', 'loan_request.id', 'transfer')
-                ->paginate(5);
 
             return view('users.admin.requests')->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         } else {
@@ -44,19 +33,23 @@ class LoanRequestsController extends Controller
             $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
             
             // for transferring money to member
-            $transferring = DB::table('loan_process')
+            $pending_mem_receive = DB::table('processes')
                 ->join('loan_request', 'loan_request.id', '=', 'request_id')
                 ->join('users', 'users.id', '=', 'collector_id')
-                ->select('loan_process.id', 'transfer', 'request_id', 'collector_id', 'loan_process.updated_at',
+                ->select('processes.id', 'transfer', 'request_id', 'collector_id', 'processes.updated_at',
                     'lname', 'fname', 'loan_amount')
                 ->where('user_id', Auth::user()->id)
                 ->where('transfer', 3)
                 ->paginate(5);
                 
-            
-            // return dd($pending);
+            // table processes column confirmed if the member confirm the member has successfully gave the money to colletor 
+            $pending_mem_con = DB::table('transactions')
+                ->join('users', 'users.id', '=', 'collector_id')
+                ->select('transactions.id', 'amount','lname','fname', 'mname')
+                ->where('confirmed', NULL)
+                ->paginate(5);
            
-            return view('users.member.requests')->with('transferring',$transferring)->with('transferring', $transferring)->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
+            return view('users.member.requests')->with('pending_mem_con',$pending_mem_con)->with('pending_mem_receive', $pending_mem_receive)->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         }
     }
 
@@ -97,7 +90,7 @@ class LoanRequestsController extends Controller
         $lr->user_id = Auth::user()->id;
 
         // Compute for Compound Interest
-        $lr->balance = $request->input('amount')*1.06;
+        $lr->balance = $request->input('amount')*0.94;
 
         // sched_id is NULL for now since it still hasn't been approved
         $lr->sched_id = null;
@@ -188,6 +181,10 @@ class LoanRequestsController extends Controller
     public function reject($id) 
     {
         $rq = Loan_Request::find($id);
+        // This condition acts as guard bugs found that the member can cancel even the admin accept the request when the member dont refresh the page
+        if($rq->confirmed == TRUE){
+            return redirect()->route('admin-requests')->with('error', 'This request already accepted by the admin');
+        }
         $rq->confirmed = false;
         $rq->paid = 1;
         $rq->save();

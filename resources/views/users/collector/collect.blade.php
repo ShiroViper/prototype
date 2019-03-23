@@ -22,26 +22,50 @@
     </div>
     <div class="form-group">
         {{ Form::label('amount', 'Amount Received', ['class' => 'h6']) }}
-        {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'step' => '0.01']) }}
+        {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'step' => '0.01', 'min' => 5]) }}
          @if ($errors->has('amount'))
             <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
         @endif
     </div>
     <div class="form-group">
         {{ Form::label('id', 'Member ID', ['class' => 'h6']) }}
-        {{ Form::number('id', '', ['class' => $errors->has('id') ? 'form-control is-invalid' : 'form-control']) }}
+        {{ Form::text('id', null, ['class' => $errors->has('id') ? 'form-control is-invalid' : 'form-control']) }}
          @if ($errors->has('id'))
             <div class="invalid-feedback">{{ $errors->first('id') }}</div>
         @endif
     </div>
     {{-- <div class="form-group">
         {{ Form::label('member', 'Member Name') }}
-        {{ Form::text('member',, ['class' => 'form-control', 'readonly']) }}
+        {{ Form::text('member', null, ['class' => 'form-control', 'readonly']) }}
     </div> --}}
 
-    {{ Form::submit('Pay', ['class' => 'btn btn-primary', 'target'=>'_blank']) }}
+    {{ Form::submit('Submit Payment', ['class' => 'btn btn-primary autocomplete-btn', 'target'=>'_blank', 'disabled']) }}
 
       {!!Form::close()!!}
     </div>
 </div>
+<script>
+var tmp = @json($members);
+var members = [];
+for (var i = 0; i < tmp.length; i++) {
+    // alert(tmp[i].id);
+    item = {}
+    item["value"] = tmp[i].id;
+    item["label"] = tmp[i].lname+", "+tmp[i].fname+" "+tmp[i].mname;
+    members.push(item);
+}
+// console.log(members);
+
+// var members = [];
+// item = {}
+// item["id"] = 123;
+// item["name"] = "member";
+// members.push(item);
+// console.log(members);
+</script>
+@push('scripts')
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{{ asset('js/scripts.js') }}" defer></script>
+    <script src="{{ asset('js/autocomplete.js') }}"></script>
+@endpush
 @endsection

@@ -18,95 +18,144 @@
         @endif
     </div>
 </div>
-<div class="row pt-3">
-    <div class="col">
-        <div class="card">
-            <h6 class="card-header">Pending Requests</h6>
-            <div class="container">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Date Requested</th>
-                                <th>Requested Loan</th>
-                                <th>Loan Amount</th>
-                                <th>Payables</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (count($pending) > 0)
-                                @foreach ($pending as $item)
-                                    {{-- <tr data-toggle="modal" data-target="#reqModal" data-id="{{ $item->id }}" data-ca="{{ $item->created_at }}" data-la="{{ $item->loan_amount }}" data-dp="{{ $item->days_payable }}" data-desc="{{ $item->description }}"> --}}
+
+{{-- @if (!$pending) --}}
+    <div class="row pt-3">
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">Pending Requests</h6>
+                <div class="container">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date Requested</th>
+                                    <th>Requested Loan</th>
+                                    <th>Loan Amount</th>
+                                    <th>Payables</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (count($pending) > 0)
+                                    @foreach ($pending as $item)
+                                        {{-- <tr data-toggle="modal" data-target="#reqModal" data-id="{{ $item->id }}" data-ca="{{ $item->created_at }}" data-la="{{ $item->loan_amount }}" data-dp="{{ $item->days_payable }}" data-desc="{{ $item->description }}"> --}}
+                                        <tr>
+                                            <td>{{ date('F d, Y', strtotime($item->created_at)) }}</td>
+                                            <td>₱ {{ number_format($item->loan_amount/0.94,2) }}</td>
+                                            <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
+                                            <td>{{ $item->days_payable }} Days</td>
+                                            <td>
+                                                {!! Form::open(['action' => ['LoanRequestsController@destroy', $item->id], 'method' => 'POST']) !!}
+                                                    {{ Form::hidden('_method', 'DELETE') }}
+                                                    {{ Form::submit('Cancel Request', ['class' => 'btn btn-outline-secondary no-modal']) }}
+                                                {!! Form::close() !!}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                <tr>
+                                    <td colspan="100%" class="text-center"><h4 class="text-muted">No Entries Found</h4></td>
+                                </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        {{ $pending->links() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{-- @endif --}}
+
+{{-- Show list of data that waiting to confirm --}}
+@if (count($pending_mem_con) != null)
+    <div class="row pt-3">
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">Pending Confirmation</h6>
+                <div class="container">
+                    <div class="table-responsive">
+                        <table class="table table-hover" >
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Amount Sent</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (count($pending_mem_con) > 0)
+                                    @foreach ($pending_mem_con as $item)
                                     <tr>
-                                        <td>{{ date('F d, Y', strtotime($item->created_at)) }}</td>
-                                        <td>₱ {{ number_format($item->loan_amount/0.94,2) }}</td>
-                                        <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
-                                        <td>{{ $item->days_payable }} Days</td>
-                                        <td>
-                                            {!! Form::open(['action' => ['LoanRequestsController@destroy', $item->id], 'method' => 'POST']) !!}
-                                                {{ Form::hidden('_method', 'DELETE') }}
-                                                {{ Form::submit('Cancel Request', ['class' => 'btn btn-outline-secondary no-modal']) }}
-                                            {!! Form::close() !!}
+                                        <td>{{$item->lname. ', '.$item->fname.' '.$item->mname}}</td>
+                                        <td>₱ {{$item->amount}} </td>
+                                        <td class="d-flex flex-row">
+                                            <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/accept">Accept</a>
                                         </td>
                                     </tr>
-                                @endforeach
-                            @else
-                            <tr>
-                                <td colspan="100%" class="text-center"><h4 class="text-muted">No Entries Found</h4></td>
-                            </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
-                <div class="d-flex justify-content-center mt-3">
-                    {{ $pending->links() }}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row pt-3">
-    <div class="col">
-        <div class="card">
-            <h6 class="card-header">Pending Money</h6>
-            <div class="container">
-                <div class="table-responsive">
-                    <table class="table table-hover" >
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Money To Receive</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (count($transferring) > 0)
-                                @foreach ($transferring as $item)
+                                    @endforeach
+                                @else
                                 <tr>
-                                    <td>{{$item->lname}}, {{$item->fname}} </td>
-                                    <td>{{$item->loan_amount}} </td>
-                                    <td class="d-flex flex-row">
-                                        <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/receive/{{ $item->request_id }}/accept">Accept</a>
-                                    </td>
+                                    <td colspan="100%" class="text-center"><h4 class="text-muted">No Entries Found</h4></td>
                                 </tr>
-                                @endforeach
-                            @else
-                            <tr>
-                                <td colspan="100%" class="text-center"><h4 class="text-muted">No Entries Found</h4></td>
-                            </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
-                <div class="d-flex justify-content-center mt-3">
-                    {{ $transferring->links() }}
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        {{ $pending_mem_con->links() }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+@endif
+
+@if (count($pending_mem_receive) > 0)
+    <div class="row pt-3">
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">Pending Money</h6>
+                <div class="container">
+                    <div class="table-responsive">
+                        <table class="table table-hover" >
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Money To Receive</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (count($pending_mem_receive) > 0)
+                                    @foreach ($pending_mem_receive as $item)
+                                    <tr>
+                                        <td>{{$item->lname}}, {{$item->fname}} </td>
+                                        <td>₱ {{$item->loan_amount}} </td>
+                                        <td class="d-flex flex-row">
+                                            <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/receive/{{ $item->request_id }}/accept">Accept</a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                @else
+                                <tr>
+                                    <td colspan="100%" class="text-center"><h4 class="text-muted">No Entries Found</h4></td>
+                                </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        {{ $pending_mem_receive->links() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 
 <div class="row pt-5">
         <div class="col">
@@ -162,56 +211,6 @@
             </div>
         </div>
     </div>
-
-{{-- <div class="modal fade" id="reqModal" tabindex="-1" role="dialog" aria-labelledby="reqModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="reqModalLabel">View Request</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-4">
-                        <span class="display-5">Loan Amount: </span>
-                    </div>
-                    <div class="col">
-                        <span class="loan-la"></span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-4">
-                        <span class="display-5">Days Payable: </span>
-                    </div>
-                    <div class="col">
-                        <span class="loan-dp"></span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-4">
-                        <span class="display-5">Description: </span>
-                    </div>
-                    <div class="col">
-                        <span class="loan-desc"></span>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-4">
-                        <span class="display-5">Date Created: </span>
-                    </div>
-                    <div class="col">
-                        <span class="loan-ca"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div> --}}
 
 <div class="modal fade" id="histReqModal" tabindex="-1" role="dialog" aria-labelledby="histReqModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
