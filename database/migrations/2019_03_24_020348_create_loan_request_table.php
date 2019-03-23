@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDepositsTable extends Migration
+class CreateLoanRequestTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,22 @@ class CreateDepositsTable extends Migration
      */
     public function up()
     {
-        Schema::create('deposits', function (Blueprint $table) {
+        Schema::create('loan_request', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('member_id');
+            $table->integer('user_id');
             $table->unsignedInteger('sched_id');
-            $table->timestamp('start_date');
-            $table->tinyInteger('payment_method');
+            $table->decimal('loan_amount', 10, 2);
+            $table->unsignedInteger('days_payable');
+            $table->boolean('confirmed')->nullable();
+            $table->integer('get')->nullable();
+            $table->integer('paid')->nullable();
+            $table->integer('received')->nullable();
+            $table->decimal('balance', 10, 2);
             $table->timestamps();
+
             $table->foreign('sched_id')
                 ->references('id')
                 ->on('schedules')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->foreign('member_id')
-                ->references('id')
-                ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
@@ -41,7 +42,7 @@ class CreateDepositsTable extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('deposits');
+        Schema::dropIfExists('loan_request');
         Schema::enableForeignKeyConstraints();
     }
 }
