@@ -98,7 +98,7 @@ class TransactionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-        return dd($request);
+        // return dd($request);
         $messages = [
             'required' => 'This field is required'
         ];
@@ -113,8 +113,11 @@ class TransactionController extends Controller
 
     // ***************************      Start           ***************************
          if ($request->type == 1) { 
-            // If the transaction is a Deposit
-            return dd('Deposittt');
+            // If the transaction is a DEPOSIT
+            $transact = New Transaction;    
+            $transact->trans_type = $request->type;
+            $transact->member_id = $request->id;
+            $transact->amount = $request->amount;
         } else if ($request->type == 3) {
             // If the transaction is a Loan Payment [ $trans_type = 3 ]
             $transact = New Transaction;    
@@ -189,6 +192,8 @@ class TransactionController extends Controller
         // Get the sched_id
         $transact->sched_id = $sched->id;
         $transact->save();
+
+        // return dd($sched, $transact);
 
         return redirect()->route('transaction-collect')->with('success', 'Waiting to confirm from the member');
     }

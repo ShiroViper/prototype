@@ -28,6 +28,8 @@ class DepositController extends Controller
             'start_date' => ['required']
         ]);
 
+        return dd('test');
+
         $deposit = new Deposit;
         $deposit->member_id = Auth::user()->id;
         $deposit->payment_method = $request->input('payment_method');
