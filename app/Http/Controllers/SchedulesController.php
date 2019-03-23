@@ -27,67 +27,77 @@ class SchedulesController extends Controller
     public function index()
     {
         $schedules = Schedule::get();
+        $user = User::find(Auth::user()->id);
+
         $sched_list = [];
+        /*
         foreach ($schedules as $key => $schedule) {
-            // [1] Deposit Schedule type
+            // [1] Deposit Schedule type for a member
             if ($schedule->sched_type == 1 && ($schedule->user_id == Auth::user()->id) ) {
-                $method = Deposit::where('member_id', '=', Auth::user()->id)->first();
+                return dd('here boi');
+                $method = User::where([
+                    ['member_id', '=', Auth::user()->id],
+                    ['setup', '=', null]
+                ])->first();
                 // return dd($schedule->payment_method);
                 // Get the deposit table row of the logged in user
 
                 // If method user acccount is not found, redirect to setting up account
+                return dd($method);
                 if(!$method){
                     return view('users.member.dashboard')->with('setup', 'Please setup your account first')->with('active', 'dashboard');
                 }
 
-                switch ($method->payment_method) {
-                    // Daily deposit payment basis
-                    case 1:
-                        $sched_list[] = Calendar::event(
-                            '__',
-                            true,
-                            new Carbon($schedule->start_date),
-                            new Carbon($schedule->end_date.' +1 Day'),
-                            $key,
-                            [
-                                'color' => '#EF5450',
-                                'textColor' => '#EF5450',
-                                // 'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
-                                'description' => 'Daily Payment Deposit',
-                                // 'userId' => 'User ID '.$schedule->userId
-                            ]
-                        );
-                    break;
-                    case 2:
-                        // $numOfWeek = $start->diffInWeeks($end);
-                        $interval = new DateInterval('P7D');
-                        // $dayOfWeek = Carbon::parse($start)->dayOfWeek;
-                        $start = new Carbon($schedule->start_date);
-                        $end = new Carbon($schedule->end_date.' +1 Day');
-                        $period = new DatePeriod($start, $interval, $end);
-                        foreach ($period as $key => $date) {
-                            // echo "<pre>".$key." ".$date->format('Y-m-d')."</pre>";
-                            $sched_list[] = Calendar::event(
-                                '__',
-                                true,
-                                $date->format('Y-m-d'),
-                                $date->format('Y-m-d'),
-                                $key,
-                                [
-                                    'color' => '#EF5450',
-                                    'textColor' => '#EF5450',
-                                    // 'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
-                                    'description' => 'Weekly Payment Deposit',
-                                    // 'userId' => 'User ID '.$schedule->userId
-                                ]
-                            );
-                        }
-                    break;
-                    case 3:
-                       return dd('monthly');
-                    break;
-                }
-            } else if ($schedule->sched_type == 2) {
+                // switch ($method->payment_method) {
+                //     // Daily deposit payment basis
+                //     case 1:
+                //         $sched_list[] = Calendar::event(
+                //             '__',
+                //             true,
+                //             new Carbon($schedule->start_date),
+                //             new Carbon($schedule->end_date.' +1 Day'),
+                //             $key,
+                //             [
+                //                 'color' => '#EF5450',
+                //                 'textColor' => '#EF5450',
+                //                 // 'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
+                //                 'description' => 'Daily Payment Deposit',
+                //                 // 'userId' => 'User ID '.$schedule->userId
+                //             ]
+                //         );
+                //     break;
+                //     case 2:
+                //         // $numOfWeek = $start->diffInWeeks($end);
+                //         $interval = new DateInterval('P7D');
+                //         // $dayOfWeek = Carbon::parse($start)->dayOfWeek;
+                //         $start = new Carbon($schedule->start_date);
+                //         $end = new Carbon($schedule->end_date.' +1 Day');
+                //         $period = new DatePeriod($start, $interval, $end);
+                //         foreach ($period as $key => $date) {
+                //             // echo "<pre>".$key." ".$date->format('Y-m-d')."</pre>";
+                //             $sched_list[] = Calendar::event(
+                //                 '__',
+                //                 true,
+                //                 $date->format('Y-m-d'),
+                //                 $date->format('Y-m-d'),
+                //                 $key,
+                //                 [
+                //                     'color' => '#EF5450',
+                //                     'textColor' => '#EF5450',
+                //                     // 'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
+                //                     'description' => 'Weekly Payment Deposit',
+                //                     // 'userId' => 'User ID '.$schedule->userId
+                //                 ]
+                //             );
+                //         }
+                //     break;
+                //     case 3:
+                //        return dd('monthly');
+                //     break;
+                // }
+            } 
+            
+            else if ($schedule->sched_type == 2) {
                 // [2] Show Loan Schedule
                 $sched_list[] = Calendar::event(
                     '__',
@@ -103,9 +113,10 @@ class SchedulesController extends Controller
                         // 'userId' => 'User ID '.$schedule->userId
                     ]
                 );
-            } else if ($schedule->sched_type == 3) {
+            } 
+
+            else if ($schedule->sched_type == 3) {
                 // [3] Show Paid Loan Schedule
-                // return dd(' sched type = 3');
                 $sched_list[] = Calendar::event(
                     '__',
                     true,
@@ -120,7 +131,9 @@ class SchedulesController extends Controller
                         // 'userId' => 'User ID '.$schedule->userId
                     ]
                 );
-            } else {
+            } 
+            
+            else {
                 // kanang wala na juy choice
                 $methods = Deposit::all();
                 foreach ($methods as $method) {
@@ -175,6 +188,33 @@ class SchedulesController extends Controller
                 }
             }
         }
+        */
+        foreach ($schedules as $key => $schedule) {
+            switch ($schedule->sched_type) {
+                // Loan Request
+                case 2:
+                break;
+
+                // Paid Loan / Deposit
+                case 3:
+                    $sched_list[] = Calendar::event(
+                        '__',
+                        true,
+                        new Carbon($schedule->start_date),
+                        new Carbon($schedule->end_date.' +1 Day'),
+                        $key,
+                        [
+                            'color' => '#3FBC47',
+                            'textColor' => '#3FBC47',
+                            // 'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
+                            'description' => 'Paid Date',
+                            // 'userId' => 'User ID '.$schedule->userId
+                        ]
+                    );
+                break;
+            }
+        }
+
         $calendar_details = Calendar::addEvents($sched_list)->setCallbacks([
             'eventRender' => 'function(event, element) {
                 $(element).popover({
@@ -189,19 +229,22 @@ class SchedulesController extends Controller
             'eventLimit' => 4,
         ]);
 
+        /**
+         * If a member didn't set-up his/her payment
+         * method yet
+         * 
+         * Get the member_id and return the first row
+        */
         if (Auth::user()->user_type == 2) {
             return view('users.admin.calendar')->with(compact('calendar_details'))->with('active', 'sched');
         } else {
-            /**
-             * If a member didn't set-up his/her payment
-             * method yet
-             * 
-             * Get the member_id and return the first row
-             */
-            if (Deposit::where('member_id', '=', Auth::user()->id)->doesntExist()) {
-                return view('users.member.dashboard')->with('setup', 'Please setup your account first')->with('active', 'dashboard');
+            if ($user = User::where([
+                    ['id', '=', Auth::user()->id],
+                    ['setup', '=', null]
+                ])->first()) {
+                return view('users.member.dashboard')->with('user', $user)->with('active', 'dashboard');
             } else {
-                return view('users.member.dashboard')->with(compact('calendar_details'))->with('active', 'dashboard')->with('setup', null);
+                return view('users.member.dashboard')->with(compact('calendar_details'))->with('active', 'dashboard')->with('user', null);
             }
         }
     }

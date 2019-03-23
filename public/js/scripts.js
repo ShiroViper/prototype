@@ -19,6 +19,27 @@ $('tr .no-modal').on("click", function (e) {
   e.stopPropagation();
 });
 
+/**
+ * Password checker
+ */
+function passwordChecker() {
+  var pass = $("#password").val();
+  var confirm = $("#cpassword").val();
+  // pass != null ? alert('null') : alert('false');
+  if (pass == 0) {
+    $("#cpassword").val('');
+    $("#password-checker").text("");
+    $(".member-setup-btn").prop('disabled', true);
+  } else if (pass == confirm) {
+    // alert("no pass");
+    $("#password-checker").text("Passwords match").css("color", "green");
+    $(".member-setup-btn").prop('disabled', false);
+  } else {
+    $("#password-checker").text("Passwords do not match!").css("color", "red");
+    $(".member-setup-btn").prop('disabled', true);
+  }
+}
+
 // $('#reqModal').on('show.bs.modal', function (event) {
 //   var button = $(event.relatedTarget);
 //   var id = button.data('id');
@@ -77,7 +98,15 @@ $(function () {
    */
   $('div[role="status"]').toggle();
 
+  /**
+   * Tooltip 
+   */
   $('[data-toggle="tooltip"]').tooltip();
+
+  /**
+   * Password checker
+   */
+  $("#cpassword").keyup(passwordChecker);
 
   // $('#reqModal').on('show.bs.modal', function (e) {
   //   // var url = window.location.href;

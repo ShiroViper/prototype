@@ -64,5 +64,5 @@ $(function () {
 //   source: collector
 // });
 
-var collector = [];
+// var collector = [];
 // var members = [];
