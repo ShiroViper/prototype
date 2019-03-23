@@ -16,31 +16,30 @@ class CreateProcessesTable extends Migration
         Schema::create('processes', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('transfer')->nullable();
-            $table->integer('request_id');
-            $table->integer('admin_id');
-            $table->integer('collector_id');
-            $table->timestamps();
-            
-            $table->unsignedInteger('collector_id');
-            $table->foreign('collector_id')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
             $table->unsignedInteger('request_id');
             $table->foreign('request_id')
                 ->references('id')
                 ->on('loan_request')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-
             $table->unsignedInteger('admin_id');
             $table->foreign('admin_id')
                 ->references('id')
                 ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->unsignedInteger('collector_id');
+            $table->foreign('collector_id')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->integer('process_type')->nullable();
+            $table->timestamps();
+            
+            // $table->unsignedInteger('collector_id');
+            // $table->unsignedInteger('request_id');
+            // $table->unsignedInteger('admin_id');
         });
     }
 
