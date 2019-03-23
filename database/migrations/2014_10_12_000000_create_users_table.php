@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->unsignedInteger('user_type');
-            $table->tinyInteger('setup')->nullable();
+            $table->boolean('setup')->nullable();
             $table->string('cell_num');
             $table->text('address');
             $table->timestamp('email_verified_at')->nullable();
