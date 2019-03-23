@@ -95,16 +95,14 @@
                                             <td>₱ {{ $request->loan_amount }}</td>
                                             <td>{{ $request->days_payable }} Days</td>
                                             <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
-                                            <td>{{$request->received ? 'Yes' : ($request->confirmed ? 'No': 'N/A')}} </td>  
+                                            <td>{{ $request->received ? 'Yes' : ($request->confirmed ? 'No': 'N/A')}} </td>  
                                             <td>{{ $request->confirmed ? ($request->paid ? 'Yes' : 'Ongoing') : 'N/A' }}</td>
                                             {{-- if status is declined skip this function otherwise execur --}}
-                                            @if($request->received != 1 && $request->confirmed != 0 && $request->transfer < 2)
+                                            @if($request->received != 1 && $request->confirmed != 0)
                                                 <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/process/{{ $request->id }}/edit">Transfer</a></td>
-                                            @elseif($request->transfer < 4)
-                                                <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/process/{{ $request->id }}/edit">Details</a></td>
                                             @else
                                                 <td>N/A</td>
-                                            @endif
+                                            @endif --}}
                                         </tr>
                                     @endforeach
                                 @else

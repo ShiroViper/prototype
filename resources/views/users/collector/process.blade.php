@@ -9,7 +9,7 @@
 <h3>Loan Process: Transfer Money</h3>
 <div class="row">
     <div class="col-sm-10 col-md-7 col-lg-5 my-3">  
-      {!!Form::open(['action'=> 'LoanProcessController@store', 'method'=>'POST']) !!}
+      {!!Form::open(['action'=> 'ProcessController@store', 'method'=>'POST']) !!}
       @csrf
 
     @if($process->transfer == 3)

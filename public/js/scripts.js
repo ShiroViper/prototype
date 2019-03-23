@@ -71,20 +71,7 @@ $('#histReqModal').on('show.bs.modal', function (event) {
   modal.find('.loan-desc').html(desc);
 });
 
-// var availableTags = [
-//   "ActionScript",
-//   "AppleScript",
-//   "Asp",
-//   "BASIC",
-// ];
-
-
-$(function () {
-  
-  $("input#c_id").autocomplete({
-    source: collector
-  });
-  
+$(function () { 
   /**
    * Spinner for calendar
    */

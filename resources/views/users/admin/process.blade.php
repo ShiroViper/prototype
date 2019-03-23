@@ -9,10 +9,10 @@
 <h3>Loan Process: Transfer Money</h3>
 <div class="row">
     <div class="col-sm-10 col-md-7 col-lg-5 my-3">  
-      {!!Form::open(['action'=> 'LoanProcessController@store', 'method'=>'POST']) !!}
+      {!!Form::open(['action'=> 'ProcessController@store', 'method'=>'POST']) !!}
       @csrf
     {{-- Request ID --}}
-    {{ Form::text('id', $process->id, ['hidden']) }}
+    {{ Form::text('request_id', $process->id, ['hidden']) }}
       
     @if($trans != NULL)
         @if($trans->transfer == 1)
@@ -43,10 +43,10 @@
             {{ Form::date('date',\Carbon\Carbon::now(), ['class' => 'form-control', 'readonly']) }}
         </div>
         <div class="form-group">
-            {{ Form::label('name', 'Collector Name') }}
-            {{ Form::text('name', '', ['class' => $errors->has('name') ? 'form-control is-invalid' : 'form-control']) }}
-            @if ($errors->has('name'))
-                <div class="invalid-feedback">{{ $errors->first('name') }}</div>
+            {{ Form::label('id', 'Collector ID') }}
+            {{ Form::text('id', '', ['class' => $errors->has('id') ? 'form-control is-invalid' : 'form-control']) }}
+            @if ($errors->has('id'))
+                <div class="invalid-feedback">{{ $errors->first('id') }}</div>
             @endif
         </div>
         {{ Form::submit('Transfer to Collector', ['class' => 'btn btn-primary']) }}

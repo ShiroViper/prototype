@@ -92,4 +92,7 @@
         </div> --}}
     </div>
 </div>
+@push('scripts')
+    <script src="{{ asset('js/scripts.js') }}" defer></script>
+@endpush
 @endsection

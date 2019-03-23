@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChangeCollectoIdMemberIdToFkInLoanProcess extends Migration
+class CreateProcessesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,23 +13,29 @@ class ChangeCollectoIdMemberIdToFkInLoanProcess extends Migration
      */
     public function up()
     {
-        Schema::table('loan_process', function (Blueprint $table) {
+        Schema::create('processes', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('transfer')->nullable();
+            $table->integer('request_id');
+            $table->integer('admin_id');
+            $table->integer('collector_id');
+            $table->timestamps();
             
-            $table->unsignedInteger('collector_id')->change();
+            $table->unsignedInteger('collector_id');
             $table->foreign('collector_id')
                 ->references('id')
                 ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->unsignedInteger('request_id')->change();
+            $table->unsignedInteger('request_id');
             $table->foreign('request_id')
                 ->references('id')
                 ->on('loan_request')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->unsignedInteger('admin_id')->change();
+            $table->unsignedInteger('admin_id');
             $table->foreign('admin_id')
                 ->references('id')
                 ->on('users')
@@ -45,6 +51,8 @@ class ChangeCollectoIdMemberIdToFkInLoanProcess extends Migration
      */
     public function down()
     {
-        // 
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('processes');
+        Schema::enableForeignKeyConstraints();
     }
 }

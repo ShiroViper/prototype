@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddProcessTypeToLoanProcessTable extends Migration
+class AddRequestIdToTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddProcessTypeToLoanProcessTable extends Migration
      */
     public function up()
     {
-        Schema::table('loan_process', function (Blueprint $table) {
-            $table->integer('process_type')->nullable()->after('collector_id');
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->integer('request_id')->nullable()->after('id');
         });
     }
 
@@ -25,8 +25,8 @@ class AddProcessTypeToLoanProcessTable extends Migration
      */
     public function down()
     {
-        Schema::table('loan_process', function (Blueprint $table) {
-            $table->dropColumn('process_type');
+        Schema::table('transactions', function (Blueprint $table) {
+            //
         });
     }
 }

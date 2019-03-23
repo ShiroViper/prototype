@@ -60,4 +60,7 @@
 <div class="d-flex justify-content-center mt-3">
     {{ $users->links() }}
 </div>
+@push('scripts')
+    <script src="{{ asset('js/scripts.js') }}" defer></script>
+@endpush
 @endsection

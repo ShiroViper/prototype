@@ -48,7 +48,12 @@
         </div>
     </div>
 </div>
+@prepend('scripts')
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.js"></script>
+@endprepend 
+@push('scripts')
+    <script src="{{ asset('js/scripts.js') }}" defer></script>
+@endpush
     {!! $calendar_details->script() !!}
 @endsection
