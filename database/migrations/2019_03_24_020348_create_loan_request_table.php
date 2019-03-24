@@ -16,7 +16,7 @@ class CreateLoanRequestTable extends Migration
         Schema::create('loan_request', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
-            $table->unsignedInteger('sched_id');
+            $table->unsignedInteger('sched_id')->nullable();
             $table->decimal('loan_amount', 10, 2);
             $table->unsignedInteger('days_payable');
             $table->boolean('confirmed')->nullable();
