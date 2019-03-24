@@ -148,7 +148,7 @@
                     <div class="form-group">
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="terms" required>
-                            <label class="custom-control-label" for="terms">I Agree to the terms and conditions</label>
+                            <label class="custom-control-label" for="terms">I Agree to the <a href='/terms' target='_blank'>Terms and Conditions</a></label>
                         </div>
                     </div>
                     <div class="d-flex justify-content-lg-center">

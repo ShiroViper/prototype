@@ -191,8 +191,27 @@ class SchedulesController extends Controller
         */
         foreach ($schedules as $key => $schedule) {
             switch ($schedule->sched_type) {
+                // Collector's schedule instead of DEPOSIT
+                case 1:
+
+                break;
+
                 // Loan Request
                 case 2:
+                $sched_list[] = Calendar::event(
+                    '_',
+                    true,
+                    new Carbon($schedule->start_date),
+                    new Carbon($schedule->end_date.' +1 Day'),
+                    $key,
+                    [
+                        'color' => '#EF9950',
+                        'textColor' => '#EF9950',
+                        'description' => 'Loan Date',
+                        // can add variables
+                        'sample' => 'sample'
+                    ]
+                );
                 break;
 
                 // Paid Loan / Deposit
@@ -206,9 +225,7 @@ class SchedulesController extends Controller
                         [
                             'color' => '#3FBC47',
                             'textColor' => '#3FBC47',
-                            // 'description' => 'Loaned ₱'.$schedule->loanRequest->loan_amount.' due on '.date('F d, Y', strtotime($schedule->end_date)),
                             'description' => 'Paid Date',
-                            // 'userId' => 'User ID '.$schedule->userId
                         ]
                     );
                 break;
@@ -222,8 +239,13 @@ class SchedulesController extends Controller
                     trigger: "hover",
                     placement: "top",
                     container: "body"
-                });             
+                });
             }',
+            'eventClick' => 'function(event) {
+                if (event) {
+                    alert("Clicked " + event.sample);
+                }
+            }'
         ])->setOptions([
             'header' => [],
             'eventLimit' => 4,

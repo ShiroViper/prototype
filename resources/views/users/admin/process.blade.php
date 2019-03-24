@@ -39,11 +39,11 @@
     @endif
     @if($trans == NULL)
         <div class="form-group">
-            {{ Form::label('date', 'Date') }}
+            {{ Form::label('date', 'Date', ['class' => 'h6']) }}
             {{ Form::date('date',\Carbon\Carbon::now(), ['class' => 'form-control', 'readonly']) }}
         </div>
         <div class="form-group">
-            {{ Form::label('id', 'Collector ID') }}
+            {{ Form::label('id', 'Collector ID', ['class' => 'h6']) }}
             {{ Form::text('id', '', ['class' => $errors->has('id') ? 'form-control is-invalid' : 'form-control']) }}
             @if ($errors->has('id'))
                 <div class="invalid-feedback">{{ $errors->first('id') }}</div>
@@ -75,28 +75,39 @@
     </div>
 </div>
 <script>
+    var tmp = @json($collectors);
     var collectors = [];
-    @foreach ($collectors as $collector)
-        collectors.push(
-            ['{!! $collector->id !!}', '{!! $collector->lname !!}', '{!! $collector->fname !!}', '{!! $collector->mname !!}']
-        );
-    @endforeach
+    for (var i = 0; i < tmp.length; i++) {
+        // alert(tmp[i].id);
+        item = {}
+        item["value"] = tmp[i].id;
+        item["label"] = tmp[i].lname+", "+tmp[i].fname+" "+tmp[i].mname;
+        collectors.push(item);
+    }
     console.log(collectors);
 
-    var collector = [];
-    for (var key in collectors) {
-        // skip loop if the property is from prototype
-        if (!collectors.hasOwnProperty(key)) continue;
-        var object = collectors[key];
-        // collector.push(object[0]+", "+object[1]+" "+object[2]+" "+object[3]);
-        // for (var property in object) {
-        //     // skip loop if the property is from prototype
-        //     if (!object.hasOwnProperty(property)) continue;
+    // var collectors = [];
+    // @foreach ($collectors as $collector)
+    //     collectors.push(
+    //         ['{!! $collector->id !!}', '{!! $collector->lname !!}', '{!! $collector->fname !!}', '{!! $collector->mname !!}']
+    //     );
+    // @endforeach
+    // console.log(collectors);
 
-        //     console.log(property + " = " + object[property]);
-        // }
-        console.log("value"+ collectors[key]);
-    }
+    // var collector = [];
+    // for (var key in collectors) {
+    //     // skip loop if the property is from prototype
+    //     if (!collectors.hasOwnProperty(key)) continue;
+    //     var object = collectors[key];
+    //     // collector.push(object[0]+", "+object[1]+" "+object[2]+" "+object[3]);
+    //     // for (var property in object) {
+    //     //     // skip loop if the property is from prototype
+    //     //     if (!object.hasOwnProperty(property)) continue;
+
+    //     //     console.log(property + " = " + object[property]);
+    //     // }
+    //     console.log("value"+ collectors[key]);
+    // }
 
     // Fron PHP to JSON 
     // var collect = @json($collectors);
@@ -121,4 +132,11 @@
     // }
 
 </script>
+
+@push('scripts')
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{{ asset('js/scripts.js') }}" defer></script>
+    <script src="{{ asset('js/autocomplete.js') }}"></script>
+@endpush
+
 @endsection

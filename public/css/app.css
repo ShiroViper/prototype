@@ -16339,6 +16339,10 @@ readers do not read off random characters that represent icons */
   font-weight: 400;
 }
 
+.failed-loan {
+  height: calc(100vh - 226px);
+}
+
 .pop-messages {
   top: 100px;
   left: 25%;
