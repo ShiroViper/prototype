@@ -191,6 +191,11 @@ class SchedulesController extends Controller
         */
         foreach ($schedules as $key => $schedule) {
             switch ($schedule->sched_type) {
+                // Collector's schedule instead of DEPOSIT
+                case 1:
+
+                break;
+
                 // Loan Request
                 case 2:
                 $sched_list[] = Calendar::event(
@@ -219,7 +224,7 @@ class SchedulesController extends Controller
                         $key,
                         [
                             'color' => '#3FBC47',
-                            'textColor' => 'white',
+                            'textColor' => '#3FBC47',
                             'description' => 'Paid Date',
                         ]
                     );

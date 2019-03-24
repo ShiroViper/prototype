@@ -39,11 +39,11 @@
     @endif
     @if($trans == NULL)
         <div class="form-group">
-            {{ Form::label('date', 'Date') }}
+            {{ Form::label('date', 'Date', ['class' => 'h6']) }}
             {{ Form::date('date',\Carbon\Carbon::now(), ['class' => 'form-control', 'readonly']) }}
         </div>
         <div class="form-group">
-            {{ Form::label('id', 'Collector ID') }}
+            {{ Form::label('id', 'Collector ID', ['class' => 'h6']) }}
             {{ Form::text('id', '', ['class' => $errors->has('id') ? 'form-control is-invalid' : 'form-control']) }}
             @if ($errors->has('id'))
                 <div class="invalid-feedback">{{ $errors->first('id') }}</div>

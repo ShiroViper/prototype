@@ -20,11 +20,11 @@ $('#id').autocomplete({
                 .appendTo(ul);
         };
     },
-    change: function ( event, ui ) {
-        if (!ui.item) {
-            $(this).val("");
-        }
-    }
+    // change: function ( event, ui ) {
+    //     if (!ui.item) {
+    //         $(this).val("");
+    //     }
+    // }
 });
 
 $(function () {
