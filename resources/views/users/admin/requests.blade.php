@@ -62,64 +62,64 @@
 </div>
 
 <div class="row pt-5">
-        <div class="col">
-            <div class="card">
-                <h6 class="card-header">Requests History</h6>
-                <div class="container">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Date Approved</th>
-                                    <th>Name</th>
-                                    <th>Loan Amount</th>
-                                    <th>Payables</th>
-                                    <th>Status</th>
-                                    <th>Money Received</th>
-                                    <th>Paid</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (count($requests) > 0)
-                                    @foreach ($requests as $request)
-                                        {{-- @if ($request->paid)
-                                        <tr class="clickable" data-toggle="modal" data-target="#histReqModal" data-id="{{ $request->id }}" data-cdate="{{ date('F d, Y H:i:s A', strtotime($request->created_at)) }}" data-mem="{{ $request->user->lname.', '.$request->user->fname.' '.$request->user->mname }}" data-memid="{{ $request->user->id }}" data-udate="{{ date('F d, Y H:i:s A', strtotime($request->updated_at)) }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}" data-paid="{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}">
+    <div class="col">
+        <div class="card">
+            <h6 class="card-header">Requests History</h6>
+            <div class="container">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date Approved</th>
+                                <th>Name</th>
+                                <th>Loan Amount</th>
+                                <th>Payables</th>
+                                <th>Status</th>
+                                <th>Money Received</th>
+                                <th>Paid</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (count($requests) > 0)
+                                @foreach ($requests as $request)
+                                    {{-- @if ($request->paid)
+                                    <tr class="clickable" data-toggle="modal" data-target="#histReqModal" data-id="{{ $request->id }}" data-cdate="{{ date('F d, Y H:i:s A', strtotime($request->created_at)) }}" data-mem="{{ $request->user->lname.', '.$request->user->fname.' '.$request->user->mname }}" data-memid="{{ $request->user->id }}" data-udate="{{ date('F d, Y H:i:s A', strtotime($request->updated_at)) }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}" data-paid="{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}">
+                                    @else
+                                    <tr class="table-secondary font-weight-bold clickable" data-toggle="modal" data-target="#histReqModal" data-id="{{ $request->id }}" data-cdate="{{ date('F d, Y H:i:s A', strtotime($request->created_at)) }}" data-mem="{{ $request->user->lname.', '.$request->user->fname.' '.$request->user->mname }}" data-memid="{{ $request->user->id }}" data-udate="{{ date('F d, Y H:i:s A', strtotime($request->updated_at)) }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}" data-paid="{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}">
+                                    @endif --}}
+                                    <tr >
+                                        <td>{{ $request->updated_at}}</td>
+                                        {{-- <td>{{ $request->user->lname.', '. $request->user->fname.' '. $request->user->mname }}</td> --}}
+                                        <td>{{$request->lname}}, {{$request->fname}} {{$request->mname}} </td>
+                                        <td>₱ {{ $request->loan_amount }}</td>
+                                        <td>{{ $request->days_payable }} Days</td>
+                                        <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
+                                        <td>{{ $request->received ? 'Yes' : ($request->confirmed ? 'No': 'N/A')}} </td>  
+                                        <td>{{ $request->confirmed ? ($request->paid ? 'Yes' : 'Ongoing') : 'N/A' }}</td>
+                                        {{-- if status is declined skip this function otherwise execur --}}
+                                        @if($request->received != 1 && $request->confirmed != 0)
+                                            <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/process/{{ $request->id }}/edit">Transfer</a></td>
                                         @else
-                                        <tr class="table-secondary font-weight-bold clickable" data-toggle="modal" data-target="#histReqModal" data-id="{{ $request->id }}" data-cdate="{{ date('F d, Y H:i:s A', strtotime($request->created_at)) }}" data-mem="{{ $request->user->lname.', '.$request->user->fname.' '.$request->user->mname }}" data-memid="{{ $request->user->id }}" data-udate="{{ date('F d, Y H:i:s A', strtotime($request->updated_at)) }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}" data-paid="{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}">
-                                        @endif --}}
-                                        <tr >
-                                            <td>{{ $request->updated_at}}</td>
-                                            {{-- <td>{{ $request->user->lname.', '. $request->user->fname.' '. $request->user->mname }}</td> --}}
-                                            <td>{{$request->lname}}, {{$request->fname}} {{$request->mname}} </td>
-                                            <td>₱ {{ $request->loan_amount }}</td>
-                                            <td>{{ $request->days_payable }} Days</td>
-                                            <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
-                                            <td>{{ $request->received ? 'Yes' : ($request->confirmed ? 'No': 'N/A')}} </td>  
-                                            <td>{{ $request->confirmed ? ($request->paid ? 'Yes' : 'Ongoing') : 'N/A' }}</td>
-                                            {{-- if status is declined skip this function otherwise execur --}}
-                                            @if($request->received != 1 && $request->confirmed != 0)
-                                                <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/process/{{ $request->id }}/edit">Transfer</a></td>
-                                            @else
-                                                <td>N/A</td>
-                                            @endif --}}
-                                        </tr>
-                                    @endforeach
-                                @else
-                                <tr>
-                                    <td colspan="100%" class="text-center"><h4 class="text-muted">No Entries Found</h4></td>
-                                </tr>
-                                @endif
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="d-flex justify-content-center mt-3">
-                        {{ $requests->links() }}
-                    </div>
+                                            <td>N/A</td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                            @else
+                            <tr>
+                                <td colspan="100%" class="text-center"><h4 class="text-muted">No Entries Found</h4></td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    {{ $requests->links() }}
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     @push('scripts')
         <script src="{{ asset('js/scripts.js') }}"></script>
