@@ -16398,24 +16398,28 @@ readers do not read off random characters that represent icons */
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.pay-dates {
-  background: #EF5450;
-}
-
 .loan-dates {
-  background: #EF9950;
+  background: #F87930;
 }
 
 .paid-dates {
-  background: #3FBC47;
+  background: #00CC66;
 }
 
 .current-date {
-  background: #83CACD;
+  background: #F7DE7C;
 }
 
 .fc-unthemed td.fc-today {
-  background: #83CACD !important;
+  background: #F7DE7C !important;
+}
+
+.admin-calendar-info div[class^=info-] p {
+  margin-bottom: 0;
+}
+
+.admin-calendar-info div[class^=info-] p + h5 {
+  font-family: "Source Sans Pro", sans-serif;
 }
 
 .main-login-container {

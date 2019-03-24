@@ -1,13 +1,13 @@
 
 // $pay: #ff7043;
-// $current: #fff59d;
-// $paid: #7befb2;
-// $loan: #ef5350;
+$current: #F7DE7C;
+$paid: #00CC66;
+$loan: #F87930;
 
-$pay: #EF5450;
-$current: #83CACD;
-$paid: #3FBC47;
-$loan: #EF9950;
+// $pay: #EF5450;
+// $current: #83CACD;
+// $paid: #3FBC47;
+// $loan: #EF9950;
 
 // .lighted a{
 //     background-color : $color !important;
@@ -31,9 +31,9 @@ $loan: #EF9950;
     border: 1px solid rgba(0, 0, 0, .2);
   }
 
-  .pay-dates {
-      background: $pay;
-  }
+//   .pay-dates {
+//       background: $pay;
+//   }
 
   .loan-dates {
       background: $loan;
@@ -49,6 +49,13 @@ $loan: #EF9950;
 
   .fc-unthemed td.fc-today {
       background: $current !important;
+  }
+
+  .admin-calendar-info div[class^="info-"] p {
+    margin-bottom: 0;
+    & + h5 {
+      font-family: "Source Sans Pro", sans-serif;
+    }
   }
  
 //  div.ui-datepicker {

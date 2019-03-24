@@ -44,6 +44,11 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Loan_Request');
     }
+
+    public function schedule()
+    {
+        return $this->hasMany('App\Schedule');
+    }
     
     public function transactions()
     {

@@ -91,7 +91,7 @@
                                     <tr >
                                         <td>{{ $request->updated_at}}</td>
                                         {{-- <td>{{ $request->user->lname.', '. $request->user->fname.' '. $request->user->mname }}</td> --}}
-                                        <td>{{$request->lname}}, {{$request->fname}} {{$request->mname}} </td>
+                                        <td>{{$request->user->lname}}, {{$request->user->fname}} {{$request->user->mname}} </td>
                                         <td>₱ {{ $request->loan_amount }}</td>
                                         <td>{{ $request->days_payable }} Days</td>
                                         <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
@@ -120,10 +120,9 @@
         </div>
     </div>
 </div>
-
-    @push('scripts')
-        <script src="{{ asset('js/scripts.js') }}"></script>
-    @endpush
+@push('scripts')
+    <script src="{{ asset('js/scripts.js') }}"></script>
+@endpush
     
 {{-- <div class="modal fade" id="reqModal" tabindex="-1" role="dialog" aria-labelledby="reqModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
