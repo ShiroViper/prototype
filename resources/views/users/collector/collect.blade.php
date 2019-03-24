@@ -39,7 +39,7 @@
         {{ Form::text('member', null, ['class' => 'form-control', 'readonly']) }}
     </div> --}}
 
-    {{ Form::submit('Submit Payment', ['class' => 'btn btn-primary autocomplete-btn', 'target'=>'_blank', 'disabled']) }}
+    {{ Form::submit('Submit Payment', ['class' => 'btn btn-primary autocomplete-btn', 'target'=>'_blank']) }}
 
       {!!Form::close()!!}
     </div>
@@ -54,7 +54,7 @@ for (var i = 0; i < tmp.length; i++) {
     item["label"] = tmp[i].lname+", "+tmp[i].fname+" "+tmp[i].mname;
     members.push(item);
 }
-// console.log(members);
+console.log(members);
 
 // var members = [];
 // item = {}

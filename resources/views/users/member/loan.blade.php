@@ -26,6 +26,7 @@
                 </div>
             </div>
             {{ Form::submit('Request', ['class' => 'btn btn-primary']) }}
+            {{-- <button class="btn btn-primary" role="button" data-toggle="modal" data-target="#termsModal">Continue</button> --}}
             {!! Form::close() !!}
         </div>
         <div class="col-sm-10 col-md-7 col-lg-5 my-3">  
@@ -42,4 +43,26 @@
     <h3 class="header mt-3 text-center">Request Loan Not Available</h3>
     <h3 class="header mt-3 text-center">Please Settle your loan</h3>
 @endif
+
+{{-- <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reqModalLabel">User Terms and Condition Agreement</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <h1 class="display-4">Terms and Conditions</h1>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div> --}}
+
 @endsection

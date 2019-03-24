@@ -120,6 +120,10 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script src="{{ asset('js/scripts.js') }}"></script>
+    @endpush
     
 {{-- <div class="modal fade" id="reqModal" tabindex="-1" role="dialog" aria-labelledby="reqModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
