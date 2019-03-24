@@ -17,6 +17,7 @@ use App\User;
 use App\Deposit;
 use DB;
 
+
 class SchedulesController extends Controller
 {
     /**
@@ -27,7 +28,7 @@ class SchedulesController extends Controller
     public function index()
     {
         $schedules = Schedule::get();
-        $user = User::find(Auth::user()->id);
+        // $user = User::find(Auth::user()->id);
 
         $sched_list = [];
         /*
@@ -191,22 +192,47 @@ class SchedulesController extends Controller
         */
         foreach ($schedules as $key => $schedule) {
             switch ($schedule->sched_type) {
+                // Collector's schedule instead of DEPOSIT
+                case 1:
+
+                break;
+
                 // Loan Request
                 case 2:
-                $sched_list[] = Calendar::event(
-                    '_',
-                    true,
-                    new Carbon($schedule->start_date),
-                    new Carbon($schedule->end_date.' +1 Day'),
-                    $key,
-                    [
-                        'color' => '#EF9950',
-                        'textColor' => '#EF9950',
-                        'description' => 'Loan Date',
-                        // can add variables
-                        'sample' => 'sample'
-                    ]
-                );
+                    // If the logged user is the ADMINISTRATOR
+                    if (Auth::user()->user_type == 2) {
+                        $user = User::where('id', '=', $schedule->user_id)->first();
+                        $sched_list[] = Calendar::event(
+                            '_',
+                            true,
+                            new Carbon($schedule->start_date),
+                            new Carbon($schedule->end_date.' +1 Day'),
+                            $key,
+                            [
+                                'color' => '#EF9950',
+                                'textColor' => '#EF9950',
+                                'description' => 'Loan Date',
+                                // get user info
+                                'user_id' => $schedule->user_id,
+                                'lname' => $user->lname,
+                                'fname' => $user->fname,
+                                'mname' => $user->mname,
+                            ]
+                        );
+                    } else {
+                        $sched_list[] = Calendar::event(
+                            '_',
+                            true,
+                            new Carbon($schedule->start_date),
+                            new Carbon($schedule->end_date.' +1 Day'),
+                            $key,
+                            [
+                                'color' => '#EF9950',
+                                'textColor' => '#EF9950',
+                                'description' => 'Loan Date',
+                            ]
+                        );
+                    }
                 break;
 
                 // Paid Loan / Deposit
@@ -219,7 +245,7 @@ class SchedulesController extends Controller
                         $key,
                         [
                             'color' => '#3FBC47',
-                            'textColor' => 'white',
+                            'textColor' => '#3FBC47',
                             'description' => 'Paid Date',
                         ]
                     );
@@ -238,12 +264,13 @@ class SchedulesController extends Controller
             }',
             'eventClick' => 'function(event) {
                 if (event) {
-                    alert("Clicked " + event.sample);
+                    alert("Clicked "+event.lname+", "+event.fname+" "+event.mname);
                 }
             }'
         ])->setOptions([
             'header' => [],
             'eventLimit' => 4,
+            'selectable' => true
         ]);
 
         /**

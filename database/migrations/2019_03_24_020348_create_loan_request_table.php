@@ -15,8 +15,8 @@ class CreateLoanRequestTable extends Migration
     {
         Schema::create('loan_request', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
-            $table->unsignedInteger('sched_id');
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('sched_id')->nullable();
             $table->decimal('loan_amount', 10, 2);
             $table->unsignedInteger('days_payable');
             $table->boolean('confirmed')->nullable();
@@ -29,6 +29,12 @@ class CreateLoanRequestTable extends Migration
             $table->foreign('sched_id')
                 ->references('id')
                 ->on('schedules')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
