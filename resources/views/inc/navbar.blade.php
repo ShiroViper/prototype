@@ -110,6 +110,12 @@
                     <li class="nav-item px-3 h6">
                         <a class="nav-link" href="/admin/failed">Failed Deposit</a>
                     </li>
+                    <li class="nav-item px-3 h6">
+                        <a class="nav-link" href="/admin/myloan">My Loan</a>
+                    </li>
+                    <li class="nav-item px-3 h6">
+                        <a class="nav-link" href="/admin/savings">Savings</a>
+                    </li>
                     
                 {{-- COLLECTOR --}}
                 @elseif (Auth::user()->user_type == 1)
@@ -147,13 +153,7 @@
                             <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/member/requests">Requests</a>
                         </li>
                         <li class="nav-item px-3 h6">
-                            <a class="nav-link{{ $active == 'patronage' ? ' active callout' : '' }}" href="/member/patronage">Patronage Refund</a>
-                        </li>
-                        <li class="nav-item px-3 h6">
-                            <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/loan">My Loan</a>
-                        </li>
-                        <li class="nav-item px-3 h6">
-                            <a class="nav-link{{ $active == 'saving' ? ' active callout' : '' }}" href="/member/saving">Savings</a>
+                            <a class="nav-link{{ $active == 'status' ? ' active callout' : '' }}" href="/member/status">Status</a>
                         </li>
                     @endif
                 @endif

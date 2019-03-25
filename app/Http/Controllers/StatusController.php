@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Status;
+use App\Loan_Request;
+use Auth;
 use Illuminate\Http\Request;
 
 class StatusController extends Controller
@@ -12,17 +14,26 @@ class StatusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index_patronage()
+    public function index()
     {
-        return view('users.member.status')->with('active', 'patronage');
-    }
-    public function index_loan()
-    {
-        return view('users.member.status')->with('active', 'loan');
-    }
-    public function index_saving()
-    {
-        return view('users.member.status')->with('active', 'saving');
+        switch (Auth::user()->user_type){
+            case 0:
+            // This will fetch the savings, patronage refund and distribution for member status
+                $savings = Status::where('user_id', Auth::user()->id)->first();
+                $patronage = Status::where('user_id', Auth::user()->id)->first();
+                $loan = Loan_Request::where([['user_id',Auth::user()->id], ['confirmed', 1], ['received',1], ['paid', NULL]])->first();
+
+                // dd($savings, $patronage, $loan);
+
+                return view('users.member.status')->with('loan', $loan)->with('savings', $savings)->with('patronage', $patronage)->with('active', 'status');
+            break;
+
+            case 1:
+            break;
+
+            case 2:
+            break;
+        }
     }
 
     /**

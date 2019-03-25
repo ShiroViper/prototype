@@ -12,6 +12,7 @@ use Auth;
 use DB;
 use Carbon\Carbon;
 use App\Schedule;
+use App\Status;
 
 class LoanRequestsController extends Controller
 {
@@ -45,10 +46,12 @@ class LoanRequestsController extends Controller
             // table processes column confirmed if the member confirm the member has successfully gave the money to colletor 
             $pending_mem_con = DB::table('transactions')
                 ->join('users', 'users.id', '=', 'collector_id')
-                ->select('transactions.id', 'amount','lname','fname', 'mname')
+                ->select('transactions.id', 'amount','lname','fname', 'mname', 'trans_type')
                 ->where('confirmed', NULL)
+                ->where('member_id', Auth::user()->id)
                 ->paginate(5);
-           
+
+        //    dd($pending_mem_con, Auth::user()->id);
             return view('users.member.requests')->with('pending_mem_con',$pending_mem_con)->with('pending_mem_receive', $pending_mem_receive)->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         }
     }
@@ -79,18 +82,19 @@ class LoanRequestsController extends Controller
 
         $this->validate($request, [
             'amount' => ['required'],
-            'days' => ['required']
+            'months' => ['required']
         ], $messages);
 
+        // Loan * .06 = monthly interest * months payable = interest to pay + loan amount = loan to pay 
+        // example: 1500 * 0.06 = 90 * 4 = 360 + 1500 = 1860
+        $loan_to_pay = $request->amount * 0.06 * $request->months + $request->amount;
+
         $lr = new Loan_Request;
-        //  Store the Computed Compound Interest  ex: 6% 
-        $lr->loan_amount = $request->input('amount') * 0.94;
-        $lr->days_payable = $request->input('days');
+        $lr->loan_amount = $request->input('amount');
+        $lr->days_payable = $request->input('months');
+        $lr->balance = $loan_to_pay;
         $lr->get = 0;
         $lr->user_id = Auth::user()->id;
-
-        // Compute for Compound Interest
-        $lr->balance = $request->input('amount')*0.94;
 
         // sched_id is NULL for now since it still hasn't been approved
         $lr->sched_id = null;
@@ -154,6 +158,10 @@ class LoanRequestsController extends Controller
         if ($rq == NULL){            
             return redirect()->route('member-requests')->with('error', 'Loan Request Not Found');
         }
+        // This condition acts as guard bugs found that the member can cancel even the admin accept the request when the member dont refresh the page
+        if($rq->confirmed == TRUE){
+            return redirect()->route('member-requests')->with('error', 'This request already accepted by the admin');
+        }
         $rq->delete();
         return redirect()->route('member-requests')->with('success', 'Request removed successfully');
     }
@@ -182,10 +190,6 @@ class LoanRequestsController extends Controller
     public function reject($id) 
     {
         $rq = Loan_Request::find($id);
-        // This condition acts as guard bugs found that the member can cancel even the admin accept the request when the member dont refresh the page
-        if($rq->confirmed == TRUE){
-            return redirect()->route('admin-requests')->with('error', 'This request already accepted by the admin');
-        }
         $rq->confirmed = false;
         $rq->paid = 1;
         $rq->save();

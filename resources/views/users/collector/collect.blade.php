@@ -11,25 +11,26 @@
     <div class="col-sm-10 col-md-7 col-lg-5 my-3">  
       {!!Form::open(['action'=> 'TransactionController@store', 'method'=>'POST']) !!}
       @csrf
-    
+      {{Form::hidden('token', $token)}}
+
       <div class="form-group">
         {{ Form::label('date', 'Date', ['class' => 'h6']) }}
         {{ Form::date('date',\Carbon\Carbon::now(), ['class' => 'form-control', 'readonly']) }}
     </div>
     <div class="form-group">
         {{ Form::label('type', 'Type', ['class' => 'h6']) }}
-        {{ Form::select('type', [1=>'Deposit', 3=>'Loan Payment'], 3, ['class' => 'form-control']) }}
+        {{ Form::select('type', [1=>'Deposit', 3=>'Loan Payment'],NULL, ['class' => 'form-control', 'placeholder'=>'Select Type', 'required ']) }}
     </div>
     <div class="form-group">
         {{ Form::label('amount', 'Amount Received', ['class' => 'h6']) }}
-        {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'step' => '0.01', 'min' => 5]) }}
+        {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'step' => '0.01', 'min' => 5, 'required']) }}
          @if ($errors->has('amount'))
             <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
         @endif
     </div>
     <div class="form-group">
         {{ Form::label('id', 'Member ID', ['class' => 'h6']) }}
-        {{ Form::text('id', null, ['class' => $errors->has('id') ? 'form-control is-invalid' : 'form-control']) }}
+        {{ Form::text('id', null, ['class' => $errors->has('id') ? 'form-control is-invalid' : 'form-control', 'required']) }}
          @if ($errors->has('id'))
             <div class="invalid-feedback">{{ $errors->first('id') }}</div>
         @endif

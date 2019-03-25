@@ -29,7 +29,6 @@
                         <thead>
                             <tr>
                                 <th>Date Requested</th>
-                                <th>Requested Loan</th>
                                 <th>Loan Amount</th>
                                 <th>Payables</th>
                                 <th>Action</th>
@@ -41,7 +40,6 @@
                                     {{-- <tr data-toggle="modal" data-target="#reqModal" data-id="{{ $item->id }}" data-ca="{{ $item->created_at }}" data-la="{{ $item->loan_amount }}" data-dp="{{ $item->days_payable }}" data-desc="{{ $item->description }}"> --}}
                                     <tr>
                                         <td>{{ date('F d, Y', strtotime($item->created_at)) }}</td>
-                                        <td>₱ {{ number_format($item->loan_amount/0.94,2) }}</td>
                                         <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
                                         <td>{{ $item->days_payable }} Days</td>
                                         <td>
@@ -88,13 +86,23 @@
                             <tbody>
                                 @if (count($pending_mem_con) > 0)
                                     @foreach ($pending_mem_con as $item)
-                                    <tr>
-                                        <td>{{$item->lname. ', '.$item->fname.' '.$item->mname}}</td>
-                                        <td>₱ {{$item->amount}} </td>
-                                        <td class="d-flex flex-row">
-                                            <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/accept">Accept</a>
-                                        </td>
-                                    </tr>
+                                    @if($item->trans_type == 1)
+                                        <tr>
+                                            <td>{{$item->lname. ', '.$item->fname.' '.$item->mname}}</td>
+                                            <td>₱ {{$item->amount}} </td>
+                                            <td class="d-flex flex-row">
+                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/d_accept">Accept</a>
+                                            </td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td>{{$item->lname. ', '.$item->fname.' '.$item->mname}}</td>
+                                            <td>₱ {{$item->amount}} </td>
+                                            <td class="d-flex flex-row">
+                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/accept">Accept</a>
+                                            </td>
+                                        </tr>
+                                    @endif
                                     @endforeach
                                 @else
                                 <tr>

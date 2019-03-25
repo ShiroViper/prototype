@@ -17,7 +17,6 @@
                             <tr>
                                 <th>Date Requested</th>
                                 <th>Name</th>
-                                <th>Requested Money</th>
                                 <th>Loan Amount</th>
                                 <th>Payables</th>
                                 <th>Action</th>
@@ -30,7 +29,6 @@
                                     <tr >
                                         <td>{{ date("F d, Y", strtotime($item->created_at)) }}</td>
                                         <td>{{ $item->user->lname.', '. $item->user->fname.' '. $item->user->mname }}</td>
-                                        <td>₱{{ number_format($item->loan_amount/0.94, 2) }}</td>
                                         <td>₱{{ number_format($item->loan_amount, 2) }}</td>
                                         @if($item->method == 2)
                                             <td>{{ $item->days_payable / 30 }} Months</td>

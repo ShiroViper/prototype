@@ -65,6 +65,8 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'store' => 'admin-process-store'
             ]
         ]);
+        // Route::get('/myloan', '')->name('admin-myloan');
+        // Route::get('/savings', '')->name('admin-savings');
         Route::get('/calendar', 'SchedulesController@index')->name('admin-calendar');
     });
 
@@ -88,6 +90,7 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         // TWO REDUNDUNDANT REDIRECTS??? : okay na
         Route::get('/transactions', 'TransactionController@index')->name('member-transactions');
         Route::get('/sent/{id}/accept', 'TransactionController@accept')->name('loan-payment-accept');
+        Route::get('/sent/{id}/d_accept', 'TransactionController@deposit_accept')->name('deposit-accept');
         
         Route::get('/receive/{id}/accept', 'ProcessController@accept')->name('member-accept');
         // Route::get('/process/{id}/edit', 'ProcessController@col_edit')->name('member-process');
@@ -98,9 +101,11 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'store' => 'member-process-store'
             ]
         ]);
-        Route::get('/patronage', 'StatusController@index_patronage')->name('member-patronage');
-        Route::get('/loan', 'StatusController@index_loan')->name('member-loan');
-        Route::get('/saving', 'StatusController@index_saving')->name('member-saving');
+        Route::resource('/status', 'StatusController', [
+            'names' => [
+                'index' => 'member-status'
+            ]
+        ]);
     });
 
     Route::prefix('collector')->group(function () {

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 // use DB;
 use Illuminate\Validation\Rule;
 use App\User;
+use App\Status;
 use Hash;
 use Validator;
 use Auth;
@@ -115,6 +116,11 @@ class UsersController extends Controller
         $user->cell_num = $request->input('cell_num');
         $user->address = $request->input('address');
         $user->save();
+
+        // this will create a new status row in status column for his/her savings and patronage refund
+        $new_status = New Status;
+        $new_status->user_id = $request->input('id');
+        $new_status->save();
 
         return redirect()->route('users-index')->with('success', 'User added successfully');
     }

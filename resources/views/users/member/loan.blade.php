@@ -14,9 +14,9 @@
                 {{ Form::label('amount', 'Loan Amount', ['class' => 'h6']) }}
                     {{ Form::number('amount', '', ['class' => 'form-control', 'placeholder' => 'Enter amount (e.g. 1000.50)', 'step' => '0.01', 'required']) }}
             </div>
-            {{ Form::label('', 'Days Payable', ['class' => 'h6']) }}
+            {{ Form::label('', 'Months Payable', ['class' => 'h6']) }}
                 <div class="form-group">
-                {{ Form::number('days', '', ['class' => 'form-control', 'required']) }}
+                {{ Form::number('months', '', ['class' => 'form-control', 'required']) }}
                 </div>
             <div class="form-group">
                 <div class="form-check">
