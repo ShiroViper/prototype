@@ -23,6 +23,7 @@
                         @if ( $user->user_type == 1 )
                             {{-- Highlight if they are collectors --}}
                             <tr class="manage-accounts clickable-row table-warning" data-href="/admin/users/{{ $user->id }}">
+                            <!-- manage-accounts clickable-row text-muted font-weight-lighter font-italic -->
                         @else
                             <tr class="manage-accounts clickable-row" data-href="/admin/users/{{ $user->id }}">
                         @endif

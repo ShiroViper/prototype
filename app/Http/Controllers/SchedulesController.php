@@ -41,7 +41,6 @@ class SchedulesController extends Controller
                                 container: "body"
                             });
                         }'
-                        
                     ])->setOptions([
                         'header' => [],
                         'eventLimit' => 4,
@@ -111,7 +110,7 @@ class SchedulesController extends Controller
                             case 1:                                                     // Deposit schedule type 
                             break;
                             case 2:                                                     // Loan Request schedule type
-                                $user = User::find($schedule->user_id);                // Get the instance of a user by its ID
+                                $user = User::find($schedule->user_id);                 // Get the instance of a user by its ID
                                 // return dd($user);
                                 $sched_list[] = Calendar::event(
                                     '_',

@@ -10,12 +10,18 @@
     <div class="col-sm col-md-10 col-xl-8">
         <div class="py-3 d-flex justify-content-between align-items-center">
             <a class="btn btn-light border" role="button" href="/admin/users"><i class="fas fa-arrow-left"></i>  Back to list</a>
-            <div class="float-right">
+            @if ($user->inactive == null || $user->inactive == false )
+            <div class="float-right d-flex flex-row">
+                <a href="/admin/users/{{ $user->id }}/inactive" class="btn btn-outline-secondary border mr-3" role="button" data-toggle="tooltip" data-placement="top" title="Archive" onclick="return confirm('Are you sure to archive this user?');"><i class="fas fa-archive"></i></button>
                 <a href="/admin/users/{{ $user->id }}/edit" class="btn btn-success btn-block edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a>
             </div>
-            {{-- <div class="float-right mr-2">
-                <button class="btn btn-outline-secondary border" type="button" title="Archive"><i class="fas fa-archive"></i></button>
-            </div> --}}
+            @else
+            <div class="alert alert-warning ml-2">This user is inactive</div>   
+                <div class="float-right d-flex flex-row">
+                    <a href="/admin/users/{{ $user->id }}/active" class="btn btn-primary border mr-3" role="button" data-toggle="tooltip" data-placement="top" title="Set user as Active" onclick="return confirm('Set this user to active?');"><i class="fas fa-share-square"></i></button>
+                    <a href="/admin/users/{{ $user->id }}/edit" class="btn btn-success btn-block edit-button" role="button" data-toggle="tooltip" data-placement="top" title="Edit User"><i class="fas fa-user-edit fa-lg"></i></a>
+                </div>
+            @endif
         </div>
         <div class="card">
             <h6 class="card-header">User information</h6>

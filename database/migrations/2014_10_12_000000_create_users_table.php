@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->boolean('setup')->nullable();
             $table->string('cell_num');
             $table->text('address');
+            $table->boolean('inactive')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
