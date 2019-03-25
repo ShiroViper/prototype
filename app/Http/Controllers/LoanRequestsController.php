@@ -165,8 +165,9 @@ class LoanRequestsController extends Controller
         
         // A schedule belongs to a certain loan request (relationships)
         $sched = new Schedule;
-        $sched->start_date = Carbon::now();
-        $sched->end_date = Carbon::now()->addDays($rq->days_payable);
+        // Add 1 day from the start of the loan payment to give the members a breathing room
+        $sched->start_date = Carbon::now()->addDay();
+        $sched->end_date = Carbon::now()->addDays(1 + $rq->days_payable);
         $sched->sched_type = 2;
         $sched->user_id = $rq->user_id;
         $sched->save();

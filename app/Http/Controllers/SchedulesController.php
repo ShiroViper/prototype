@@ -57,8 +57,8 @@ class SchedulesController extends Controller
                                 $sched_list[] = Calendar::event(
                                     '_',
                                     true,
-                                    new Carbon($schedule->start_date.' +1 Day'),
-                                    new Carbon($schedule->end_date.' +1 Day'),
+                                    new Carbon($schedule->start_date),
+                                    new Carbon($schedule->end_date),
                                     $key,
                                     [
                                         'color' => '#F87930',
@@ -116,8 +116,8 @@ class SchedulesController extends Controller
                                 $sched_list[] = Calendar::event(
                                     '_',
                                     true,
-                                    new Carbon($schedule->start_date.' +1 Day'),
-                                    new Carbon($schedule->end_date.' +1 Day'),
+                                    new Carbon($schedule->start_date),
+                                    new Carbon($schedule->end_date),
                                     $key,
                                     [
                                         'color' => '#F87930',
