@@ -16,8 +16,9 @@ class CreateSchedulesTable extends Migration
         Schema::create('schedules', function (Blueprint $table) {
             $table->increments('id');
             //  add column these column for add_user_id_and_sched_type_on_schedules_table file to take effect
-            $table->integer('user_id');
-            $table->integer('sched_type');
+            // $table->integer('user_id');
+            $table->unsignedInteger('user_id');
+            $table->tinyInteger('sched_type');
 
             $table->date('start_date');
             $table->date('end_date');
@@ -25,6 +26,11 @@ class CreateSchedulesTable extends Migration
             // $table->boolean('weekly')->default(false);
             // $table->string('color');
             $table->timestamps();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

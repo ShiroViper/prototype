@@ -32,6 +32,11 @@ class Schedule extends Model
         return $this->belongsTo('App\Loan_Request', 'id');
     }
 
+    public function schedule()
+    {
+        return $this->belongsTo('App\User');
+    }
+
     public function deposit()
     {
         return $this->belongsTo('App\Deposit', 'id');
