@@ -25,7 +25,7 @@ class LoanRequestsController extends Controller
         if (Auth::user()->user_type == 2) {
             $lr = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(5);
             $pending = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNull('confirmed')->paginate(5);
-
+            // return dd($lr);  
             return view('users.admin.requests')->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         } else {
             $lr = Loan_Request::orderBy('updated_at', 'desc')->where('user_id', Auth::user()->id)->whereNotNull('confirmed')->paginate(5);

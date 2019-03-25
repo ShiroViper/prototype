@@ -11,7 +11,7 @@
 // ];
 
 $('#id').autocomplete({
-    source: members,
+    source: typeof members === 'undefined' ? collectors : members,
     minLength: 1,
     create: function () {
         $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
@@ -20,11 +20,11 @@ $('#id').autocomplete({
                 .appendTo(ul);
         };
     },
-    change: function ( event, ui ) {
-        if (!ui.item) {
-            $(this).val("");
-        }
-    }
+    // change: function ( event, ui ) {
+    //     if (!ui.item) {
+    //         $(this).val("");
+    //     }
+    // }
 });
 
 $(function () {
@@ -33,13 +33,13 @@ $(function () {
             $(this).val("");
         }
     });
-    $('input#id, input#amount').keyup(function () {
-        if ($('input#id').val() != '' && $('input#amount').val() != '') {
-            $(':input.autocomplete-btn').prop('disabled', false);
-        } else {
-            $(':input.autocomplete-btn').prop('disabled', true);
-        }
-    });
+    // $('input#id, input#amount').keyup(function () {
+    //     if ($('input#id').val() != '' && $('input#amount').val() != '') {
+    //         $(':input.autocomplete-btn').prop('disabled', false);
+    //     } else {
+    //         $(':input.autocomplete-btn').prop('disabled', true);
+    //     }
+    // });
 });
 
 // $("input#test").autocomplete({
@@ -64,5 +64,5 @@ $(function () {
 //   source: collector
 // });
 
-var collector = [];
+// var collector = [];
 // var members = [];

@@ -17,26 +17,29 @@ class CreateProcessesTable extends Migration
             $table->increments('id');
             $table->integer('transfer')->nullable();
             $table->unsignedInteger('request_id');
+            $table->unsignedInteger('admin_id');
+            $table->unsignedInteger('collector_id');
+            $table->integer('process_type')->nullable();
+            $table->timestamps();
+
             $table->foreign('request_id')
                 ->references('id')
                 ->on('loan_request')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->unsignedInteger('admin_id');
+            
             $table->foreign('admin_id')
                 ->references('id')
                 ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->unsignedInteger('collector_id');
+
             $table->foreign('collector_id')
                 ->references('id')
                 ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->integer('process_type')->nullable();
-            $table->timestamps();
-            
+
             // $table->unsignedInteger('collector_id');
             // $table->unsignedInteger('request_id');
             // $table->unsignedInteger('admin_id');

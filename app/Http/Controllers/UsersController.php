@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use App\User;
 use Hash;
 use Validator;
+use Auth;
 
 class UsersController extends Controller
 {
@@ -172,7 +173,7 @@ class UsersController extends Controller
             'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'mname' => ['nullable', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
-            'email' => ['required', Rule::unique('users')->ignore($id)],
+            'email' => ['required', 'email', Rule::unique('users')->ignore($id)],
             'address' => ['required', 'string'],
         ], $messages);
 
@@ -210,5 +211,44 @@ class UsersController extends Controller
         $user->delete();
 
         return redirect()->route('users-index')->with('success', 'User removed successfully');
+    }
+
+    /**
+     * Setup user Account
+     */
+    public function setup(Request $request)
+    {
+        // return dd($request);
+
+        $messages = [
+            'required' => 'This field is required',
+            'alpha' => 'Please use only alphabetic characters',
+            'regex' => 'Numeric characters and symbols are not allowed'
+        ];
+
+        $this->validate($request, [
+            'lname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
+            'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
+            'mname' => ['nullable', 'string', 'regex:/^[\pL\s\-]+$/u'],
+            'password' => ['required', 'string', 'alpha_num'],
+            'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
+            'email' => ['required', 'email', Rule::unique('users')->ignore(Auth::user()->id)],
+            'address' => ['required', 'string'],
+        ], $messages);
+
+        $user = User::find(Auth::user()->id);
+        $user->lname = $request->input('lname');
+        $user->fname = $request->input('fname');
+        $user->mname = $request->input('mname');
+        $user->password = Hash::make($request->input('password'));
+        $user->email = $request->input('email');
+        $user->cell_num = $request->input('cell_num');
+        $user->address = $request->input('address');
+        
+        // Account already setup'ed
+        $user->setup = true;
+        $user->save();
+
+        return redirect()->route('member-dashboard')->with('success', 'Account updated successfully');
     }
 }
