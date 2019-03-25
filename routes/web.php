@@ -32,6 +32,8 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'index' => 'users-index'
             ]
         ]);
+        Route::get('/users/{id}/inactive', 'UsersController@inactive');
+        Route::get('/users/{id}/active', 'UsersController@active');
         Route::get('/requests/{id}/accept', 'LoanRequestsController@accept');
         Route::get('/requests/{id}/reject', 'LoanRequestsController@reject');
         Route::resource('/requests', 'LoanRequestsController', [

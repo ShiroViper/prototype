@@ -251,4 +251,26 @@ class UsersController extends Controller
 
         return redirect()->route('member-dashboard')->with('success', 'Account updated successfully');
     }
+
+    /**
+     * Set this user to inactive
+     */
+    public function inactive($id)
+    {
+        $user = User::find($id);
+        $user->inactive = true;
+        $user->save();
+        return view('users.admin.view')->with('user', $user)->with('active', 'manage');
+    }
+
+    /**
+     * Set this user to active
+     */
+    public function active($id)
+    {
+        $user = User::find($id);
+        $user->inactive = false;
+        $user->save();
+        return view('users.admin.view')->with('user', $user)->with('active', 'manage');
+    }
 }
