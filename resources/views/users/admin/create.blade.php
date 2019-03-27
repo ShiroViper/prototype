@@ -38,13 +38,13 @@ or creates a new one depending on the year --}}
             {!! Form::open(['action' => 'UsersController@store', 'method' => 'POST']) !!}
             @csrf
             <div class="row">
-                <div class="col-sm">
+                {{-- <div class="col-sm">
                     <div class="form-group">
                         {{ Form::label('id', 'Member ID', ['class' => 'h6']) }}
                         {{ Form::text('id', $result, ['class' => 'form-control', 'readonly']) }}
                     </div>
-                </div>
-                <div class="col-sm">
+                </div> --}}
+                <div class="col-sm col-md-6">
                     <div class="form-group">
                         {{ Form::label('type', 'Account Type', ['class' => 'h6']) }}
                         {{ Form::select('type', [0 => 'Member', 1 => 'Collector'], 0, ['class' => 'form-control']) }}
@@ -73,6 +73,7 @@ or creates a new one depending on the year --}}
                 <div class="col-lg">
                     <div class="form-group">
                         {{ Form::label('mname', 'Middle Name', ['class' => 'h6']) }}
+                        <small class="text-muted ml-2">(Optional)</small>
                         {{ Form::text('mname', '', ['class' => $errors->has('mname') ? 'form-control is-invalid' : 'form-control']) }}
                         @if ($errors->has('mname'))
                             <div class="invalid-feedback">{{ $errors->first('mname') }}</div>
@@ -94,7 +95,7 @@ or creates a new one depending on the year --}}
             <div class="row">
                 <div class="col">
                     <div class="form-group">
-                        {{ Form::label('cell_num', 'Cellphone Number', ['class' => 'h6']) }}
+                        {{ Form::label('cell_num', 'Contact Number', ['class' => 'h6']) }}
                         {{ Form::text('cell_num', '', ['class' => $errors->has('cell_num') ? 'form-control is-invalid' : 'form-control']) }}
                         @if ($errors->has('cell_num'))
                             <div class="invalid-feedback">{{ $errors->first('cell_num') }}</div>
@@ -115,7 +116,7 @@ or creates a new one depending on the year --}}
                 </div>
             </div>
             <div class="d-flex justify-content-lg-center">
-                {{ Form::submit('Create Member', ['class' => 'btn btn-primary align-content-center px-3']) }}
+                {{ Form::submit('Create', ['class' => 'btn btn-block btn-primary align-content-center my-3']) }}
             </div>
             {!! Form::close() !!}
         </div>
