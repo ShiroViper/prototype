@@ -1,4 +1,4 @@
-<footer class="border-top border-bottom p-3 mt-3 card-footer">
+<footer class="border-top border-bottom p-3 mt-3 bg-light">
     <div class="container">
         <div class="row">
             <div class="col">

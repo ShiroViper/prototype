@@ -49,6 +49,9 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'show' => 'profile-show'
             ]
         ]);
+
+        Route::post('/calendar/available', 'DaysOffController@available');
+
         Route::get('/failed', 'TransactionController@failed')->name('collector-failed');
         Route::get('/deliquent', 'TransactionController@deliquent')->name('collector-deliquent');
         Route::resource('/transaction','TransactionController',[
