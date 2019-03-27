@@ -143,8 +143,8 @@ class SchedulesController extends Controller
                                 );
                                 // $test = Carbon::now()->format('N');
 
-                                return dd($test);
-                                return dd($schedule->id, $lr->id);
+                                // return dd($test);
+                                // return dd($schedule->id, $lr->id);
                             break;
                             case 3:                                                     // Payment schedule type
                                 $sched_list[] = Calendar::event(
@@ -223,7 +223,7 @@ class SchedulesController extends Controller
                             }
 
                            if (event.received) {
-                                $('.admin-calendar-info .info-status').html('<h6 class=\"font-italic alert alert-success border\">Money already sent</h6>');
+                                $('.admin-calendar-info .info-status').html('<h6 class=\"font-italic alert alert-success border text-center\">Money already sent</h6>');
                             } else {
                                 $('.admin-calendar-info .info-status').html('<a class=\"btn btn-primary assign-btn btn-block\" data-sched='+event.loan_id+' href=\"/admin/process/'+event.loan_id+'/edit\" role=\"button\">Assign collector</a>');
                             }

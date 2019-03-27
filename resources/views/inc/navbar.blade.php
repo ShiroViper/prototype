@@ -110,12 +110,6 @@
                     <li class="nav-item px-3 h6">
                         <a class="nav-link" href="/admin/failed">Failed Deposit</a>
                     </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link" href="/admin/myloan">My Loan</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link" href="/admin/savings">Savings</a>
-                    </li>
                     
                 {{-- COLLECTOR --}}
                 @elseif (Auth::user()->user_type == 1)

@@ -82,7 +82,7 @@
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col col-md col-lg-4">
-                            <span>Days Payable</span>
+                            <span>Months Payable</span>
                         </div>
                         <div class="col col-md col-lg">
                             <h6>{{ $process->days_payable }}</h6>
