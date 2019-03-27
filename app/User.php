@@ -59,4 +59,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Deposit');
     }
+    
+    public function comment()
+    {
+        return $this->hasOne('App\Comment');
+    }
 }

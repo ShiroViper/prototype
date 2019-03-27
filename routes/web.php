@@ -49,6 +49,9 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'show' => 'profile-show'
             ]
         ]);
+
+        Route::post('/calendar/available', 'DaysOffController@available');
+
         Route::get('/failed', 'TransactionController@failed')->name('collector-failed');
         Route::get('/deliquent', 'TransactionController@deliquent')->name('collector-deliquent');
         Route::resource('/transaction','TransactionController',[
@@ -66,6 +69,9 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
             ]
         ]);
         Route::get('/calendar', 'SchedulesController@index')->name('admin-calendar');
+        
+        Route::get('/cancel/{id}/accept', 'MemberController@accept')->name('admin-cancel-accept');
+        Route::get('/cancel/{id}/reject', 'MemberController@reject')->name('admin-cancel-reject');
     });
 
     Route::prefix('member')->group(function () {
@@ -88,6 +94,7 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         // TWO REDUNDUNDANT REDIRECTS??? : okay na
         Route::get('/transactions', 'TransactionController@index')->name('member-transactions');
         Route::get('/sent/{id}/accept', 'TransactionController@accept')->name('loan-payment-accept');
+        Route::get('/sent/{id}/d_accept', 'TransactionController@deposit_accept')->name('deposit-accept');
         
         Route::get('/receive/{id}/accept', 'ProcessController@accept')->name('member-accept');
         // Route::get('/process/{id}/edit', 'ProcessController@col_edit')->name('member-process');
@@ -98,9 +105,14 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'store' => 'member-process-store'
             ]
         ]);
-        Route::get('/patronage', 'StatusController@index_patronage')->name('member-patronage');
-        Route::get('/loan', 'StatusController@index_loan')->name('member-loan');
-        Route::get('/saving', 'StatusController@index_saving')->name('member-saving');
+        Route::resource('/status', 'StatusController', [
+            'names' => [
+                'index' => 'member-status'
+            ]
+        ]);
+        Route::get('/cancel', 'MemberController@cancel')->name('member-cancel');
+        Route::post('/cancel/archive/', 'MemberController@update')->name('member-cancel-archive');
+        Route::get('/cancel/destroy', 'MemberController@destroy')->name('member-cancel-destroy');
     });
 
     Route::prefix('collector')->group(function () {

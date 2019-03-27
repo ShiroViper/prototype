@@ -16,6 +16,7 @@ use Calendar;
 use App\User;
 use App\Deposit;
 use DB;
+use App\Loan_Request;
 
 
 class SchedulesController extends Controller
@@ -111,7 +112,8 @@ class SchedulesController extends Controller
                             break;
                             case 2:                                                     // Loan Request schedule type
                                 $user = User::find($schedule->user_id);                 // Get the instance of a user by its ID
-                                // return dd($user);
+                                $lr = Loan_Request::where('user_id', '=', $schedule->user_id)->has('user')->first();
+                                // Get the loan request of that certain user
                                 $sched_list[] = Calendar::event(
                                     '_',
                                     true,
@@ -119,18 +121,30 @@ class SchedulesController extends Controller
                                     new Carbon($schedule->end_date),
                                     $key,
                                     [
+                                        'loan_id' => $lr->id,
+                                        'start' => $schedule->start_date,
+                                        'end' => $schedule->end_date,
                                         'color' => '#F87930',
                                         'textColor' => '#F87930',
                                         'description' => 'Loan request from '.$user->lname.', '.$user->fname.' '.$user->mname,
-                                        'user_id' => $user->user,
+                                        'sched_type' => $schedule->sched_type,
+                                        'user_id' => $user->id,
                                         'lname' => $user->lname,
                                         'fname' => $user->fname,
                                         'mname' => $user->mname,
                                         'email' => $user->email,
                                         'address' => $user->address,
-                                        'cell' => $user->cell_num
+                                        'cell' => $user->cell_num,
+                                        'amount' => $lr->loan_amount,
+                                        'dp' => $lr->days_payable,
+                                        'paid' => $lr->paid,
+                                        'received' => $lr->received
                                     ]
                                 );
+                                // $test = Carbon::now()->format('N');
+
+                                return dd($test);
+                                return dd($schedule->id, $lr->id);
                             break;
                             case 3:                                                     // Payment schedule type
                                 $sched_list[] = Calendar::event(
@@ -143,6 +157,7 @@ class SchedulesController extends Controller
                                         'color' => '#00CC66',
                                         'textColor' => '#00CC66',
                                         'description' => 'Payment made by '.$user->lname.', '.$user->fname.' '.$user->mname,
+                                        'sched_type' => $schedule->sched_type,
                                         'user_id' => $user->user,
                                         'lname' => $user->lname,
                                         'fname' => $user->fname,
@@ -165,17 +180,72 @@ class SchedulesController extends Controller
                                 container: "body"
                             });
                         }',
-                        'eventClick' => 'function(event) {
-                            $(".info-title").text("");
-                            $(".admin-calendar-info .info-name").html("<p>Name</p><h5>"+event.lname+", "+event.fname+" "+event.mname+"</h5>");
-                            $(".admin-calendar-info .info-cell").html("<p>Contact Number</p><h5>"+event.cell+"</h5>");
-                            $(".admin-calendar-info .info-email").html("<p>Email-address</p><h5>"+event.email+"</h5>");
-                            $(".admin-calendar-info .info-address").html("<p>Address</p><h5>"+event.address+"</h5>");
-                        }'
+                        'eventClick' => "function(event) {
+                            $('.info-card').show();
+                            $('.duty-card').hide();
+                            $('.admin-calendar-info').show();
+                            $('.info-sub-title').hide();
+                            $('.info-title').text(function() {
+                                switch (event.sched_type) {
+                                    case 1: break;
+                                    case 2:
+                                        return 'Loan Request';
+                                    break;
+                                    case 3:
+                                        return 'User Payment';
+                                    break;
+                                }
+                            });
+                            $('.info-card').removeClass('admin-calendar-paid-dates admin-calendar-loan-dates').toggleClass(function(){
+                                switch (event.sched_type) {
+                                    case 1: break;
+                                    case 2:
+                                        return 'admin-calendar-loan-dates';
+                                    break;
+                                    case 3:
+                                        return 'admin-calendar-paid-dates';
+                                    break;
+                                }
+                            }).addClass('text-white');
+                            $('.admin-calendar-info .info-name').html('<small>Name</small><h6>'+event.lname+', '+event.fname+' '+event.mname+'</h6>');
+                            $('.admin-calendar-info .info-cell').html('<small>Contact Details</small><h6>'+event.cell+'</h6>');
+                            $('.admin-calendar-info .info-email').html('<small>Email-address</small><h6>'+event.email+'</h6>');
+                            $('.admin-calendar-info .info-address').html('<small>Address</small><h6>'+event.address+'</h6>');
+                            $('.admin-calendar-info .info-email').html('<small>Email-address</small><h6>'+event.email+'</h6>');
+                            $('.admin-calendar-info .info-amt').html('<small>Amount Loaned</small><h6>'+event.amount+'</h6>');
+                            $('.admin-calendar-info .info-dp').html('<small>Days payable</small><h6>'+event.dp+'</h6>');
+                            $('.admin-calendar-info .info-divider').html('<hr>');
+
+                            if (event.paid) {
+                                $('.admin-calendar-info .info-paid').html('<h6>Payment Done</h6>');
+                            } else {
+                                $('.admin-calendar-info .info-paid').html('<h6 class=\"font-italic alert alert-warning border\">Payment still ongoing</h6>');
+                            }
+
+                           if (event.received) {
+                                $('.admin-calendar-info .info-status').html('<h6 class=\"font-italic alert alert-success border\">Money already sent</h6>');
+                            } else {
+                                $('.admin-calendar-info .info-status').html('<a class=\"btn btn-primary assign-btn btn-block\" data-sched='+event.loan_id+' href=\"/admin/process/'+event.loan_id+'/edit\" role=\"button\">Assign collector</a>');
+                            }
+                        }",
+                        'eventMouseout' => 'function (event) {
+                            $(this).removeClass("admin-calendar-selected-event");
+                        }',
+                        'select' => 'function(startDate, endDate) {
+                            $(".duty-sub-title").hide();
+                            $(".admin-calendar-info").hide();
+                            $(".info-card").removeClass("admin-calendar-paid-dates admin-calendar-loan-dates text-white");
+                            $(".info-title").text("Event Details");
+                            $(".info-sub-title").show().text("Click on an event to view more details");
+
+                            $("input[name=av_start]").val(moment(startDate).format("YYYY-MM-DD"));
+                            $("input[name=av_end]").val(moment(endDate).format("YYYY-MM-DD"));
+                        }',
                     ])->setOptions([
+                        'plugins' => [ 'interaction', 'dayGrid'],
                         'header' => [],
-                        'eventLimit' => 4,
-                        // 'selectable' => true
+                        'eventLimit' => 2,
+                        'selectable' => true,
                     ]);
             break;
         }
@@ -469,7 +539,9 @@ class SchedulesController extends Controller
          * Get the member_id and return the first row
         */
         if (Auth::user()->user_type == 2) {
-            return view('users.admin.calendar')->with(compact('calendar_details'))->with('active', 'sched');
+            $collectors = User::where('user_type', '=', 1)->get();
+            // dd($collectors);
+            return view('users.admin.calendar')->with(compact('calendar_details'))->with('active', 'sched')->with('collectors', $collectors);
         } else {
             if ($user = User::where([
                     ['id', '=', Auth::user()->id],
