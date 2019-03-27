@@ -73,7 +73,7 @@ class ProcessController extends Controller
     {
         $messages = [
             'required' => 'This field is required',
-            'id' => 'Please use Numbers'
+            'id' => 'Must be a valid ID Number'
         ];
         $this->validate($request, [
             'id' => ['required', 'numeric'],
@@ -118,7 +118,9 @@ class ProcessController extends Controller
         // find any request in loan_request and any Process table based on request id
         $process = Loan_Request::find($id);
         $trans = Process::where('request_id', '=', $id)->first();
-        $user = User::where('user_type', '=', 1)->first();
+        $user = User::where('id', '=', $process->user_id)->first();
+        // NIKEEEEEEE!!! AHHAHHAAHAH
+        // $user = User::where('user_type', '=', 1)->first();
 
         // This function fix $trans not defined
         if($trans == NULL ){
@@ -128,7 +130,7 @@ class ProcessController extends Controller
         // Gets collector info
         $collectors = User::where('user_type', '=', 1)->select('id','lname','fname','mname')->orderBy('id', 'desc')->get();
 
-        // return dd($collectors);
+        // return dd($user);
 
         return view ('users.admin.process')->with('user', $user)->with('trans',$trans)->with('active', 'requests')->with('process',$process)->with('collectors', $collectors);
 

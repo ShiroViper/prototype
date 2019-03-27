@@ -16398,16 +16398,26 @@ readers do not read off random characters that represent icons */
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.loan-dates {
+.admin-calendar-loan-dates {
   background: #F87930;
 }
 
-.paid-dates {
+.admin-calendar-paid-dates {
   background: #00CC66;
 }
 
-.current-date {
+.admin-calendar-current-date {
   background: #F7DE7C;
+}
+
+.admin-calendar-highlighted {
+  background: #bce8f1;
+}
+
+.admin-calendar-selected-event {
+  background: #124A8E !important;
+  color: #124A8E !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
 }
 
 .fc-unthemed td.fc-today {

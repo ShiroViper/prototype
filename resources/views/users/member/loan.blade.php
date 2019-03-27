@@ -10,14 +10,38 @@
     <div class="row">
         <div class="col-sm-10 col-md-7 col-lg-5 my-3">  
             {!! Form::open(['action' => 'LoanRequestsController@store', 'method' => 'POST']) !!}
+            @csrf
+            {{Form::hidden('token', $token) }}
+
+            {{ Form::label('amount', 'Loan Amount', ['class' => 'h6']) }}
             <div class="form-group">
-                {{ Form::label('amount', 'Loan Amount', ['class' => 'h6']) }}
-                    {{ Form::number('amount', '', ['class' => 'form-control', 'placeholder' => 'Enter amount (e.g. 1000.50)', 'step' => '0.01', 'required']) }}
+                    {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'placeholder' => 'Enter amount (e.g. 1000.50)', 'min'=>'5', 'required']) }}
+                @if ($errors->has('amount'))
+                    <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
+                @endif
             </div>
-            {{ Form::label('', 'Days Payable', ['class' => 'h6']) }}
-                <div class="form-group">
-                {{ Form::number('days', '', ['class' => 'form-control', 'required']) }}
-                </div>
+
+            {{ Form::label('months', 'Months Payable', ['class' => 'h6']) }}
+            <div class="form-group">
+            {{ Form::number('months', '', ['class' => $errors->has('months') ? 'form-control is-invalid' : 'form-control', 'min'=>'1', 'max'=>'12', 'required']) }}
+                @if ($errors->has('months'))
+                    <div class="invalid-feedback">{{ $errors->first('months') }}</div>
+                @endif
+            </div>
+
+            {{ Form::label('reason', 'Reason', ['class' => 'h6']) }}
+            <div class="form-group">
+                {{ Form::textarea('reason', '', ['class' => $errors->has('reason') ? 'form-control is-invalid' : 'form-control', 'rows' => 2, 'required']) }}
+                @if ($errors->has('reason'))
+                    <div class="invalid-feedback">{{ $errors->first('reason') }}</div>
+                @endif
+            </div>
+            
+            <label for="pass"> Password</label>
+            <div class="form-group">
+                <input type="password" name="pass" class="form-control" required>
+            </div>
+
             <div class="form-group">
                 <div class="form-check">
                     {!! Form::checkbox('agreement', 'yes', false, ['class' => 'form-check-input', 'id' => 'agreement', 'required']) !!}

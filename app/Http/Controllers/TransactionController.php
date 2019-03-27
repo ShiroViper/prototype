@@ -6,11 +6,13 @@ use App\Transaction;
 use Illuminate\Http\Request;
 use DB;
 use Auth;
-use App\Loan_Request;
-use App\Schedule;
 use Carbon\Carbon;
 use Codedge\Fpdf\Fpdf\Fpdf;
+use Illuminate\Support\Str;
+use App\Status;
+use App\Loan_Request;
 use App\User;
+use App\Schedule;
 
 class TransactionController extends Controller
 {
@@ -66,7 +68,12 @@ class TransactionController extends Controller
             $transactions = Transaction::where([['collector_id', Auth::user()->id], ['confirmed', 1]])->orderBy('created_at', 'DESC')->paginate(10);
             return view('users.collector.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
         } else {
-            $transactions = Transaction::where([['member_id', '=', Auth::user()->id], ['confirmed',1]])->paginate(10);
+            // $transactions = Transaction::where([['member_id', '=', Auth::user()->id], ['confirmed',1]])->paginate(10);
+            $transactions = DB::table('transactions')->join('users', 'users.id', '=', 'collector_id')
+                ->select('amount', 'lname', 'fname', 'mname', 'trans_type', 'transactions.created_at')
+                ->where('member_id', Auth::user()->id)->whereNotNull('confirmed')
+                ->paginate(5);
+            // dd($transactions);
             return view('users.member.transactions')->with('transactions', $transactions)->with('active', 'transactions');
         }
         // $transactions = DB::table('transactions')
@@ -87,8 +94,20 @@ class TransactionController extends Controller
     public function create()
     {
         $members = User::where('user_type', '=', '0')->select('id','lname','fname','mname')->orderBy('id', 'desc')->get();
+        
+        /* This for finding duplicate token in table */
+        $token = Str::random(10);
+        $check_token = Transaction::select('token')->get();
+        for ($x = 0; $x < count($check_token); $x++){
+            if($check_token[$x]->token == $token){
+                $token = Str::random(10);
+            }
+        }
+        // ================================================
+
+
         // return dd($members);
-        return view('users.collector.collect')->with('active','collect')->with('members', $members);
+        return view('users.collector.collect')->with('active','collect')->with('members', $members)->with('token', $token);
     }
 
     /**
@@ -98,35 +117,66 @@ class TransactionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-        // return dd($request);
+            
+        // This check if the token is duplicate or not after the form is saved , This trick the collector think he submitted one form
+        if(Transaction::where('token', $request->token)->first()){
+            return redirect()->back()->with('success', 'Waiting to confirm from member');
+        }
+
+        // // This check if the requested id is a member or not 
+        // if(!User::where([['id', $request->id], ['user_type', 0]])->first()){
+        //     return redirect()->back()->withInput()->with('error', 'Member Not Found');
+        // }
+
         $messages = [
-            'required' => 'This field is required'
+            'required' => 'This field is required',
+            'numeric' => 'This field is Numbers',
         ];
         $this->validate($request, [
             'amount' => ['required', 'numeric'],
+            'type' => ['required','numeric'],
             'id' => ['required', 'numeric'],
         ], $messages);
-        
-        // if($request->amount <= 49){
-        //     return redirect()->route('transaction-collect')->with('active', 'collect')->with('error', 'Please pay above 50.00 Php')->withInput();
-        // }
 
     // ***************************      Start           ***************************
          if ($request->type == 1) { 
             // If the transaction is a DEPOSIT
-            $transact = New Transaction;    
-            $transact->trans_type = $request->type;
+
+            $transact = New Transaction;
             $transact->member_id = $request->id;
+            $transact->collector_id = Auth::user()->id;
+            $transact->trans_type = $request->type;
             $transact->amount = $request->amount;
+            $transact->get = 0;
+            $transact->token = $request->token;
+
+            // Create a paid date
+            $sched = new Schedule;
+            $sched->user_id = $transact->member_id;
+            $sched->sched_type = 1;     // [1] Deposit Schedule (See SchedulesController)
+            $sched->start_date = Carbon::now()->format('Y-m-d');
+            $sched->end_date = Carbon::now()->format('Y-m-d');
+            $sched->save();
+
+            // Get the sched_id
+            $transact->sched_id = $sched->id;
+            $transact->save();
+            
+            return redirect()->back()->with('success', 'Waiting to confirm from the Member');
+            
         } else if ($request->type == 3) {
+
+            // 
+
             // If the transaction is a Loan Payment [ $trans_type = 3 ]
             $transact = New Transaction;    
             $transact->member_id = $request->id;
             $transact->trans_type = $request->type;
-            // Add new condition where 
+            $transact->token = $request->token;
+
+            // Add new condition where transaction: member id is null or no existing loan payment transaction execute this code 
             if (Transaction::where('member_id','=', $request->id)->first() == NULL) {
-                // $temp = Transaction::where('member_id','=', $request->id)->first();
-                // return dd($temp);
+
                 // If this is the first transaction made by the member
                 $loan_request = Loan_Request::where([
                     ['user_id', '=', $request->id],
@@ -134,13 +184,14 @@ class TransactionController extends Controller
                     ['received', '=', 1],
                     ['get', '=', 0]
                 ])->first();        // Get the loan_request
+
                 // If $loan_request is NULL redirect and return error message
                 if(!$loan_request){
                     return redirect()->back()->withInput()->with('error', 'Not Found');
                 }
 
                 // Need to confirm from the member to deduct the balance 
-                // $loan_request->balance = $loan_request->balance - $transact->amount;
+                // $loan_request->balance = $loan_request->balance - $transact->amount; Instead this moved from the accept()
                 $transact->request_id = $loan_request->id;
                 $transact->amount = $request->amount;
                 $loan_request->get = 1;
@@ -160,42 +211,43 @@ class TransactionController extends Controller
                     // Prevents the collector to input the amount that is larger than the balance
                     return redirect()->route('transaction-collect')->with('error', 'Amount entered is beyond the balance')->withInput();
                 } else if (($loan_request->balance - $request->amount) == 0) {
-                    // return 'hi';
+                    // $loan_request->balance is moved in accept ()
                     // $loan_request->balance = $loan_request->balance - $request->amount;
                     // $loan_request->paid = 1;    // Payment is closed/done
-                    // Moved to accept()
+
                     $transact->amount = $request->amount;
                     $transact->request_id = $loan_request->id;
                 } else {
                     // Payment continues
                     // $loan_request->balance = $loan_request->balance - $transact->amount;
                     // Instead to deduct the balance here it need to confirm from the member via accept()
+
                     $transact->amount = $request->amount;
                     $transact->request_id = $loan_request->id;
                 }
                 $loan_request->save();
             }
+            
+            $transact->get = 1;     // Serves as the basis for the next transaction? : get is not use anymore since the balance is being moved to loan_request table
+            $transact->collector_id = Auth::user()->id;
+
+            // Create a paid date
+            $sched = new Schedule;
+            $sched->user_id = $transact->member_id;
+            $sched->sched_type = 3;     // [3] Paid Loan Schedule (See SchedulesController)
+            $sched->start_date = Carbon::now()->format('Y-m-d');
+            $sched->end_date = Carbon::now()->format('Y-m-d');
+            $sched->save();
+
+            // Get the sched_id
+            $transact->sched_id = $sched->id;
+            $transact->save();
+
+            return redirect()->route('transaction-collect')->with('success', 'Waiting to confirm from the member');
+            
         } else {
             return redirect()->back()->with('error', 'Pick a valid Transaction Type');
         }
-        $transact->get = 1;     // Serves as the basis for the next transaction?
-        $transact->collector_id = Auth::user()->id;
-
-        // Create a paid date
-        $sched = new Schedule;
-        $sched->user_id = $transact->member_id;
-        $sched->sched_type = 3;     // [3] Paid Loan Schedule (See SchedulesController)
-        $sched->start_date = Carbon::now()->format('Y-m-d');
-        $sched->end_date = Carbon::now()->format('Y-m-d');
-        $sched->save();
-
-        // Get the sched_id
-        $transact->sched_id = $sched->id;
-        $transact->save();
-
-        // return dd($sched, $transact);
-
-        return redirect()->route('transaction-collect')->with('success', 'Waiting to confirm from the member');
     }
 
     /**
@@ -249,15 +301,48 @@ class TransactionController extends Controller
         $loan_request = Loan_Request::where('id', $transact->request_id)->first();
         $transact->confirmed = 1;
         $loan_request->balance = $loan_request->balance - $transact->amount;
+        // return 'hi';
 
         // if $loan_request->balance has no value change paid status to 1
         if(!$loan_request->balance){
             $loan_request->paid = 1;
+            
+            // this code update the distribution amount in id 1, the constant/default row 
+            $update_dis = Status::where('user_id', 1)->first();
+            $update_dis->distribution = $update_dis->distribution + $loan_request->loan_amount * 0.06 * 0.6;
+            $update_dis->save();
+
+            // this code update the patronage amounr of the users
+            $update_pat = Status::where('user_id', Auth::user()->id)->first();
+            $update_pat->patronage_refund = $update_pat->patronage_refund + $loan_request->loan_amount * 0.06 * 0.4;
+            $update_pat->save();
         }
 
         $loan_request->save();
         $transact->save();
         return redirect()->back()->with('success', 'Confirmed Successfully');
+    }
+
+    // For deposit confirmation
+    public function deposit_accept($id){
+        $transact = Transaction::where([['id', $id], ['confirmed', NULL]])->first();
+        $transact->confirmed = 1;
+
+        // If member/user_id exist execute this code and update the status
+        $status = Status::where('user_id', $transact->member_id)->first();
+        if($status){
+            $status->savings = $status->savings + $transact->amount;
+        }else{
+            // Create new status data
+            $status = New Status;
+            $status->user_id = Auth::user()->id;
+            $status->savings = $status->savings + $transact->amount;
+        }
+        
+        $status->save();
+        $transact->save();
+        
+        return redirect()->back()->with('success', 'Confirmed Successsfully');
     }
 
     public function generatepdf($m, $m_name, $c_name){

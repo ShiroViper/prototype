@@ -20,8 +20,12 @@
                     </div>
                     <div class="row py-3">
                         <div class="col col-sm col-md col-lg-10 col-xl-6">
-                            <a href="#" class="btn btn-primary px-3 mr-2">I want to be a member</a>
                             {{-- <a href="/login" class="btn btn-outline-secondary px-3">Already a member</a> --}}
+
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#member">
+                                I want to be a member
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -93,4 +97,29 @@
         </div>
     </div>
 </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="member" tabindex="-1" role="dialog" aria-labelledby="memberLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="memberLabel">I Want To Be A Member</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            Please contact the Administration of this following information:
+            Email: 
+            Contact Number: 
+            Name: 
+            Address:
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 @endsection
