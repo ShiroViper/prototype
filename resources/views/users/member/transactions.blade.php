@@ -12,7 +12,6 @@
             <tr>
                 <th>Account</th>
                 <th>Date & Time</th>
-                <th>Type</th>
                 <th>Collector</th>
                 <th>Amount</th>
                 <!-- <th>Balance</th> -->
@@ -23,16 +22,11 @@
             @foreach ($transactions as $trans)
             <tr>
                 @if( $trans->trans_type == 1 )
-                    <td>Deposit</td>
+                    <td>Savings: Deposit</td>
                 @else
-                    <td>Loan Payment</td>
+                    <td>My Loan: Loan Payment</td>
                 @endif
                 <td>{{ date("h:i A  F d, Y", strtotime($trans->created_at)) }}</td>
-                @if( $trans->trans_type == 1 )
-                    <td>Savings</td>
-                @else
-                    <td>My Loan</td>
-                @endif
                 <td>{{$trans->fname}}, {{$trans->fname}} {{$trans->mname}} </td>
                 <td>₱ {{ number_format($trans->amount, 2) }}</td>
             </tr>

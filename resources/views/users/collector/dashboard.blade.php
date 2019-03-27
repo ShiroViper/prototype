@@ -12,40 +12,24 @@
             <table class="table table-striped mt-3">
                 <thead>
                     <tr>
-                        <th>Time</th>
-                        <th>Date</th>
-                        <th>Member ID</th>
-                        <th>Name</th>
-                        <!-- <th>Account</th> -->
-                        <th>Type</th>
-                        <th>Pay</th>
-                        <!-- <th>Balance</th> -->
+                        <th>Account</th>
+                        <th>Date&Time</th>
+                        <th>Member </th>
+                        <th>Amount</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if (count($transactions) > 0)
                         @foreach ($transactions as $trans)
                         <tr>
-                            <td>{{date("h:i A", strtotime($trans->created_at))}}</td>
-                            <td>{{date("M d, Y", strtotime($trans->created_at))}}</td>
-
-                            <td>{{$trans->id}} </td>
-                            <td>{{$trans->lname}} {{$trans->fname}}</td>
-                        
-                            @if($trans->trans_type == 2 || $trans->trans_type == 3 )
-                                <td>My Loan</td>
-                            @elseif ($trans->trans_type == 1 )
-                                <td>Savings</td>
+                            @if($trans->trans_type == 1)
+                                <td>Savings: Deposit</td>
+                            @else
+                                <td>My Loan: Loan Payment</td>
                             @endif
-    
-                            @if( $trans->trans_type == 1 )
-                                <td>Deposit</td>
-                            @elseif( $trans->trans_type == 2 )
-                                <td>Loan</td>
-                            @elseif ( $trans->trans_type == 3 )
-                                <td>Loan Payment</td>
-                            @endif
-                            <td>Php {{$trans->amount}}</td>
+                            <td>{{date("h:i A M d, Y", strtotime($trans->created_at))}}</td>
+                            <td>{{$trans->lname}}, {{$trans->fname}} {{$trans->mname}} </td>
+                            <td>₱ {{$trans->amount}}</td>
                         </tr>  
                         @endforeach
                     @else

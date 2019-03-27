@@ -52,11 +52,11 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
 
         Route::post('/calendar/available', 'DaysOffController@available');
 
-        Route::get('/failed', 'TransactionController@failed')->name('collector-failed');
-        Route::get('/deliquent', 'TransactionController@deliquent')->name('collector-deliquent');
+        Route::get('/failed', 'TransactionController@failed')->name('admin-failed');
+        Route::get('/deliquent', 'TransactionController@deliquent')->name('admin-deliquent');
         Route::resource('/transaction','TransactionController',[
             'names'=>[
-                'index'=>'collector-dashboard',
+                'index'=>'admin-dashboard',
                 'create'=>'transaction-collect'
                 
             ]

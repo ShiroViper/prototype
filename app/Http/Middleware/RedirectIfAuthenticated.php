@@ -25,10 +25,15 @@ class RedirectIfAuthenticated
                 return redirect()->route('collector-dashboard');
             }
             else {
-                return redirect()->route('member-dashboard');
+                // check if inactive is true or false
+                if (!Auth::user()->inactive == 1){
+                    return redirect()->route('member-dashboard');
+                }else{
+                    return redirect()->route('member-cancel');
+                }
             }
         }
 
         return $next($request);
-    }
+    }   
 }

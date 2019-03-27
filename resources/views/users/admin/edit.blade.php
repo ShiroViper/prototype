@@ -88,7 +88,7 @@
                         </li>
                         <li class="list-group-item">
                             <div class="row">
-                                <div class="col">Cell Num</div>
+                                <div class="col">Contact Number</div>
                                 <div class="col font-weight-bold">
                                     {{ Form::number('cell_num', $user->cell_num, ['class' => $errors->has('cell_num') ? 'form-control is-invalid' : 'form-control']) }}
                                     {{-- <input name="cell_num" type="text" class="form-control{{ $errors->has('cell_num') ? ' is-invalid' : '' }}" value="{{ $errors->has('cell_num') ? old('cell_num') : $user->cell_num }}" required> --}}

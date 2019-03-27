@@ -109,11 +109,11 @@
           </button>
         </div>
         <div class="modal-body">
-            Please contact the Administration of this following information:
-            Email: 
-            Contact Number: 
-            Name: 
-            Address:
+            Please contact the Administration of this following information: <br>
+            Email: <br>
+            Contact Number:  <br>
+            Name: <br>
+            Address: <br>
 
         </div>
         <div class="modal-footer">
