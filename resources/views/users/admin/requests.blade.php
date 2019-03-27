@@ -6,6 +6,49 @@
 
 @section('content')
 <h3 class="header mt-2">Requests</h3>
+
+@if(count($pending_cancel) > 0)
+    <div class="row pt-3">
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">Cancellation of account Requests</h6>
+                <div class="container">
+                    <div class="table-responsive">
+                        <table class="table table-hover mt-3">
+                            <thead>
+                                <tr>
+                                    <th>Date Requested</th>
+                                    <th>Name</th>
+                                    <th>Comments (testing only)</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($pending_cancel as $item)
+                                    {{-- <tr data-toggle="modal" data-target="#LoanModal"> --}}
+                                    <tr >
+                                        <td>{{ date("F d, Y", strtotime($item->created_at)) }}</td>
+                                        <td>{{ $item->user->lname.', '. $item->user->fname.' '. $item->user->mname }}</td>
+                                        <td>{{ $item->comments }} </td>
+                                        <td class="d-flex flex-row">
+                                            <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/cancel/{{ $item->id }}/accept">Accept</a>
+                                            <a class="btn btn-outline-secondary mx-2 no-modal" role="button" href="/admin/cancel/{{ $item->id }}/reject">Decline</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        {{ $pending_cancel->links() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
+
 <div class="row pt-3">
     <div class="col">
         <div class="card">
@@ -16,8 +59,8 @@
                         <thead>
                             <tr>
                                 <th>Date Requested</th>
-                                <th>Name</th>
-                                <th>Loan Amount</th>
+                                <th>Member</th>
+                                <th>Loan Requested</th>
                                 <th>Payables</th>
                                 <th>Action</th>
                             </tr>
@@ -27,16 +70,10 @@
                                 @foreach ($pending as $item)
                                     {{-- <tr data-toggle="modal" data-target="#LoanModal"> --}}
                                     <tr >
-                                        <td>{{ date("F d, Y", strtotime($item->created_at)) }}</td>
+                                        <td>{{ date("h:i A  F d, Y", strtotime($item->created_at)) }}</td>
                                         <td>{{ $item->user->lname.', '. $item->user->fname.' '. $item->user->mname }}</td>
-                                        <td>₱{{ number_format($item->loan_amount, 2) }}</td>
-                                        @if($item->method == 2)
-                                            <td>{{ $item->days_payable / 30 }} Months</td>
-                                        @elseif($item->method == 1)
-                                            <td>{{ $item->days_payable /7 }} Weeks</td>
-                                        @else
-                                            <td>{{ $item->days_payable }} Days</td>
-                                        @endif
+                                        <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
+                                        <td>{{ $item->days_payable }} Months</td>
                                         <td class="d-flex flex-row">
                                             <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/requests/{{ $item->id }}/accept">Accept</a>
                                             <a class="btn btn-outline-secondary mx-2 no-modal" role="button" href="/admin/requests/{{ $item->id }}/reject">Decline</a>
@@ -62,14 +99,14 @@
 <div class="row pt-5">
     <div class="col">
         <div class="card">
-            <h6 class="card-header">Requests History</h6>
+            <h6 class="card-header">Requests History[status, received, paid move to modal] [meantime testing only]</h6>
             <div class="container">
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>Date Approved</th>
-                                <th>Name</th>
+                                <th>Member</th>
                                 <th>Loan Amount</th>
                                 <th>Payables</th>
                                 <th>Status</th>
@@ -87,11 +124,10 @@
                                     <tr class="table-secondary font-weight-bold clickable" data-toggle="modal" data-target="#histReqModal" data-id="{{ $request->id }}" data-cdate="{{ date('F d, Y H:i:s A', strtotime($request->created_at)) }}" data-mem="{{ $request->user->lname.', '.$request->user->fname.' '.$request->user->mname }}" data-memid="{{ $request->user->id }}" data-udate="{{ date('F d, Y H:i:s A', strtotime($request->updated_at)) }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}" data-paid="{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}">
                                     @endif --}}
                                     <tr >
-                                        <td>{{ $request->updated_at}}</td>
-                                        {{-- <td>{{ $request->user->lname.', '. $request->user->fname.' '. $request->user->mname }}</td> --}}
+                                        <td>{{ date("h:i A  F d, Y", strtotime($request->updated_at)) }}</td>
                                         <td>{{$request->user->lname}}, {{$request->user->fname}} {{$request->user->mname}} </td>
-                                        <td>₱ {{ $request->loan_amount }}</td>
-                                        <td>{{ $request->days_payable }} Days</td>
+                                        <td>₱ {{ number_format($request->loan_amount  * 0.06 * $request->days_payable + $request->loan_amount, 2) }}</td>
+                                        <td>{{ $request->days_payable }} Months</td>
                                         <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
                                         <td>{{ $request->received ? 'Yes' : ($request->confirmed ? 'No': 'N/A')}} </td>  
                                         <td>{{ $request->confirmed ? ($request->paid ? 'Yes' : 'Ongoing') : 'N/A' }}</td>
@@ -118,6 +154,7 @@
         </div>
     </div>
 </div>
+
 @push('scripts')
     <script src="{{ asset('js/scripts.js') }}"></script>
 @endpush

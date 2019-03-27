@@ -73,7 +73,7 @@ class ProcessController extends Controller
     {
         $messages = [
             'required' => 'This field is required',
-            'id' => 'Please use Numbers'
+            'id' => 'Must be a valid ID Number'
         ];
         $this->validate($request, [
             'id' => ['required', 'numeric'],

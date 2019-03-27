@@ -65,9 +65,10 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'store' => 'admin-process-store'
             ]
         ]);
-        // Route::get('/myloan', '')->name('admin-myloan');
-        // Route::get('/savings', '')->name('admin-savings');
         Route::get('/calendar', 'SchedulesController@index')->name('admin-calendar');
+        
+        Route::get('/cancel/{id}/accept', 'MemberController@accept')->name('admin-cancel-accept');
+        Route::get('/cancel/{id}/reject', 'MemberController@reject')->name('admin-cancel-reject');
     });
 
     Route::prefix('member')->group(function () {
@@ -106,6 +107,9 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'index' => 'member-status'
             ]
         ]);
+        Route::get('/cancel', 'MemberController@cancel')->name('member-cancel');
+        Route::post('/cancel/archive/', 'MemberController@update')->name('member-cancel-archive');
+        Route::get('/cancel/destroy', 'MemberController@destroy')->name('member-cancel-destroy');
     });
 
     Route::prefix('collector')->group(function () {

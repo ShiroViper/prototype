@@ -11,7 +11,7 @@
         <thead>
             <tr>
                 <th>Account</th>
-                <th>Date</th>
+                <th>Date & Time</th>
                 <th>Type</th>
                 <th>Collector</th>
                 <th>Amount</th>
@@ -24,20 +24,17 @@
             <tr>
                 @if( $trans->trans_type == 1 )
                     <td>Deposit</td>
-                @elseif( $trans->trans_type == 2 )
-                    <td>Loan</td>
-                @elseif ( $trans->trans_type == 3 )
+                @else
                     <td>Loan Payment</td>
                 @endif
-                <!-- <td>{{date("h:i A", strtotime($trans->created_at))}}</td> -->
-                <td>{{date("M d, Y", strtotime($trans->created_at))}}</td>
-                @if($trans->trans_type == 2 || $trans->trans_type == 3 )
-                    <td>My Loan</td>
-                @elseif ($trans->trans_type == 1 )
+                <td>{{ date("h:i A  F d, Y", strtotime($trans->created_at)) }}</td>
+                @if( $trans->trans_type == 1 )
                     <td>Savings</td>
+                @else
+                    <td>My Loan</td>
                 @endif
-                <td>{{$trans->collector_id}} </td>
-                <td>Php {{$trans->amount}}</td>
+                <td>{{$trans->fname}}, {{$trans->fname}} {{$trans->mname}} </td>
+                <td>₱ {{ number_format($trans->amount, 2) }}</td>
             </tr>
             @endforeach
         @else

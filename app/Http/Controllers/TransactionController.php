@@ -68,7 +68,12 @@ class TransactionController extends Controller
             $transactions = Transaction::where([['collector_id', Auth::user()->id], ['confirmed', 1]])->orderBy('created_at', 'DESC')->paginate(10);
             return view('users.collector.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
         } else {
-            $transactions = Transaction::where([['member_id', '=', Auth::user()->id], ['confirmed',1]])->paginate(10);
+            // $transactions = Transaction::where([['member_id', '=', Auth::user()->id], ['confirmed',1]])->paginate(10);
+            $transactions = DB::table('transactions')->join('users', 'users.id', '=', 'collector_id')
+                ->select('amount', 'lname', 'fname', 'mname', 'trans_type', 'transactions.created_at')
+                ->where('member_id', Auth::user()->id)->whereNotNull('confirmed')
+                ->paginate(5);
+            // dd($transactions);
             return view('users.member.transactions')->with('transactions', $transactions)->with('active', 'transactions');
         }
         // $transactions = DB::table('transactions')
@@ -125,12 +130,13 @@ class TransactionController extends Controller
 
         $messages = [
             'required' => 'This field is required',
+            'numeric' => 'This field is Numbers',
         ];
         $this->validate($request, [
             'amount' => ['required', 'numeric'],
+            'type' => ['required','numeric'],
             'id' => ['required', 'numeric'],
         ], $messages);
-        dd($request->type);
 
     // ***************************      Start           ***************************
          if ($request->type == 1) { 
@@ -156,7 +162,7 @@ class TransactionController extends Controller
             $transact->sched_id = $sched->id;
             $transact->save();
             
-            return redirect()->back()->with('success', 'Waiting to confrim from the Member');
+            return redirect()->back()->with('success', 'Waiting to confirm from the Member');
             
         } else if ($request->type == 3) {
 
@@ -303,7 +309,7 @@ class TransactionController extends Controller
             
             // this code update the distribution amount in id 1, the constant/default row 
             $update_dis = Status::where('user_id', 1)->first();
-            $update_dis->distribution = $update_dis->distribution + $loan_request->loan_amount * 0.06 * 0.6 ;
+            $update_dis->distribution = $update_dis->distribution + $loan_request->loan_amount * 0.06 * 0.6;
             $update_dis->save();
 
             // this code update the patronage amounr of the users

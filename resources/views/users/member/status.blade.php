@@ -11,8 +11,10 @@
             <div class="row">
                 <div class="col-3">
                     <p>Patronage Refund</p>
-                    @if($patronage)
+                    @if($patronage->patronage_refund)
                         {{$patronage->patronage_refund}}
+                    @else
+                        No patronage refund
                     @endif
                 </div>
                 <div class="col-3">
@@ -25,14 +27,10 @@
                 </div>
                 <div class="col-3">
                     <p>Savings</p>
-                    @if($savings)
+                    @if($savings->savings)
                         {{$savings->savings}}
-                    @endif
-                </div>
-                <div class="col-3">
-                    <p>Shares</p>
-                    @if($savings)
-                        {{$savings->savings / 5}}
+                    @else
+                        No current savings
                     @endif
                 </div>
             </div>

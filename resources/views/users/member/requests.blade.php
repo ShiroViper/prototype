@@ -18,57 +18,8 @@
     </div>
 </div>
 
-{{-- @if (!$pending) --}}
-<div class="row pt-3">
-    <div class="col">
-        <div class="card">
-            <h6 class="card-header">Pending Requests</h6>
-            <div class="container">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Date Requested</th>
-                                <th>Loan Amount</th>
-                                <th>Payables</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (count($pending) > 0)
-                                @foreach ($pending as $item)
-                                    {{-- <tr data-toggle="modal" data-target="#reqModal" data-id="{{ $item->id }}" data-ca="{{ $item->created_at }}" data-la="{{ $item->loan_amount }}" data-dp="{{ $item->days_payable }}" data-desc="{{ $item->description }}"> --}}
-                                    <tr>
-                                        <td>{{ date('F d, Y', strtotime($item->created_at)) }}</td>
-                                        <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
-                                        <td>{{ $item->days_payable }} Days</td>
-                                        <td>
-                                            {!! Form::open(['action' => ['LoanRequestsController@destroy', $item->id], 'method' => 'POST']) !!}
-                                                {{ Form::hidden('_method', 'DELETE') }}
-                                                {{ Form::submit('Cancel Request', ['class' => 'btn btn-outline-secondary no-modal']) }}
-                                            {!! Form::close() !!}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                            <tr>
-                                <td colspan="100%" class="text-center"><h4 class="text-muted">No Entries Found</h4></td>
-                            </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
-                <div class="d-flex justify-content-center mt-3">
-                    {{ $pending->links() }}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{{-- @endif --}}
-
 {{-- Show list of data that waiting to confirm --}}
-@if (count($pending_mem_con) != null)
+@if (count($pending_mem_con))
     <div class="row pt-3">
         <div class="col">
             <div class="card">
@@ -79,36 +30,26 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
+                                    <th>Type</th>
                                     <th>Amount Sent</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (count($pending_mem_con) > 0)
-                                    @foreach ($pending_mem_con as $item)
-                                    @if($item->trans_type == 1)
-                                        <tr>
-                                            <td>{{$item->lname. ', '.$item->fname.' '.$item->mname}}</td>
-                                            <td>₱ {{$item->amount}} </td>
-                                            <td class="d-flex flex-row">
-                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/d_accept">Accept</a>
-                                            </td>
-                                        </tr>
-                                    @else
-                                        <tr>
-                                            <td>{{$item->lname. ', '.$item->fname.' '.$item->mname}}</td>
-                                            <td>₱ {{$item->amount}} </td>
-                                            <td class="d-flex flex-row">
-                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/accept">Accept</a>
-                                            </td>
-                                        </tr>
-                                    @endif
-                                    @endforeach
-                                @else
-                                <tr>
-                                    <td colspan="100%" class="text-center"><h4 class="text-muted">No Entries Found</h4></td>
-                                </tr>
-                                @endif
+                                @foreach ($pending_mem_con as $item)
+                                    <tr>
+                                        <td>{{$item->lname. ', '.$item->fname.' '.$item->mname}}</td>
+                                        @if($item->trans_type == 1)
+                                            <td>Deposit</td>
+                                        @else
+                                            <td>Loan Payment</td>
+                                        @endif
+                                        <td>₱ {{$item->amount}} </td>
+                                        <td class="d-flex flex-row">
+                                            <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/d_accept">Accept</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -164,16 +105,63 @@
     </div>
 @endif
 
+<div class="row pt-3">
+    <div class="col">
+        <div class="card">
+            <h6 class="card-header">Pending Requests</h6>
+            <div class="container">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date Requested</th>
+                                <th>Loan Requested</th>
+                                <th>Payables</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (count($pending) > 0)
+                                @foreach ($pending as $item)
+                                    {{-- <tr data-toggle="modal" data-target="#reqModal" data-id="{{ $item->id }}" data-ca="{{ $item->created_at }}" data-la="{{ $item->loan_amount }}" data-dp="{{ $item->days_payable }}" data-desc="{{ $item->description }}"> --}}
+                                    <tr>
+                                        <td>{{ date("h:i A  F d, Y", strtotime($item->created_at)) }}</td>
+                                        <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
+                                        <td>{{ $item->days_payable }} Months</td>
+                                        <td>
+                                            {!! Form::open(['action' => ['LoanRequestsController@destroy', $item->id], 'method' => 'POST']) !!}
+                                                {{ Form::hidden('_method', 'DELETE') }}
+                                                {{ Form::submit('Cancel Request', ['class' => 'btn btn-outline-secondary no-modal']) }}
+                                            {!! Form::close() !!}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                            <tr>
+                                <td colspan="100%" class="text-center"><h4 class="text-muted">No Entries Found</h4></td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    {{ $pending->links() }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row pt-5">
         <div class="col">
             <div class="card">
-                <h6 class="card-header">Requests History</h6>
+                <h6 class="card-header">Requests History[need update modal]</h6>
                 <div class="container">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Date</th>
+                                    <th>Date Approved</th>
                                     <th>Loan Amount</th>
                                     <th>Payables</th>
                                     <th>Status</th>
@@ -185,19 +173,13 @@
                                 @if (count($requests) > 0)
                                     @foreach ($requests as $request)
                                         @if ($request->paid)
-                                        <tr class="clickable" data-toggle="modal" data-target="#histReqModal" data-id="{{ $request->id }}" data-cdate="{{ date('F d, Y H:i:s A', strtotime($request->created_at)) }}" data-udate="{{ date('F d, Y H:i:s A', strtotime($request->updated_at)) }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}" data-paid="{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}">
+                                            <tr class="clickable" data-toggle="modal" data-target="#histReqModal" data-id="{{ $request->id }}" data-cdate="{{ date('F d, Y H:i:s A', strtotime($request->created_at)) }}" data-udate="{{ date('F d, Y H:i:s A', strtotime($request->updated_at)) }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}" data-paid="{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}">
                                         @else
-                                        <tr class="table-secondary font-weight-bold clickable" data-toggle="modal" data-target="#histReqModal"  data-id="{{ $request->id }}" data-cdate="{{ date('F d, Y H:i:s A', strtotime($request->created_at)) }}" data-udate="{{ date('F d, Y H:i:s A', strtotime($request->updated_at)) }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}" data-paid="{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}">
+                                            <tr class="table-secondary font-weight-bold clickable" data-toggle="modal" data-target="#histReqModal"  data-id="{{ $request->id }}" data-cdate="{{ date('F d, Y H:i:s A', strtotime($request->created_at)) }}" data-udate="{{ date('F d, Y H:i:s A', strtotime($request->updated_at)) }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}" data-paid="{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}">
                                         @endif
-                                            <td>{{ date('F d, Y', strtotime($request->updated_at)) }}</td>
-                                            <td>₱ {{ $request->loan_amount }}</td>
-                                            @if($request->method == 2)
-                                                <td>{{ $request->days_payable / 30 }} Months</td>
-                                            @elseif($request->method == 1)
-                                                <td>{{ $request->days_payable / 7 }} Weeks</td>
-                                            @else
-                                                <td>{{ $request->days_payable }} Days</td>
-                                            @endif
+                                            <td>{{ date("h:i A  F d, Y", strtotime($request->updated_at)) }}</td>
+                                            <td>₱ {{ number_format($request->loan_amount * 0.06 * $request->days_payable + $request->loan_amount, 2) }}</td>
+                                            <td>{{ $request->days_payable }} Months</td>
                                             <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
                                             <td>{{ $request->received ? 'Yes' : 'No'}}</td>
                                             <td>{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}</td>

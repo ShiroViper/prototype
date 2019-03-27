@@ -139,23 +139,28 @@
                     </li>
                 {{-- MEMBER --}}
                 @else
+                    @if(Auth::user()->inactive == 0)
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/member/dashboard">Dashboard</a>
+                        </li>
+                        @if(Auth::user()->setup != NULL)
+                            <li class="nav-item px-3 h6">
+                                <a class="nav-link{{ $active == 'transactions' ? ' active callout' : '' }}" href="/member/transactions">Transactions</a>
+                            </li>
+                            <li class="nav-item px-3 h6">
+                                <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/requests/create">Loan</a>
+                            </li>
+                            <li class="nav-item px-3 h6">
+                                <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/member/requests">Requests</a>
+                            </li>
+                            <li class="nav-item px-3 h6">
+                                <a class="nav-link{{ $active == 'status' ? ' active callout' : '' }}" href="/member/status">Status</a>
+                            </li>
+                        @endif
+                    @endif                        
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/member/dashboard">Dashboard</a>
+                        <a class="nav-link{{ $active == 'cancel' ? ' active callout' : '' }}" href="/member/cancel">Cancel</a>
                     </li>
-                    @if(Auth::user()->setup != NULL)
-                        <li class="nav-item px-3 h6">
-                            <a class="nav-link{{ $active == 'transactions' ? ' active callout' : '' }}" href="/member/transactions">Transactions</a>
-                        </li>
-                        <li class="nav-item px-3 h6">
-                            <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/requests/create">Loan</a>
-                        </li>
-                        <li class="nav-item px-3 h6">
-                            <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/member/requests">Requests</a>
-                        </li>
-                        <li class="nav-item px-3 h6">
-                            <a class="nav-link{{ $active == 'status' ? ' active callout' : '' }}" href="/member/status">Status</a>
-                        </li>
-                    @endif
                 @endif
             {{-- END IF STATEMENT --}}
             </ul>
