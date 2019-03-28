@@ -106,6 +106,7 @@ class TransactionController extends Controller
         // if(!User::where([['id', $request->id], ['user_type', 0]])->first()){
         //     return redirect()->back()->withInput()->with('error', 'Member Not Found');
         // }
+        dd($request);
 
         $messages = [
             'required' => 'This field is required',
@@ -114,7 +115,7 @@ class TransactionController extends Controller
         $this->validate($request, [
             'amount' => ['required', 'numeric'],
             'type' => ['required','numeric'],
-            'id' => ['required', 'numeric'],
+            'memID' => ['required', 'numeric'],
         ], $messages);
 
     // ***************************      Start           ***************************
