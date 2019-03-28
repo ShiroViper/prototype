@@ -23,6 +23,8 @@ Route::middleware(['guest'])->group(function () {
     Route::view('/terms', 'terms', ['active' => 'terms']);
 });
 
+Route::post('/request', 'MemberRequestController@memberRequest');
+
 Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     Route::prefix('admin')->middleware('admin-routes')->group(function () {
         Route::get('/dashboard', 'TransactionController@index')->name('admin-dashboard');
