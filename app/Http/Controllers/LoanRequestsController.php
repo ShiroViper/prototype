@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use App\Schedule;
 use App\Status;
 use App\Comment;
+use App\Process;
 
 class LoanRequestsController extends Controller
 {
@@ -41,10 +42,7 @@ class LoanRequestsController extends Controller
             $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
             
             // for transferring money to member
-            $pending_mem_receive = DB::table('processes')
-                ->join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'collector_id')
-                ->select('processes.id', 'transfer', 'request_id', 'collector_id', 'processes.updated_at','lname', 'fname', 'loan_amount')
-                ->where('user_id', Auth::user()->id)->where('transfer', 3)->orderBy('updated_at', 'asc')->paginate(5);
+            $pending_mem_receive = Process::join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'collector_id')->select('processes.id', 'transfer', 'request_id', 'collector_id', 'processes.updated_at','lname', 'fname','mname', 'loan_amount')->where([['user_id', Auth::user()->id],['transfer',3]])->orderBy('updated_at', 'asc')->paginate(5);
                 
             // table processes column confirmed if the member confirm the member has successfully gave the money to colletor 
             $pending_mem_con = DB::table('transactions')

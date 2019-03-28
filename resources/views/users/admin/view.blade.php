@@ -66,7 +66,7 @@
                 </li>
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col col-sm">Cell Number</div>
+                        <div class="col col-sm">Contact Number</div>
                         <div class="col font-weight-bold">{{ $user->cell_num }}</div>
                     </div>
                 </li>

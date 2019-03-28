@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Process;
 use App\User;
 use App\Loan_Request;
+use App\Transaction;
 use Illuminate\Http\Request;
 use Auth;
 use DB;
@@ -24,32 +25,11 @@ class ProcessController extends Controller
      */
     public function index()
     {
-        // $pending = Process::where('collector_id', '=', Auth::user()->id)->paginate(10);
-        $pending_col = DB::table('processes')
-            ->join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'admin_id')
-            ->select('processes.id', 'transfer', 'request_id', 'admin_id', 'collector_id', 'processes.updated_at','lname', 'fname', 'loan_amount', 'days_payable')
-            ->where('collector_id', Auth::user()->id)->where('transfer', 1)
-            ->paginate(5);
-
-        $received_col = DB::table('processes')
-            ->join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'admin_id')
-            ->select('processes.id', 'transfer', 'request_id', 'admin_id', 'collector_id', 'processes.updated_at','lname', 'fname', 'loan_amount', 'days_payable')
-            ->where('collector_id', Auth::user()->id)->where('transfer', '>=', 2)->where('transfer', 2)
-            ->paginate(5);
-            
-        $transferred_mem = DB::table('processes')
-            ->join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'user_id')
-            ->select('processes.id', 'transfer', 'request_id', 'user_id', 'collector_id', 'processes.updated_at','lname', 'fname', 'loan_amount', 'days_payable')
-            ->where('collector_id', Auth::user()->id)->where('transfer', 4)
-            ->paginate(5);
-
-        $confirmed = DB::table('transactions')
-            ->join('users', 'users.id', '=', 'member_id')
-            ->select('transactions.id', 'amount', 'lname', 'fname','mname')
-            ->where('confirmed', null)
-            ->paginate(5);
-            // dd($received);
-
+        $pending_col = Process::join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'admin_id')->select('processes.id', 'transfer', 'request_id', 'admin_id', 'collector_id', 'processes.updated_at','lname', 'fname', 'loan_amount', 'days_payable')->where([['collector_id', Auth::user()->id],['transfer',1]])->paginate(5);
+        $received_col = Process::join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'admin_id')->select('processes.id', 'transfer', 'request_id', 'admin_id', 'collector_id', 'processes.updated_at', 'lname', 'fname', 'mname', 'loan_amount', 'days_payable')->where([['collector_id', Auth::user()->id], ['transfer', 2]])->paginate(5);
+        $transferred_mem = Process::join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'user_id')->select('processes.id', 'transfer', 'request_id', 'user_id', 'collector_id', 'processes.updated_at','lname', 'fname', 'mname', 'loan_amount', 'days_payable')->where([['collector_id', Auth::user()->id],['transfer',4]])->paginate(5);
+        $confirmed = Transaction::join('users', 'users.id', '=', 'member_id')->select('transactions.id', 'amount', 'lname', 'fname','mname')->where('confirmed', null)->paginate(5);
+        
         return view('users.collector.requests')->with('confirmed', $confirmed)->with('transferred_mem', $transferred_mem)->with('received_col', $received_col)->with('pending_col', $pending_col)->with('active', 'request');
     }
 

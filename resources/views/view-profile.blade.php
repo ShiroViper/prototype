@@ -55,7 +55,7 @@
                 </li>
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col">Cell Number</div>
+                        <div class="col">Contact Number</div>
                         <div class="col font-weight-bold">{{ $user->cell_num }}</div>
                     </div>
                 </li>
