@@ -9,6 +9,54 @@
         <script src="{{ asset('js/scripts.js') }}"></script>
     @endpush
     @if (is_null($user))
+        <p class="header display-5 mt-3">My Account</p>
+        {{-- <div class="row">
+            <div class="col-sm p-2">
+                <div class="card shadow-sm" style="max-width: 18rem">
+                    <div class="card-body d-flex justify-content-center align-items-center flex-column">
+                        <h1 class="display-4">5</h1>
+                        <h5 class="card-title">Savings</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm p-2">
+                <div class="card shadow-sm" style="max-width: 18rem">
+                    <div class="card-body d-flex justify-content-center align-items-center flex-column">
+                        <h1 class="display-4">5</h1>
+                        <h5 class="card-title">Patronage Refund</h5>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+        <div class="card-deck pb-5">
+            <div class="card shadow-sm">
+                <div class="card-body d-flex justify-content-center align-items-center flex-column">
+                    <div class="border rounded-circle p-2 bg-light"><i class="text-primary fas fa-piggy-bank fa-lg"></i></div>
+                    <h5 class="pt-2 header display-5 font-weight-bold text-center">
+                        {{ $savings ? '₱ '.$savings->savings : '₱ 0.00' }}
+                    </h5>
+                    <small>Savings</small>
+                </div>
+            </div>
+            <div class="card shadow-sm">
+                <div class="card-body d-flex justify-content-center align-items-center flex-column">
+                    <div class="border rounded-circle p-2 bg-light"><i class="text-success fas fa-wallet fa-lg"></i></div>
+                    <h5 class="pt-2 header display-5 font-weight-bold text-center">
+                        {{ $patronage && $patronage->patronage_refund != null ? '₱ '.$patronage->patronage_refund : '₱ 0.00' }}
+                    </h5>
+                    <small>Patronage Refund</small>
+                </div>
+            </div>
+            <div class="card shadow-sm">
+                <div class="card-body d-flex justify-content-center align-items-center flex-column">
+                    <div class="border rounded-circle p-2 bg-light"><i class="text-warning fas fa-coins fa-lg"></i></div>
+                    <h5 class="pt-2 header display-5 font-weight-bold text-center">
+                        {{ $loan ? $loan->balance : 'No loan requests made' }}
+                    </h5>
+                    <small>Current Loan Balance</small>
+                </div>
+            </div>
+        </div>
         <div class="row mt-2">
             <div class="col-md-8 my-3">
                 <div class="card shadow">

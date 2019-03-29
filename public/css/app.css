@@ -16339,7 +16339,8 @@ readers do not read off random characters that represent icons */
   font-weight: 400;
 }
 
-.failed-loan {
+.failed-loan,
+.full-view {
   height: calc(100vh - 226px);
 }
 
@@ -16448,6 +16449,7 @@ readers do not read off random characters that represent icons */
 .main-login {
   position: relative;
   height: 100vh;
+  background: #f8f9fa;
 }
 
 @media screen and (min-width: 768px) {

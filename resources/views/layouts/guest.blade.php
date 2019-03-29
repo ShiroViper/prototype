@@ -27,9 +27,10 @@
 </head>
     <body>
 		@include('inc.navbar')
+		@include('inc.messages')
 		@yield('content')
 		@include('inc.footer')
+		@stack('scripts')
 	</body>
-	@include('inc.scripts')
 </html>	
 @endguest

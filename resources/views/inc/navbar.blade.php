@@ -147,12 +147,12 @@
                             <li class="nav-item px-3 h6">
                                 <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/member/requests">Requests</a>
                             </li>
-                            <li class="nav-item px-3 h6">
+                            {{-- <li class="nav-item px-3 h6">
                                 <a class="nav-link{{ $active == 'status' ? ' active callout' : '' }}" href="/member/status">Status</a>
-                            </li>                        
+                            </li>
                             <li class="nav-item px-3 h6">
                                 <a class="nav-link{{ $active == 'cancel' ? ' active callout' : '' }}" href="/member/cancel">Cancel</a>
-                            </li>
+                            </li> --}}
                         @endif
                     @endif
                 @endif

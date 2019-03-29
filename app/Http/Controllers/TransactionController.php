@@ -114,7 +114,7 @@ class TransactionController extends Controller
         $this->validate($request, [
             'amount' => ['required', 'numeric'],
             'type' => ['required','numeric'],
-            'id' => ['required', 'numeric'],
+            'memID' => ['required', 'numeric'],
         ], $messages);
 
     // ***************************      Start           ***************************
@@ -122,7 +122,7 @@ class TransactionController extends Controller
             // If the transaction is a DEPOSIT
 
             $transact = New Transaction;
-            $transact->member_id = $request->id;
+            $transact->member_id = $request->memID;
             $transact->collector_id = Auth::user()->id;
             $transact->trans_type = $request->type;
             $transact->amount = $request->amount;
@@ -136,7 +136,7 @@ class TransactionController extends Controller
             $sched->start_date = Carbon::now()->format('Y-m-d');
             $sched->end_date = Carbon::now()->format('Y-m-d');
             $sched->save();
-
+            
             // Get the sched_id
             $transact->sched_id = $sched->id;
             $transact->save();
@@ -144,7 +144,7 @@ class TransactionController extends Controller
             return redirect()->back()->with('success', 'Waiting to confirm from the Member');
             
         } else if ($request->type == 3) {
-
+            dd('ubos', $request);
             // If the transaction is a Loan Payment [ $trans_type = 3 ]
             $transact = New Transaction;    
             $transact->member_id = $request->id;

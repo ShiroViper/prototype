@@ -23,6 +23,8 @@ Route::middleware(['guest'])->group(function () {
     Route::view('/terms', 'terms', ['active' => 'terms']);
 });
 
+Route::post('/request', 'MemberRequestController@memberRequest');
+
 Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     Route::prefix('admin')->middleware('admin-routes')->group(function () {
         Route::get('/dashboard', 'TransactionController@index')->name('admin-dashboard');
@@ -72,6 +74,8 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         
         Route::get('/cancel/{id}/accept', 'MemberController@accept')->name('admin-cancel-accept');
         Route::get('/cancel/{id}/reject', 'MemberController@reject')->name('admin-cancel-reject');
+        Route::get('/change_pass', 'MemberController@changePassword')->name('change-password');
+        Route::post('/change_pass/change', 'MemberController@change');
     });
 
     Route::prefix('member')->group(function () {
@@ -105,14 +109,15 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'store' => 'member-process-store'
             ]
         ]);
-        Route::resource('/status', 'StatusController', [
-            'names' => [
-                'index' => 'member-status'
-            ]
-        ]);
+        // Route::resource('/status', 'StatusController', [
+        //     'names' => [
+        //         'index' => 'member-status'
+        //     ]
+        // ]);
         Route::get('/cancel', 'MemberController@cancel')->name('member-cancel');
         Route::post('/cancel/archive/', 'MemberController@update')->name('member-cancel-archive');
         Route::get('/cancel/destroy', 'MemberController@destroy')->name('member-cancel-destroy');
+        Route::get('/change_pass', 'MemberController@changePassword')->name('change-password');
     });
 
     Route::prefix('collector')->group(function () {
@@ -141,6 +146,11 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'store' => 'collector-process-store'
             ]
         ]);
+
+        Route::get('/cancel', 'MemberController@cancel')->name('member-cancel');
+        Route::post('/cancel/archive/', 'MemberController@update')->name('member-cancel-archive');
+        Route::get('/cancel/destroy', 'MemberController@destroy')->name('member-cancel-destroy');
+        Route::get('/change_pass', 'MemberController@changePassword')->name('change-password');
     });
 
 

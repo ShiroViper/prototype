@@ -155,7 +155,11 @@ class MemberController extends Controller
         $account_status = Comment::where('user_id', Auth::user()->id)->first();
         // dd($account_status);
         
-        return view('users.member.cancel')->with('account_status', $account_status)->with('token',$token)->with('active', 'cancel');
+        if (Auth::user()->user_type == 1) {
+            return view('users.collector.cancel')->with('account_status', $account_status)->with('token',$token)->with('active', 'cancel');    
+        } else {
+            return view('users.member.cancel')->with('account_status', $account_status)->with('token',$token)->with('active', 'cancel');
+        }
     }
 
     public function accept($id){
@@ -176,5 +180,26 @@ class MemberController extends Controller
         $reject->delete();
 
         return redirect()->back()->with('success', 'Cancellation of account declined');
+    }
+
+    public function changePassword()
+    {
+        $user = User::find(Auth::user()->id)->first();
+        return view('change-password')->with('user', $user)->with('active', null);
+    }
+
+    public function change(Request $request)
+    {
+        return dd($request->input());
+        $messages = [
+            'required' => 'This field is required',
+        ];
+
+        $this->validate($request, [
+            'password_confirmation' => ['confirmed', 'string'],
+        ], $messages);
+
+        $user = new User;
+        
     }
 }

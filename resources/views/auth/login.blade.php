@@ -194,7 +194,7 @@
                                     <div class="invalid-feedback">{{ $errors->first('password') }}</div>
                                 @endif
                             </div>
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
@@ -204,10 +204,10 @@
                                         </label>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="pt-3 cleafix">
-                                <small><a href="#">Having problems logging in?</a></small>
-                                <button type="submit" class="btn btn-primary float-right px-4">Login</button>
+                                {{-- <small><a href="#">Having problems logging in?</a></small> --}}
+                                <button type="submit" class="btn btn-primary btn-block px-4">Login</button>
                             </div>
                         </form>
                     </div>

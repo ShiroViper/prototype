@@ -160,7 +160,7 @@
 <div class="row pt-5">
         <div class="col">
             <div class="card">
-                <h6 class="card-header">Requests History[need update modal][add ongoing in money received]</h6>
+                <h6 class="card-header">Requests History</h6>
                 <div class="container">
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -244,7 +244,7 @@
                 </div>
                 <div class="row">
                     <div class="col-4 text-right">
-                        <span class="">Days Payable: </span>
+                        <span class="">Months Payable: </span>
                     </div>
                     <div class="col">
                         <span class="font-weight-bold loan-dp"></span>
