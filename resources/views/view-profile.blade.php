@@ -18,6 +18,7 @@
                         <i class="fas fa-cog"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="change_pass">Change Password</a>
                         <a class="dropdown-item" href="cancel">Deactivate Account</a>
                     </div>
                 </div>
@@ -27,10 +28,19 @@
                         <i class="fas fa-cog"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="change_pass">Change Password</a>
                         <a class="dropdown-item" href="cancel">Deactivate Account</a>
                     </div>
                 </div>
             @else
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle ml-3 btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="change_pass">Change Password</a>
+                    </div>
+                </div>
             @endif
         </div>
         <div class="card mt-3">

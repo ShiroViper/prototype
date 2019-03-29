@@ -181,4 +181,25 @@ class MemberController extends Controller
 
         return redirect()->back()->with('success', 'Cancellation of account declined');
     }
+
+    public function changePassword()
+    {
+        $user = User::find(Auth::user()->id)->first();
+        return view('change-password')->with('user', $user)->with('active', null);
+    }
+
+    public function change(Request $request)
+    {
+        return dd($request->input());
+        $messages = [
+            'required' => 'This field is required',
+        ];
+
+        $this->validate($request, [
+            'password_confirmation' => ['confirmed', 'string'],
+        ], $messages);
+
+        $user = new User;
+        
+    }
 }
