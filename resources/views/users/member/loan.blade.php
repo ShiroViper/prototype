@@ -5,6 +5,9 @@
 @endsection
 
 @section('content')
+@push('scripts')
+    <script src="{{ asset('js/scripts.js') }}"></script>
+@endpush
 @if(!$unpaid)
     <h3 class="header mt-2">Request Loan</h3>
     <div class="row">
@@ -31,11 +34,18 @@
 
             {{ Form::label('reason', 'Reason', ['class' => 'h6']) }}
             <div class="form-group">
-                {{ Form::textarea('reason', '', ['class' => $errors->has('reason') ? 'form-control is-invalid' : 'form-control', 'rows' => 2, 'required']) }}
-                @if ($errors->has('reason'))
-                    <div class="invalid-feedback">{{ $errors->first('reason') }}</div>
-                @endif
+                <select name="reason" id="reason" class="form-control" required>
+                    <option selected hidden>-- Select Reason --</option>
+                    <option value="1">For Personal Use</option>
+                    <option value="2">For Emergency Use</option>
+                    <option value="3">Other</option>
+                </select>
+                <textarea name="other" id="other" rows="1" class="form-control mt-2" placeholder="Other (please specify)"></textarea>
             </div>
+            {{-- {{ Form::textarea('reason', '', ['class' => $errors->has('reason') ? 'form-control is-invalid' : 'form-control', 'rows' => 1, 'required', 'placeholder' => 'Other, please specify']) }}
+            @if ($errors->has('reason'))
+                <div class="invalid-feedback">{{ $errors->first('reason') }}</div>
+            @endif --}}
             
             <label for="pass"> Password</label>
             <div class="form-group">
@@ -53,7 +63,7 @@
             {{-- <button class="btn btn-primary" role="button" data-toggle="modal" data-target="#termsModal">Continue</button> --}}
             {!! Form::close() !!}
         </div>
-        <div class="col-sm-10 col-md-7 col-lg-5 my-3">  
+        {{-- <div class="col-sm-10 col-md-7 col-lg-5 my-3">  
                Note: <br>
                Php 50 below pay for 1 week <br>
                Php 200 below pay for 1 month <br>
@@ -61,7 +71,7 @@
 
                Update: <br>
                Mangutana ta ni miss pila ka months/weeks ang duration sa ila loan.
-            </div>
+            </div> --}}
     </div>
 @else
     {{-- <h3 class="header mt-3 text-center">Request Loan Not Available</h3>

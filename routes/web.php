@@ -107,11 +107,11 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'store' => 'member-process-store'
             ]
         ]);
-        Route::resource('/status', 'StatusController', [
-            'names' => [
-                'index' => 'member-status'
-            ]
-        ]);
+        // Route::resource('/status', 'StatusController', [
+        //     'names' => [
+        //         'index' => 'member-status'
+        //     ]
+        // ]);
         Route::get('/cancel', 'MemberController@cancel')->name('member-cancel');
         Route::post('/cancel/archive/', 'MemberController@update')->name('member-cancel-archive');
         Route::get('/cancel/destroy', 'MemberController@destroy')->name('member-cancel-destroy');
