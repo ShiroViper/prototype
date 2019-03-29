@@ -143,6 +143,10 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'store' => 'collector-process-store'
             ]
         ]);
+        
+        Route::get('/cancel', 'MemberController@cancel')->name('member-cancel');
+        Route::post('/cancel/archive/', 'MemberController@update')->name('member-cancel-archive');
+        Route::get('/cancel/destroy', 'MemberController@destroy')->name('member-cancel-destroy');
     });
 
 

@@ -18,7 +18,7 @@
 
             {{ Form::label('amount', 'Loan Amount', ['class' => 'h6']) }}
             <div class="form-group">
-                    {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'placeholder' => 'Enter amount (e.g. 1000.50)', 'min'=>'5', 'required']) }}
+                    {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'placeholder' => 'Enter amount', 'min'=>'5', 'step' => '.01', 'required']) }}
                 @if ($errors->has('amount'))
                     <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
                 @endif
