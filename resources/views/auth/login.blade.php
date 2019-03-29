@@ -207,7 +207,7 @@
                             </div> --}}
                             <div class="pt-3 cleafix">
                                 {{-- <small><a href="#">Having problems logging in?</a></small> --}}
-                                <button type="submit" class="btn btn-primary float-right px-4">Login</button>
+                                <button type="submit" class="btn btn-primary btn-block float-right px-4">Login</button>
                             </div>
                         </form>
                     </div>
