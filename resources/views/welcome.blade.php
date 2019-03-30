@@ -13,12 +13,12 @@
     <div class="container">
         <div class="main-header">
             <div class="row">
-                <div class="col">
+                <div class="col col-md col-lg">
                     <div class="text-primary">
                         <span class="welcome-title header pr-2">Welcome to</span> <span class="brand-title-header">ALKANSYA</span>
                     </div>
-                    <div class="featured-desc my-3">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut earum doloremque quas a maiores amet expedita modi, ea magnam quis eum corrupti, deleniti quia tenetur eligendi illum tempora nemo eos?</p>
+                    <div class="featured-desc lead my-3">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, voluptatem perferendis tenetur totam eum minima dolore ex adipisci libero dolorem earum suscipit.</p>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis repudiandae hic nesciunt cum, non, recusandae quod dolor earum deleniti ipsam ipsum vitae fugiat aliquid quasi molestiae vel architecto mollitia, nobis.</p>
                     </div>
                     <div class="row py-3">
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col col-md-4 featured-img">
+                <div class="col col-md-4 col-lg-6 featured-img">
                     <img src="img/img.png" alt="" class="img-fluid">
                 </div>
             </div>
@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         <div class="row px-3">
-                             <div class="col col-md featured-desc">
+                             <div class="col col-md featured-desc lead">
                                 <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse cupiditate a quis laboriosam facilis omnis non dolorum modi aperiam.</span>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                                 <img src="img/rr.png" alt="" class="img-fluid" style="max-height: 60px;">
                             </div>
                             <div class="row px-3">
-                                <div class="col col-md featured-desc">
+                                <div class="col col-md featured-desc lead">
                                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor, facilis vitae! Aperiam numquam vitae, facilis illo, nostrum itaque provident maiores.</p>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                                 <img src="img/tu.png" alt="" class="img-fluid" style="max-height: 60px;">
                             </div>
                             <div class="row px-3">
-                                <div class="col col-md featured-desc">
+                                <div class="col col-md featured-desc lead">
                                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam odio esse cumque earum minima quidem qui doloremque hic possimus porro.</p>
                                 </div>
                             </div>
