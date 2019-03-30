@@ -146,23 +146,23 @@ class TransactionController extends Controller
             return redirect()->back()->with('success', 'Waiting to confirm from the Member');
             
         } else if ($request->type == 3) {
-            dd('ubos', $request);
             // If the transaction is a Loan Payment [ $trans_type = 3 ]
             $transact = New Transaction;    
-            $transact->member_id = $request->id;
+            $transact->member_id = $request->memID;
             $transact->trans_type = $request->type;
             $transact->token = $request->token;
 
             // Add new condition where transaction: member id is null or no existing loan payment transaction execute this code 
-            if (Transaction::where('member_id','=', $request->id)->first() == NULL) {
+            if (Transaction::where('member_id','=', $request->memID)->first() == NULL) {
 
                 // If this is the first transaction made by the member
                 $loan_request = Loan_Request::where([
-                    ['user_id', '=', $request->id],
+                    ['user_id', '=', $request->memID],
                     ['confirmed', '=', 1],
                     ['received', '=', 1],
                     ['get', '=', 0]
                 ])->first();        // Get the loan_request
+                dd('ubos', $loan_request, $request);
 
                 // If $loan_request is NULL redirect and return error message
                 if(!$loan_request){
@@ -179,7 +179,7 @@ class TransactionController extends Controller
                 // return $transact->member_id;
                 // Member is continuing to pay his/her loan
                 $loan_request = Loan_Request::where([
-                    ['user_id', '=', $request->id],
+                    ['user_id', '=', $request->memID],
                     ['confirmed', '=', 1],
                     ['paid', '=', null]
                 ])->first();        // Get the latest update of the loan_request
