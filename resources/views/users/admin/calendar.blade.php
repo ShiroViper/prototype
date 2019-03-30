@@ -117,7 +117,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12">
+            {{-- <div class="col-12">
                 <div class="card shadow duty-card">
                     <div class="card-header duty-title">Available collectors</div>
                     <div class="card-body">
@@ -138,51 +138,10 @@
                         </form>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>
-<!-- <div class="modal fade" id="schedModal" tabindex="-1" role="dialog" aria-labelledby="schedModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="schedModalLabel">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="row">
-                <div class="col">
-                    <p>Start Date</p>
-                    <h6 class="admin-collectors-modal-start"></h6>
-                </div>
-                <div class="col">
-                    <p>End Date</p>
-                    <h6 class="admin-collectors-modal-end"></h6>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table admin-collectors-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-        </div>
-    </div>
-</div> -->
 
 <script>
     var tmp = @json($collectors);
@@ -206,7 +165,6 @@
 
 @push('scripts')
     <script src="{{ asset('js/scripts.js') }}"></script>
-    {{-- <script src="{{ asset('js/availableCollector.js') }}"></script> --}}
 @endpush
 
 @endsection
