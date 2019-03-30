@@ -36,8 +36,8 @@
             <div class="form-group">
                 <select name="reason" id="reason" class="form-control" required>
                     <option selected hidden>-- Select Reason --</option>
-                    <option value="1">For Personal Use</option>
-                    <option value="2">For Emergency Use</option>
+                    <option value="For Personal Use">For Personal Use</option>
+                    <option value="For Emergency Use">For Emergency Use</option>
                     <option value="3">Other</option>
                 </select>
                 <textarea name="other" id="other" rows="1" class="form-control mt-2" placeholder="Other (please specify)"></textarea>
@@ -77,7 +77,7 @@
     {{-- <h3 class="header mt-3 text-center">Request Loan Not Available</h3>
     <h3 class="header mt-3 text-center">Please Settle your loan</h3> --}}
     <div class="failed-loan d-flex justify-content-center align-items-center">
-        <h6 class="display-5 header text-center">Request Loan Not Available. <br> Please settle your unfinished loan first.</h6>
+        <h6 class="display-5 header text-center">Please settle your unfinished loan first.</h6>
         {{-- <h6 class="display-5 header text-center"></h6> --}}
         {{-- <img src="{{ asset('img/img.png') }}" alt="Failed-loan" min-width="50px" height="70px"> --}}
     </div>

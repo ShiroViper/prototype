@@ -45,8 +45,9 @@
                     {{ Form::date('date',\Carbon\Carbon::now(), ['class' => 'form-control', 'readonly']) }}
                 </div>
                 <div class="form-group">
-                    {{ Form::label('id', 'Collector ID', ['class' => 'h6']) }}
-                    {{ Form::text('id', '', ['class' => $errors->has('id') ? 'form-control is-invalid' : 'form-control']) }}
+                    {{ Form::label('colName', 'Collector Name', ['class' => 'h6']) }}
+                    {{ Form::text('colName', '', ['class' => $errors->has('colName') ? 'form-control is-invalid' : 'form-control']) }}
+                    <input type="hidden" id="colID" name="colID" value="{{ old('colID') }}">
                     @if ($errors->has('id'))
                         <div class="invalid-feedback">{{ $errors->first('id') }}</div>
                     @endif

@@ -53,14 +53,16 @@ class ProcessController extends Controller
     {
         $messages = [
             'required' => 'This field is required',
-            'id' => 'Must be a valid ID Number'
+            // 'id' => 'Must be a valid ID Number'
+            'colID' => 'Account ID not found!'
         ];
         $this->validate($request, [
-            'id' => ['required', 'numeric'],
+            'colName' => ['required'],
+            'colID' => ['required']
         ], $messages);
 
         // this check if the inputted collector id is found or not else redirect and throw an error;
-        $check = User::where([['id', $request->id], ['user_type', 1]])->first();
+        $check = User::where([['id', $request->colID], ['user_type', 1]])->first();
         if ($check){
             // create a new row that the money is being transfer to collector
             $process = New Process;
@@ -71,7 +73,6 @@ class ProcessController extends Controller
             $process->save();
             return redirect()->route('admin-requests')->with('success', 'Wating to Accept Collector: '.$check->lname. ' '.$check->fname);
         }else{
-            
             return redirect()->back()->withInput()->with('error', 'Collector: Not found');
         }
     }

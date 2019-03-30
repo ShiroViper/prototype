@@ -89,6 +89,8 @@ class LoanRequestsController extends Controller
             return redirect()->action('LoanRequestsController@index');
         }
 
+        // dd($request->input());
+
         $messages = [
             'required' => 'This field is required',
             'alpha' => 'Please use only alphabetic characters',
@@ -98,6 +100,7 @@ class LoanRequestsController extends Controller
         $this->validate($request, [
             'amount' => ['required', 'numeric', 'min:5'],   
             'reason' => ['required'],
+            'other' => ['sometimes', 'required'],
             'pass' => ['required'],
             'months' => ['required','numeric', 'min:1', 'max:12']
         ], $messages);
@@ -130,7 +133,7 @@ class LoanRequestsController extends Controller
         $comment->token = $request->token; // prevent from being spammed
         $comment->save();
 
-        return redirect()->action('LoanRequestsController@index');
+        return redirect()->action('LoanRequestsController@index')->with('success', 'Request sent');
     }
 
     /**
@@ -204,7 +207,7 @@ class LoanRequestsController extends Controller
         $sched = new Schedule;
         // Add 1 day from the start of the loan payment to give the members a breathing room
         $sched->start_date = Carbon::now()->addDay();
-        $sched->end_date = Carbon::now()->addDays(1 + $rq->days_payable);
+        $sched->end_date = Carbon::now()->addMonths($rq->days_payable);
         $sched->sched_type = 2;
         $sched->user_id = $rq->user_id;
         $sched->save();
