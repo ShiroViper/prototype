@@ -18,8 +18,10 @@
                         <span class="welcome-title header pr-2">Welcome to</span> <span class="brand-title-header">ALKANSYA</span>
                     </div>
                     <div class="featured-desc lead my-3">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, voluptatem perferendis tenetur totam eum minima dolore ex adipisci libero dolorem earum suscipit.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis repudiandae hic nesciunt cum, non, recusandae quod dolor earum deleniti ipsam ipsum vitae fugiat aliquid quasi molestiae vel architecto mollitia, nobis.</p>
+                        <p>
+                            Join us and be part of an organization that aims to help people with their financial needs. 
+                        </p>
+                        <p>Alkansya is a mobile responsive web application system that is used to gain access to features like account management, money transfer, deposit, loan and payment. Managed by a non-profit organization located in Compostela, Cebu, Alkanysa turns manual process of sinking fund to online and systematic process</p>
                     </div>
                     <div class="row py-3">
                         <div class="col col-sm col-md col-lg-10 col-xl-6">
@@ -38,7 +40,7 @@
                 </div>
             </div>
         </div>
-        <div class="addon-feature pt-5">
+        {{-- <div class="addon-feature pt-5">
             <div class="row mb-3">
                 <div class="col">
                     <span class="text-info title-header">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</span>
@@ -98,7 +100,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 </div>
   
