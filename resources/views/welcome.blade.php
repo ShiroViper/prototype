@@ -138,9 +138,18 @@
 
                         <div class="form-group">
                             {{ Form::label('mname', 'Middle Name') }}
+                            <small class="text-muted">(Optional)</small>
                             {{ Form::text('mname', '', ['class' => $errors->has('mname') ? 'form-control is-invalid' : 'form-control']) }}
                             @if ($errors->has('mname'))
                                 <div class="invalid-feedback">{{ $errors->first('mname') }}</div>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            {{ Form::label('cell_num', 'Contact Number') }}
+                            {{ Form::text('cell_num', '', ['class' => $errors->has('cell_num') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('cell_num'))
+                                <div class="invalid-feedback">{{ $errors->first('cell_num') }}</div>
                             @endif
                         </div>
 
@@ -151,7 +160,17 @@
                                 <div class="invalid-feedback">{{ $errors->first('email') }}</div>
                             @endif
                         </div>
-                        <small class="text-muted"><b>Note</b>: Please wait for our administrator to validate your request.</small>
+
+                        <div class="form-group">
+                            {{ Form::label('address', 'Complete Address', ['class' => 'mb-0']) }}
+                            <div class="mb-2"><small class="text-muted">Street number, Barangay, City/Town, Province, Philippines, Zip Code</small></div>
+                            {{ Form::textarea('address', '', ['class' => $errors->has('address') ? 'form-control is-invalid' : 'form-control', 'rows' => 2]) }}
+                            @if ($errors->has('address'))
+                                <div class="invalid-feedback">{{ $errors->first('address') }}</div>
+                            @endif
+                        </div>
+
+                        <small class="text-muted"><b>Note</b>: Please wait for our administrator to verify your request.</small>
                         <div class="pt-3">
                             {{ Form::submit('Submit', ['class' => 'btn btn-primary btn-block mb-3']) }}
                         </div>

@@ -13,6 +13,7 @@ use App\Loan_Request;
 use App\User;
 use App\Schedule;
 use App\Transaction;
+use App\Member_Request;
 
 class TransactionController extends Controller
 {
@@ -47,7 +48,8 @@ class TransactionController extends Controller
     {
         if ( Auth::user()->user_type == 2 ) {
             $transactions = Transaction::join('users', 'users.id', '=' ,'member_id')->select('trans_type', 'transactions.created_at', 'lname', 'fname', 'mname', 'amount')->where('confirmed',1)->orderBy('transactions.created_at', 'desc')->paginate(10);
-            return view('users.admin.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
+            $memberRequests = Member_Request::where('approved', null)->paginate(5);
+            return view('users.admin.dashboard')->with('transactions', $transactions)->with('active', 'dashboard')->with('memReq', $memberRequests);
         } else if ( Auth::user()->user_type == 1 ) {
             $transactions = Transaction::join('users', 'users.id', '=', 'member_id' )->select('transactions.created_at', 'lname', 'fname', 'mname', 'trans_type', 'amount')->where([['collector_id', Auth::user()->id], ['confirmed', 1]])->orderBy('transactions.created_at', 'DESC')->paginate(10);
             return view('users.collector.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');

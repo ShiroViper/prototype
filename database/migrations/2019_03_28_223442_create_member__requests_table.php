@@ -19,6 +19,9 @@ class CreateMemberRequestsTable extends Migration
             $table->string('fname');
             $table->string('mname')->nullable();
             $table->string('email')->unique();
+            $table->string('contact')->unique();
+            $table->text('address');
+            $table->boolean('approved')->nullable();
             $table->timestamps();
         });
     }

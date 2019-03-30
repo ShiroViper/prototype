@@ -27,6 +27,8 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     Route::prefix('admin')->middleware('admin-routes')->group(function () {
         Route::get('/dashboard', 'TransactionController@index')->name('admin-dashboard');
+        Route::get('{id}/accept', 'MemberRequestController@accept');
+        Route::get('{id}/decline', 'MemberRequestController@decline');
         Route::get('/adminTrans', 'TransactionController@adminTransaction')->name('admin-trans');
         Route::resource('/users', 'UsersController', [
             'names' => [
