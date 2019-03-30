@@ -115,69 +115,71 @@
                 </button>
             </div>
             <div class="modal-body">
-                <h6>Please enter your credentials</h6>
-                {!!Form::open(['action'=> 'MemberRequestController@memberRequest', 'method'=>'POST']) !!}
-                    @csrf
+                <div class="container">
+                    <h6>Please enter your credentials</h6>
+                    {!!Form::open(['action'=> 'MemberRequestController@memberRequest', 'method'=>'POST']) !!}
+                        @csrf
 
-                    <div class="form-group">
-                        {{ Form::label('lname', 'Last Name') }}
-                        {{ Form::text('lname', '', ['class' => $errors->has('lname') ? 'form-control is-invalid' : 'form-control']) }}
-                        @if ($errors->has('lname'))
-                            <div class="invalid-feedback">{{ $errors->first('lname') }}</div>
-                        @endif
-                    </div>
+                        <div class="form-group">
+                            {{ Form::label('lname', 'Last Name') }}
+                            {{ Form::text('lname', '', ['class' => $errors->has('lname') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('lname'))
+                                <div class="invalid-feedback">{{ $errors->first('lname') }}</div>
+                            @endif
+                        </div>
 
-                    <div class="form-group">
-                        {{ Form::label('fname', 'First Name') }}
-                        {{ Form::text('fname', '', ['class' => $errors->has('fname') ? 'form-control is-invalid' : 'form-control']) }}
-                        @if ($errors->has('fname'))
-                            <div class="invalid-feedback">{{ $errors->first('fname') }}</div>
-                        @endif
-                    </div>
+                        <div class="form-group">
+                            {{ Form::label('fname', 'First Name') }}
+                            {{ Form::text('fname', '', ['class' => $errors->has('fname') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('fname'))
+                                <div class="invalid-feedback">{{ $errors->first('fname') }}</div>
+                            @endif
+                        </div>
 
-                    <div class="form-group">
-                        {{ Form::label('mname', 'Middle Name') }}
-                        {{ Form::text('mname', '', ['class' => $errors->has('mname') ? 'form-control is-invalid' : 'form-control']) }}
-                        @if ($errors->has('mname'))
-                            <div class="invalid-feedback">{{ $errors->first('mname') }}</div>
-                        @endif
-                    </div>
+                        <div class="form-group">
+                            {{ Form::label('mname', 'Middle Name') }}
+                            {{ Form::text('mname', '', ['class' => $errors->has('mname') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('mname'))
+                                <div class="invalid-feedback">{{ $errors->first('mname') }}</div>
+                            @endif
+                        </div>
 
-                    <div class="form-group">
-                        {{ Form::label('email', 'Email') }}
-                        {{ Form::email('email', '', ['class' => $errors->has('email') ? 'form-control is-invalid' : 'form-control']) }}
-                        @if ($errors->has('email'))
-                            <div class="invalid-feedback">{{ $errors->first('email') }}</div>
-                        @endif
-                    </div>
-                    <small class="text-muted"><b>Note</b>: Please wait for our administrator to validate your request.</small>
-                    <div class="pt-3">
-                        {{ Form::submit('Submit', ['class' => 'btn btn-primary btn-block mb-3']) }}
-                    </div>
-                {!!Form::close()!!}
-                {{-- <form method="POST" action="/request" >  
-                    <div class="form-group">
-                        <label for="">Last Name</label>
-                        <input type="text" class="form-control" name="lname">
-                    </div>
-                    <div class="form-group">
-                        <label for="">First Name</label>
-                        <input type="text" class="form-control" name="fname">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Middle Name</label>
-                        <small>*Optional</small>
-                        <input type="text" class="form-control" name="mname">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Email Address</label>
-                        <input type="email" class="form-control" name="email">
-                    </div>
-                    <small class="text-muted"><b>Note</b>: Please wait for our administrator to validate your request.</small>
-                    <div class="py-3">
-                        <button type="submit" class="btn btn-primary btn-block">Submit</button>
-                    </div>
-                </form> --}}
+                        <div class="form-group">
+                            {{ Form::label('email', 'Email') }}
+                            {{ Form::email('email', '', ['class' => $errors->has('email') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('email'))
+                                <div class="invalid-feedback">{{ $errors->first('email') }}</div>
+                            @endif
+                        </div>
+                        <small class="text-muted"><b>Note</b>: Please wait for our administrator to validate your request.</small>
+                        <div class="pt-3">
+                            {{ Form::submit('Submit', ['class' => 'btn btn-primary btn-block mb-3']) }}
+                        </div>
+                    {!!Form::close()!!}
+                    {{-- <form method="POST" action="/request" >  
+                        <div class="form-group">
+                            <label for="">Last Name</label>
+                            <input type="text" class="form-control" name="lname">
+                        </div>
+                        <div class="form-group">
+                            <label for="">First Name</label>
+                            <input type="text" class="form-control" name="fname">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Middle Name</label>
+                            <small>*Optional</small>
+                            <input type="text" class="form-control" name="mname">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Email Address</label>
+                            <input type="email" class="form-control" name="email">
+                        </div>
+                        <small class="text-muted"><b>Note</b>: Please wait for our administrator to validate your request.</small>
+                        <div class="py-3">
+                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                        </div>
+                    </form> --}}
+                </div>
             </div>
         </div>
     </div>
