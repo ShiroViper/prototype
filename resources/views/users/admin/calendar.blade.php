@@ -30,21 +30,21 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="d-flex flex-row">
-                                        <div class="square admin-calendar-current-date"></div>
+                                        <div class="square calendar-current-date"></div>
                                         <span class="header ml-1">Current Date</span>
                                     </div>
                                     <div class="d-flex flex-row">
-                                        <div class="square admin-calendar-paid-dates"></div>
+                                        <div class="square calendar-paid-dates"></div>
                                         <span class="header ml-1">Paid Dates</span>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="d-flex flex-row">
-                                        <div class="square admin-calendar-loan-dates"></div>
+                                        <div class="square calendar-loan-dates"></div>
                                         <span class="header ml-1">Loan Dates</span>
                                     </div>
                                     <div class="d-flex flex-row">
-                                        <div class="square admin-calendar-highlighted"></div>
+                                        <div class="square calendar-highlighted"></div>
                                         <span class="header ml-1">Dates highlighted</span>
                                     </div>
                                 </div>

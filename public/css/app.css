@@ -16392,6 +16392,10 @@ readers do not read off random characters that represent icons */
   }
 }
 
+.note-box {
+  border-left-width: 0.35rem !important;
+}
+
 .square {
   width: 20px;
   height: 20px;
@@ -16399,19 +16403,19 @@ readers do not read off random characters that represent icons */
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.admin-calendar-loan-dates {
+.calendar-loan-dates {
   background: #F87930;
 }
 
-.admin-calendar-paid-dates {
+.calendar-paid-dates {
   background: #00CC66;
 }
 
-.admin-calendar-current-date {
+.calendar-current-date {
   background: #F7DE7C;
 }
 
-.admin-calendar-highlighted {
+.calendar-highlighted {
   background: #bce8f1;
 }
 

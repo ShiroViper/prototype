@@ -162,7 +162,6 @@ class TransactionController extends Controller
                     ['received', '=', 1],
                     ['get', '=', 0]
                 ])->first();        // Get the loan_request
-                dd('ubos', $loan_request, $request);
 
                 // If $loan_request is NULL redirect and return error message
                 if(!$loan_request){
@@ -286,7 +285,7 @@ class TransactionController extends Controller
         $loan_request = Loan_Request::where('id', $transact->request_id)->first();
         $transact->confirmed = 1;
         $loan_request->balance = $loan_request->balance - $transact->amount;
-
+        
         // if $loan_request->balance has no value change paid status to 1
         if(!$loan_request->balance){
             $loan_request->paid = 1;
@@ -297,7 +296,8 @@ class TransactionController extends Controller
             $update_dis->save();
 
             // this code update the patronage amounr of the users
-            $update_pat = Status::where('user_id', Auth::user()->id)->first();
+            $update_pat = new Status;
+            $update_pat->user_id = Auth::user()->id;
             $update_pat->patronage_refund = $update_pat->patronage_refund + $loan_request->loan_amount * 0.06 * 0.4;
             $update_pat->save();
         }

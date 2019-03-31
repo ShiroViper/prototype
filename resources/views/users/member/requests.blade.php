@@ -20,7 +20,7 @@
 
 {{-- Show list of data that waiting to confirm --}}
 @if (count($pending_mem_con))
-    <div class="row pt-3">
+    <div class="row pt-3 mb-5">
         <div class="col">
             <div class="card">
                 <h6 class="card-header">Pending Confirmation</h6>
@@ -48,9 +48,9 @@
                                         {{-- <td>{{$item->trans_type}} </td> --}}
                                         <td class="d-flex flex-row">
                                             @if($item->trans_type == 1 )
-                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/d_accept">Accept</a>
+                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/d_accept">Confirm</a>
                                             @else
-                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/accept">Accept</a>
+                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/accept">Confirm</a>
                                             @endif
                                         </td>
                                     </tr>
@@ -110,7 +110,7 @@
     </div>
 @endif
 
-<div class="row pt-3">
+<div class="row mt-3">
     <div class="col">
         <div class="card">
             <h6 class="card-header">Pending Requests</h6>
@@ -157,7 +157,7 @@
     </div>
 </div>
 
-<div class="row pt-5">
+<div class="row mt-5">
         <div class="col">
             <div class="card">
                 <h6 class="card-header">Requests History</h6>
