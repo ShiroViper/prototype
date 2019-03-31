@@ -58,12 +58,14 @@
             </div>
             {{-- <h6 class="card-header">User information</h6> --}}
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col">Member ID</div>
-                        <div class="col font-weight-bold">{{ $user->id }}</div>
-                    </div>
-                </li>
+                @if (Auth::user()->user_type == 2)
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col">Account ID</div>
+                            <div class="col font-weight-bold">{{ $user->id }}</div>
+                        </div>
+                    </li>
+                @endif
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col">Last Name</div>

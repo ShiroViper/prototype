@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="row mt-2">
-            <div class="order-2 order-md-1 col-md my-3">
+            <div class="col-md col-lg-7 my-3">
                 <div class="card shadow">
                     <!-- <div class="card-header">Calendar</div> -->
                     <div class="card-body">
@@ -71,41 +71,47 @@
                     </div>
                 </div>
             </div>
-            <div class="order-1 order-md-2 col-lg my-3">
-                <div class="card shadow">
-                    <div class="card-body">
-                        <div class="legend">
-                            <h5 class="header">Legend:</h5>
-                            <div class="clearfix">
-                                <div class="d-flex flex-row align-items-center p-1">
-                                    <div class="square calendar-current-date"></div>
-                                    <span class="header ml-1">Current Date</span>
-                                </div>
-                                <div class="d-flex flex-row align-items-center p-1">
-                                    <div class="square calendar-paid-dates"></div>
-                                    <span class="header ml-1">Paid Dates</span>
-                                </div>
-                                {{-- <div class="d-flex flex-row align-items-center p-1">
-                                    <div class="square pay-dates"></div>
-                                    <span class="header ml-1">Pay Dates</span>
-                                </div> --}}
-                                <div class="d-flex flex-row align-items-center p-1">
-                                    <div class="square calendar-loan-dates"></div>
-                                    <span class="header ml-1">Loan Dates</span>
+            <div class="col-lg my-3">
+                <div class="row">
+                    <div class="col-12 col-lg">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="legend">
+                                    <h5 class="header">Legend:</h5>
+                                    <div class="clearfix">
+                                        <div class="d-flex flex-row align-items-center p-1">
+                                            <div class="square calendar-current-date"></div>
+                                            <span class="header ml-1">Current Date</span>
+                                        </div>
+                                        <div class="d-flex flex-row align-items-center p-1">
+                                            <div class="square calendar-paid-dates"></div>
+                                            <span class="header ml-1">Paid Dates</span>
+                                        </div>
+                                        {{-- <div class="d-flex flex-row align-items-center p-1">
+                                            <div class="square pay-dates"></div>
+                                            <span class="header ml-1">Pay Dates</span>
+                                        </div> --}}
+                                        <div class="d-flex flex-row align-items-center p-1">
+                                            <div class="square calendar-loan-dates"></div>
+                                            <span class="header ml-1">Loan Dates</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card shadow info-card mt-3">
-                    <div class="card-header info-title">Event Details</div>
-                    <div class="card-body">
-                        <small class="info-sub-title">Click click on an event to view more details</small>
-                        <div class="row">
-                            <div class="col member-calendar-info">
+                    <div class="col-12">
+                        <div class="card shadow info-card mt-3">
+                            <div class="card-header info-title">Event Details</div>
+                            <div class="card-body">
+                                <small class="info-sub-title">Click click on an event to view more details</small>
                                 <div class="row">
-                                    <div class="col text-center">
-                                        <div class="info-details"></div>
+                                    <div class="col member-calendar-info">
+                                        <div class="row">
+                                            <div class="col text-center">
+                                                <div class="info-details"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +119,6 @@
                     </div>
                 </div>
             </div>
-            
         </div>
         @prepend('scripts')
             <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>

@@ -19,9 +19,9 @@
                     </div>
                     <div class="featured-desc lead my-3">
                         <p>
-                            Join us and be part of an organization that aims to help people with their financial needs. 
+                            Join us and be part of an organization that aims to help people in their financial needs. 
                         </p>
-                        <p>Alkansya is a mobile responsive web application system that is used to gain access to features like account management, money transfer, deposit, loan and payment. Managed by a non-profit organization located in Compostela, Cebu, Alkanysa turns manual process of sinking fund to online and systematic process</p>
+                        <p>Alkansya is a mobile responsive web application system that is used to gain access to features like account management, money transfer, deposit, loan and payment. Managed by a non-profit organization located in Compostela, Cebu, Alkanysa turns the manual procedure of sinking fund into a process that is systematic with the help of the internet.</p>
                     </div>
                     <div class="row py-3">
                         <div class="col col-sm col-md col-lg-10 col-xl-6">

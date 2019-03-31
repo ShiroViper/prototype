@@ -8,38 +8,91 @@
 
 <h3 class="header mt-2">Loan Process: Transfer Money</h3>
 
+
+<a class="btn btn-light border" role="button" href="/admin/requests "><i class="fas fa-arrow-left"></i> Back to list</a>
+
 <div class="row">
-    <div class="col-md col-lg pt-3">
-        <h4>Select a collector</h4>
+    <div class="col-lg mt-3">
         {!!Form::open(['action'=> 'ProcessController@store', 'method'=>'POST']) !!}
         @csrf
             {{-- Request ID --}}
             {{ Form::text('request_id', $process->id, ['hidden']) }}
-            
             @if($trans != NULL)
                 @if($trans->transfer == 1)
-                    <div class="form-group">
-                        <label>Date Sent</label>      
-                        <div class="col font-weight-bold">{{ $trans->updated_at }}</div>       
+                    <div class="progress progress-bar-vertical">
+                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="height: 33%;">
+                        <span class="sr-only">33% Complete</span>
+                        </div>
                     </div>
-                    <div class="alert alert-success  text-center " role="alert">
-                        <strong>Transferring Money</strong>
+                    <div class="progress-cards card my-2 note-box border-success">
+                        <div class="card-body d-flex justify-content-center flex-row align-items-center text-success">
+                            <i class="fas fa-check fa-lg"></i>
+                            <div class="h5 mb-0 ml-3 header">Transferring Money </div>      
+                        </div>
+                    </div>
+                    <div class="progress-cards card text-muted my-2" aria-disabled="true">
+                        <div class="card-body d-flex justify-content-center">
+                            <div class="h5 mb-0 text-center header">Money Transferred to Collector</div>      
+                        </div>
+                    </div>
+                    <div class="progress-cards card text-muted my-2" aria-disabled="true">
+                        <div class="card-body d-flex justify-content-center">
+                            <div class="h5 mb-0 text-center header">Money Transferred to Member </div>      
+                        </div>
                     </div>
                 @elseif($trans->transfer >= 2)
-                    <div class="form-group">
-                        <label>Date Transferred</label>      
-                        <div class="col font-weight-bold">{{ $trans->updated_at }}</div>       
-                    </div>
-                    <div class="alert alert-success  text-center " role="alert">
-                        @if($trans->transfer == 2)
-                            <strong>Money Transferred to Collector </strong>
+                        @if($trans->transfer == 2 || $trans->transfer == 3)
+                            <div class="progress progress-bar-vertical">
+                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100" style="height: 66%;">
+                                <span class="sr-only">66% Complete</span>
+                                </div>
+                            </div>
+                            <div class="progress-cards card note-box border-success my-2">
+                                <div class="card-body d-flex justify-content-center flex-row align-items-center text-success">
+                                    <i class="fas fa-check fa-lg"></i>
+                                    <div class="h5 mb-0 ml-3 header">Transferring Money </div>      
+                                </div>
+                            </div>
+                            <div class="progress-cards card note-box border-success my-2">
+                                <div class="card-body d-flex justify-content-center flex-row align-items-center text-success">
+                                    <i class="fas fa-check fa-lg"></i>
+                                    <div class="h5 mb-0 ml-3 header">Money Transferred to Collector</div>      
+                                </div>
+                            </div>
+                            <div class="progress-cards card text-muted my-2" aria-disabled="true">
+                                <div class="card-body d-flex justify-content-center">
+                                    <div class="h5 mb-0 text-center header">Money Transferred to Member </div>      
+                                </div>
+                            </div>
                         @elseif($trans->transfer == 4)
-                            <strong>Money Transferred to Member </strong>
+                            <div class="progress progress-bar-vertical">
+                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="height: 100%;">
+                                <span class="sr-only">100% Complete</span>
+                                </div>
+                            </div>
+                            <div class="progress-cards card note-box border-success my-2">
+                                <div class="card-body d-flex justify-content-center flex-row align-items-center text-success">
+                                    <i class="fas fa-check fa-lg"></i>
+                                    <div class="h5 mb-0 ml-3 header">Transferring Money </div>      
+                                </div>
+                            </div>
+                            <div class="progress-cards card note-box border-success my-2">
+                                <div class="card-body d-flex justify-content-center flex-row align-items-center text-success">
+                                    <i class="fas fa-check fa-lg"></i>
+                                    <div class="h5 mb-0 ml-3 header">Money Transferred to Collector</div>      
+                                </div>
+                            </div>
+                            <div class="progress-cards card note-box border-success my-2">
+                                <div class="card-body d-flex justify-content-center flex-row align-items-center text-success">
+                                    <i class="fas fa-check fa-lg"></i>
+                                    <div class="h5 mb-0 ml-3 header">Money Transferred to Member</div>
+                                </div>
+                            </div>
                         @endif
-                    </div>
                 @endif 
             @endif
             @if($trans == NULL)
+                <h4>Select a collector</h4>
                 <div class="form-group">
                     {{ Form::label('date', 'Date', ['class' => 'h6']) }}
                     {{ Form::date('date',\Carbon\Carbon::now(), ['class' => 'form-control', 'readonly']) }}
@@ -56,9 +109,13 @@
             @endif
         {!!Form::close()!!}
     </div>
-    <div class="col-md col-lg py-3 offset-2">
+    <div class="col-lg my-3 offset-lg-1">
         <div class="card">
-            <h6 class="card-header">Loan Request Information</h6>
+            <h6 class="card-header">Loan Request Information
+                @if($trans != null ? $trans->transfer == 4 : '')
+                    <span class="badge badge-success"><small>Money Transferred</small></span>
+                @endif
+            </h6>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     <div class="row">
@@ -102,10 +159,15 @@
         // alert(tmp[i].id);
         item = {}
         item["value"] = tmp[i].id;
-        item["label"] = tmp[i].lname+", "+tmp[i].fname+" "+tmp[i].mname;
+        if (tmp[i].mname == null) {
+            item["label"] = tmp[i].lname+", "+tmp[i].fname;
+        } else {
+            item["label"] = tmp[i].lname+", "+tmp[i].fname+" "+tmp[i].mname;
+        }
+
         collectors.push(item);
     }
-    console.log(collectors);
+    // console.log(collectors);
 
     /*
     var collectors = [];

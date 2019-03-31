@@ -39,12 +39,14 @@
                     </div>
                 </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col">Member ID</div>
-                        <div class="col font-weight-bold">{{ $user->id }}</div>
-                    </div>
-                </li>
+                @if (Auth::user()->user_type == 2)
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col">Member ID</div>
+                            <div class="col font-weight-bold">{{ $user->id }}</div>
+                        </div>
+                    </li>
+                @endif
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col">Last Name</div>
@@ -91,8 +93,8 @@
                     <div class="row">
                         <div class="col">Contact Number</div>
                         <div class="col font-weight-bold">
-                            <small>*11 Digits</small>
-                            {{ Form::number('cell_num', $user->cell_num, ['class' =>  $errors->has('cell_num') ? 'form-control is-invalid' : 'form-control']) }}
+                            {{-- <small>*11 Digits</small> --}}
+                            {{ Form::text('cell_num', $user->cell_num, ['class' =>  $errors->has('cell_num') ? 'form-control is-invalid' : 'form-control']) }}
                             @if ($errors->has('cell_num'))
                                 <div class="invalid-feedback">{{ $errors->first('cell_num') }}</div>
                             @endif

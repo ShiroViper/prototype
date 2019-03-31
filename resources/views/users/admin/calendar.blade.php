@@ -22,7 +22,7 @@
     </div>
     <div class="col-lg my-3">
         <div class="row">
-            <div class="col-12 col-lg pb-3">
+            <div class="col-12 col-lg pb-3 order-2 order-lg-1">
                 <div class="card shadow">
                     <div class="card-body">
                         <div class="legend">
@@ -71,12 +71,17 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 pb-3">
+            <div class="col-12 pb-3 order-1 order-lg-2">
                 <div class="card shadow info-card">
                     <div class="card-header info-title">Event Details</div>
                     <div class="card-body">
                         <small class="info-sub-title">Click click on an event to view more details</small>
                         <div class="row">
+                            <div class="col admin-calendar-payment">
+                                <div class="row">
+                                    <div class="col info-details"></div>
+                                </div>
+                            </div>
                             <div class="col admin-calendar-info">
                                 <div class="row">
                                     <div class="col text-center">

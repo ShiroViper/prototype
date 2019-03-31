@@ -16339,6 +16339,24 @@ readers do not read off random characters that represent icons */
   font-weight: 400;
 }
 
+.progress-bar-vertical {
+  width: 20px;
+  min-height: 238px;
+  display: flex;
+  margin-right: 20px;
+  float: left;
+}
+
+.progress-bar-vertical .progress-bar {
+  width: 100%;
+  height: 0;
+  transition: height 1s ease;
+}
+
+.progress-cards {
+  height: 72px;
+}
+
 .failed-loan,
 .full-view {
   height: calc(100vh - 226px);

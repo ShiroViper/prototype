@@ -20,7 +20,7 @@ Auth::routes();
 Route::middleware(['guest'])->group(function () {
     Route::view('/', 'welcome', ['active' => 'welcome']);
     Route::view('/about', 'about', ['active' => 'about']);
-    Route::view('/terms', 'terms', ['active' => 'terms']);
+    // Route::view('/terms', 'terms', ['active' => 'terms']);
     Route::post('/request', 'MemberRequestController@memberRequest');
 });
 

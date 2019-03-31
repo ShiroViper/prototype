@@ -52,7 +52,7 @@ class SchedulesController extends Controller
                         }'
                     ])->setOptions([
                         'header' => [],
-                        'eventLimit' => 4,
+                        'eventLimit' => 2,
                         // 'selectable' => true
                     ]);
                 } else {
@@ -200,7 +200,7 @@ class SchedulesController extends Controller
                         }'
                     ])->setOptions([
                         'header' => [],
-                        'eventLimit' => 4,
+                        'eventLimit' => 3,
                         // 'selectable' => true
                     ]);
                 }
@@ -216,6 +216,9 @@ class SchedulesController extends Controller
                         switch ($schedule->sched_type) {                                // What type of schedules that were fetched
                             case 1:                                                     // Deposit schedule type 
                                 $user = User::find($schedule->user_id);
+                                $transaction = Transaction::where('sched_id', $schedule->id)->first();    // Get the transaction info
+                                // dd($transaction);
+                                $collector = User::where('id', $transaction->collector_id)->first();// Get the collector info
                                 $sched_list[] = Calendar::event(
                                     '_',
                                     true,
@@ -225,7 +228,7 @@ class SchedulesController extends Controller
                                     [
                                         'color' => '#00CC66',
                                         'textColor' => '#00CC66',
-                                        'description' => 'Deposit payment from '.$user->lname.', '.$user->fname.' '.$user->mname,
+                                        'description' => 'Deposit payment of <b>₱'.$transaction->amount.'</b> from <b>'.$user->lname.', '.$user->fname.'</b> to <b>'.$collector->lname.', '.$collector->fname.'</b>',
                                         'sched_type' => $schedule->sched_type,
                                         'user_id' => $user->id,
                                         'lname' => $user->lname,
@@ -241,39 +244,49 @@ class SchedulesController extends Controller
                                 $user = User::find($schedule->user_id);                 // Get the instance of a user by its ID
                                 $lr = Loan_Request::where('user_id', '=', $schedule->user_id)->has('user')->first();
                                 // Get the loan request of that certain user
-                                $sched_list[] = Calendar::event(
-                                    '_',
-                                    true,
-                                    new Carbon($schedule->start_date),
-                                    new Carbon($schedule->end_date),
-                                    $key,
-                                    [
-                                        'loan_id' => $lr->id,
-                                        'start' => $schedule->start_date,
-                                        'end' => $schedule->end_date,
-                                        'color' => '#F87930',
-                                        'textColor' => '#F87930',
-                                        'description' => 'Loan request from '.$user->lname.', '.$user->fname.' '.$user->mname,
-                                        'sched_type' => $schedule->sched_type,
-                                        'user_id' => $user->id,
-                                        'lname' => $user->lname,
-                                        'fname' => $user->fname,
-                                        'mname' => $user->mname,
-                                        'email' => $user->email,
-                                        'address' => $user->address,
-                                        'cell' => $user->cell_num,
-                                        'amount' => $lr->loan_amount,
-                                        'dp' => $lr->days_payable,
-                                        'paid' => $lr->paid,
-                                        'received' => $lr->received
-                                    ]
-                                );
+                                $interval = new DateInterval('P1M');
+                                $period = new DatePeriod(new Carbon($schedule->start_date), $interval, new Carbon($schedule->end_date));
+                                foreach ($period as $date) {
+                                    // $test[] = $date->format('Y-m-d');
+                                    $sched_list[] = Calendar::event(
+                                        '_',
+                                        true,
+                                        $date->format('Y-m-d'),
+                                        $date->format('Y-m-d'),
+                                        $key,
+                                        [
+                                            'loan_id' => $lr->id,
+                                            // 'start' => $schedule->start_date,
+                                            // 'end' => $schedule->end_date,
+                                            // 'start' => $date->format('Y-m-d'),
+                                            // 'end' => $date->format('Y-m-d'),
+                                            'color' => '#F87930',
+                                            'textColor' => '#F87930',
+                                            'description' => 'Loan request from '.$user->lname.', '.$user->fname.' '.$user->mname,
+                                            'sched_type' => $schedule->sched_type,
+                                            'user_id' => $user->id,
+                                            'lname' => $user->lname,
+                                            'fname' => $user->fname,
+                                            'mname' => $user->mname ? $user->mname : '',
+                                            'email' => $user->email,
+                                            'address' => $user->address,
+                                            'cell' => $user->cell_num,
+                                            'amount' => $lr->loan_amount,
+                                            'dp' => $lr->days_payable,
+                                            'paid' => $lr->paid,
+                                            'received' => $lr->received
+                                        ]
+                                    );
+                                }
                                 // $test = Carbon::now()->format('N');
-
-                                // return dd($test);
+                                // return dd($sched_list);
                                 // return dd($schedule->id, $lr->id);
                             break;
                             case 3:                                                     // Payment schedule type
+                                $user = User::find($schedule->user_id);
+                                $transaction = Transaction::where('sched_id', $schedule->id)->first();    // Get the transaction info
+                                // dd($transaction);
+                                $collector = User::where('id', $transaction->collector_id)->first();// Get the collector info
                                 $sched_list[] = Calendar::event(
                                     '_',
                                     true,
@@ -283,7 +296,7 @@ class SchedulesController extends Controller
                                     [
                                         'color' => '#00CC66',
                                         'textColor' => '#00CC66',
-                                        'description' => 'Payment made by '.$user->lname.', '.$user->fname.' '.$user->mname,
+                                        'description' => 'Loan payment of <b>₱'.$transaction->amount.'</b> from <b>'.$user->lname.', '.$user->fname.'</b> to <b>'.$collector->lname.', '.$collector->fname.'</b>',
                                         'sched_type' => $schedule->sched_type,
                                         'user_id' => $user->user,
                                         'lname' => $user->lname,
@@ -301,7 +314,19 @@ class SchedulesController extends Controller
                     $calendar_details = Calendar::addEvents($sched_list)->setCallbacks([
                         'eventRender' => 'function(event, element) {
                             $(element).popover({
-                                content: event.description,
+                                content: function() {
+                                    switch (event.sched_type) {
+                                    case 1: 
+                                        return "Deposit payment";
+                                    break;
+                                    case 2:
+                                        return "Loan Request";
+                                    break;
+                                    case 3:
+                                        return "Loan Payment";
+                                    break;
+                                    }
+                                },
                                 trigger: "hover",
                                 placement: "top",
                                 container: "body"
@@ -312,14 +337,16 @@ class SchedulesController extends Controller
                             $('.duty-card').hide();
                             $('.admin-calendar-info').show();
                             $('.info-sub-title').hide();
-                            $('.info-title').text(function() {
+                            $('.info-title').html(function() {
                                 switch (event.sched_type) {
-                                    case 1: break;
+                                    case 1: 
+                                        return '<b>Member Deposit</b>';
+                                    break;
                                     case 2:
                                         return '<b>Loan Request</b>';
                                     break;
                                     case 3:
-                                        return '<b>User Payment</b>';
+                                        return '<b>Loan Payment</b>';
                                     break;
                                 }
                             });
@@ -336,25 +363,41 @@ class SchedulesController extends Controller
                                     break;
                                 }
                             }).addClass('text-white');
-                            $('.admin-calendar-info .info-name').html('<small>Name</small><h6>'+event.lname+', '+event.fname+' '+event.mname+'</h6>');
-                            $('.admin-calendar-info .info-cell').html('<small>Contact Details</small><h6>'+event.cell+'</h6>');
-                            $('.admin-calendar-info .info-email').html('<small>Email-address</small><h6>'+event.email+'</h6>');
-                            $('.admin-calendar-info .info-address').html('<small>Address</small><h6>'+event.address+'</h6>');
-                            $('.admin-calendar-info .info-email').html('<small>Email-address</small><h6>'+event.email+'</h6>');
-                            $('.admin-calendar-info .info-amt').html('<small>Amount Loaned</small><h6>'+event.amount+'</h6>');
-                            $('.admin-calendar-info .info-dp').html('<small>Days payable</small><h6>'+event.dp+'</h6>');
-                            $('.admin-calendar-info .info-divider').html('<hr>');
 
-                            if (event.paid) {
-                                $('.admin-calendar-info .info-paid').html('<h6>Payment Done</h6>');
-                            } else {
-                                $('.admin-calendar-info .info-paid').html('<h6 class=\"font-italic alert alert-warning border\">Payment still ongoing</h6>');
-                            }
+                            switch (event.sched_type) {
+                                case 1:
+                                    $('.admin-calendar-info').hide();
+                                    $('.admin-calendar-payment').show();
+                                    $('.info-details').html(event.description);
+                                break;
+                                case 2:
+                                    $('.admin-calendar-info').show();
+                                    $('.admin-calendar-payment').hide();
+                                    $('.admin-calendar-info .info-name').html('<small>Name</small><h6>'+event.lname+', '+event.fname+' '+event.mname+'</h6>');
+                                    $('.admin-calendar-info .info-cell').html('<small>Contact Details</small><h6>'+event.cell+'</h6>');
+                                    $('.admin-calendar-info .info-email').html('<small>Email-address</small><h6>'+event.email+'</h6>');
+                                    $('.admin-calendar-info .info-address').html('<small>Address</small><h6>'+event.address+'</h6>');
+                                    $('.admin-calendar-info .info-email').html('<small>Email-address</small><h6>'+event.email+'</h6>');
+                                    $('.admin-calendar-info .info-amt').html('<small>Amount Loaned</small><h6>'+event.amount+'</h6>');
+                                    $('.admin-calendar-info .info-dp').html('<small>Payable</small><h6>'+event.dp+' Month/s</h6>');
 
-                           if (event.received) {
-                                $('.admin-calendar-info .info-status').html('<h6 class=\"font-italic alert alert-success border text-center\">Money already sent</h6>');
-                            } else {
-                                $('.admin-calendar-info .info-status').html('<a class=\"btn btn-primary assign-btn btn-block\" data-sched='+event.loan_id+' href=\"/admin/process/'+event.loan_id+'/edit\" role=\"button\">Assign collector</a>');
+                                    if (event.paid) {
+                                        $('.admin-calendar-info .info-paid').html('<h6 class=\"font-italic alert alert-success border\">Payment Done</h6>');
+                                    } else {
+                                        $('.admin-calendar-info .info-paid').html('<h6 class=\"font-italic alert alert-warning border\">Payment still ongoing</h6>');
+                                    }
+
+                                    if (event.received) {
+                                        $('.admin-calendar-info .info-status').html('<h6 class=\"font-italic alert alert-success border text-center\">Money already sent</h6>');
+                                    } else {
+                                        $('.admin-calendar-info .info-status').html('<a class=\"btn btn-primary assign-btn btn-block\" data-sched='+event.loan_id+' href=\"/admin/process/'+event.loan_id+'/edit\" role=\"button\">Assign collector</a>');
+                                    }
+                                break;
+                                case 3:
+                                    $('.admin-calendar-info').hide();
+                                    $('.admin-calendar-payment').show();
+                                    $('.info-details').html(event.description);
+                                break;
                             }
                         }",
                         'eventMouseout' => 'function (event) {
@@ -373,7 +416,7 @@ class SchedulesController extends Controller
                     ])->setOptions([
                         'plugins' => [ 'interaction', 'dayGrid'],
                         'header' => [],
-                        'eventLimit' => 2,
+                        'eventLimit' => 3,
                         'selectable' => true,
                     ]);
             break;
