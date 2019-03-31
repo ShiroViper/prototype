@@ -73,7 +73,8 @@ class LoanRequestsController extends Controller
         // ================================================
 
         $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
-        return view('users.member.loan')->with('token', $token)->with('unpaid', $unpaid)->with('active', 'loan');
+        $current_savings = Status::where('user_id', Auth::user()->id)->first();
+        return view('users.member.loan')->with('token', $token)->with('unpaid', $unpaid)->with('active', 'loan')->with('savings', $current_savings);
     }
 
     /**
@@ -89,8 +90,6 @@ class LoanRequestsController extends Controller
             return redirect()->action('LoanRequestsController@index');
         }
 
-        // dd($request->input());
-
         $messages = [
             'required' => 'This field is required',
             'alpha' => 'Please use only alphabetic characters',
@@ -99,10 +98,10 @@ class LoanRequestsController extends Controller
 
         $this->validate($request, [
             'amount' => ['required', 'numeric', 'min:5'],   
-            'reason' => ['required'],
-            'other' => ['sometimes', 'required'],
+            'reason' => ['required', 'string'],
+            'other' => ['nullable', 'sometimes'],
             'pass' => ['required'],
-            'months' => ['required','numeric', 'min:1', 'max:12']
+            'months' => ['required', 'numeric', 'min:1', 'max:12']
         ], $messages);
 
         // Loan * .06 = monthly interest * months payable = interest to pay + loan amount = loan to pay 
@@ -207,7 +206,7 @@ class LoanRequestsController extends Controller
         $sched = new Schedule;
         // Add 1 day from the start of the loan payment to give the members a breathing room
         $sched->start_date = Carbon::now()->addDay();
-        $sched->end_date = Carbon::now()->addMonths($rq->days_payable);
+        $sched->end_date = $sched->start_date->copy()->addMonths($rq->days_payable+1);
         $sched->sched_type = 2;
         $sched->user_id = $rq->user_id;
         $sched->save();
