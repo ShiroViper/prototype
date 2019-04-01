@@ -20,7 +20,7 @@
 
 {{-- Show list of data that waiting to confirm --}}
 @if (count($pending_mem_con))
-    <div class="row pt-3">
+    <div class="row pt-3 mb-5">
         <div class="col">
             <div class="card">
                 <h6 class="card-header">Pending Confirmation</h6>
@@ -30,7 +30,7 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Type</th>
+                                    <th>Transaction Type</th>
                                     <th>Amount Sent</th>
                                     <th>Action</th>
                                 </tr>
@@ -44,9 +44,14 @@
                                         @else
                                             <td>Loan Payment</td>
                                         @endif
-                                        <td>₱ {{$item->amount}} </td>
+                                        <td>₱ {{number_format($item->amount, 2)}} </td>
+                                        {{-- <td>{{$item->trans_type}} </td> --}}
                                         <td class="d-flex flex-row">
-                                            <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/d_accept">Accept</a>
+                                            @if($item->trans_type == 1 )
+                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/d_accept">Confirm</a>
+                                            @else
+                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/accept">Confirm</a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -73,7 +78,7 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Money To Receive</th>
+                                    <th>Money Received</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -81,8 +86,8 @@
                                 @if (count($pending_mem_receive) > 0)
                                     @foreach ($pending_mem_receive as $item)
                                     <tr>
-                                        <td>{{$item->lname}}, {{$item->fname}} </td>
-                                        <td>₱ {{$item->loan_amount}} </td>
+                                        <td>{{$item->lname}}, {{$item->fname}} {{$item->mname}} </td>
+                                        <td>₱ {{number_format($item->loan_amount, 2) }} </td>
                                         <td class="d-flex flex-row">
                                             <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/receive/{{ $item->request_id }}/accept">Accept</a>
                                         </td>
@@ -105,7 +110,7 @@
     </div>
 @endif
 
-<div class="row pt-3">
+<div class="row mt-3">
     <div class="col">
         <div class="card">
             <h6 class="card-header">Pending Requests</h6>
@@ -152,10 +157,10 @@
     </div>
 </div>
 
-<div class="row pt-5">
+<div class="row mt-5">
         <div class="col">
             <div class="card">
-                <h6 class="card-header">Requests History[need update modal]</h6>
+                <h6 class="card-header">Requests History</h6>
                 <div class="container">
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -239,7 +244,7 @@
                 </div>
                 <div class="row">
                     <div class="col-4 text-right">
-                        <span class="">Days Payable: </span>
+                        <span class="">Months Payable: </span>
                     </div>
                     <div class="col">
                         <span class="font-weight-bold loan-dp"></span>

@@ -20,12 +20,15 @@ Auth::routes();
 Route::middleware(['guest'])->group(function () {
     Route::view('/', 'welcome', ['active' => 'welcome']);
     Route::view('/about', 'about', ['active' => 'about']);
-    Route::view('/terms', 'terms', ['active' => 'terms']);
+    // Route::view('/terms', 'terms', ['active' => 'terms']);
+    Route::post('/request', 'MemberRequestController@memberRequest');
 });
 
 Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     Route::prefix('admin')->middleware('admin-routes')->group(function () {
         Route::get('/dashboard', 'TransactionController@index')->name('admin-dashboard');
+        Route::get('{id}/accept', 'MemberRequestController@accept');
+        Route::get('{id}/decline', 'MemberRequestController@decline');
         Route::get('/adminTrans', 'TransactionController@adminTransaction')->name('admin-trans');
         Route::resource('/users', 'UsersController', [
             'names' => [
@@ -52,11 +55,11 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
 
         Route::post('/calendar/available', 'DaysOffController@available');
 
-        Route::get('/failed', 'TransactionController@failed')->name('collector-failed');
-        Route::get('/deliquent', 'TransactionController@deliquent')->name('collector-deliquent');
+        Route::get('/failed', 'TransactionController@failed')->name('admin-failed');
+        Route::get('/deliquent', 'TransactionController@deliquent')->name('admin-deliquent');
         Route::resource('/transaction','TransactionController',[
             'names'=>[
-                'index'=>'collector-dashboard',
+                'index'=>'admin-dashboard',
                 'create'=>'transaction-collect'
                 
             ]
@@ -72,6 +75,8 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         
         Route::get('/cancel/{id}/accept', 'MemberController@accept')->name('admin-cancel-accept');
         Route::get('/cancel/{id}/reject', 'MemberController@reject')->name('admin-cancel-reject');
+        Route::get('/change_pass', 'MemberController@changePassword')->name('change-password');
+        Route::post('/change_pass/change', 'MemberController@change');
     });
 
     Route::prefix('member')->group(function () {
@@ -105,14 +110,15 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'store' => 'member-process-store'
             ]
         ]);
-        Route::resource('/status', 'StatusController', [
-            'names' => [
-                'index' => 'member-status'
-            ]
-        ]);
+        // Route::resource('/status', 'StatusController', [
+        //     'names' => [
+        //         'index' => 'member-status'
+        //     ]
+        // ]);
         Route::get('/cancel', 'MemberController@cancel')->name('member-cancel');
         Route::post('/cancel/archive/', 'MemberController@update')->name('member-cancel-archive');
         Route::get('/cancel/destroy', 'MemberController@destroy')->name('member-cancel-destroy');
+        Route::get('/change_pass', 'MemberController@changePassword')->name('change-password');
     });
 
     Route::prefix('collector')->group(function () {
@@ -141,6 +147,11 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'store' => 'collector-process-store'
             ]
         ]);
+
+        Route::get('/cancel', 'MemberController@cancel')->name('member-cancel');
+        Route::post('/cancel/archive/', 'MemberController@update')->name('member-cancel-archive');
+        Route::get('/cancel/destroy', 'MemberController@destroy')->name('member-cancel-destroy');
+        Route::get('/change_pass', 'MemberController@changePassword')->name('change-password');
     });
 
 

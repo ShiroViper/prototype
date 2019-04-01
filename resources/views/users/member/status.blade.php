@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-sm col-md-10 col-xl-8">
+    <div class="col-6">
         <div class="container">
             <div class="row">
                 <div class="col-3">
@@ -35,6 +35,10 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="col-6">
+        Note: patronage refund can be claim in the end of december or the distribution of savings if your savings is beyond 1825 pesos. <br>
+        patronage refund available if their is atleast one loan. <br>
     </div>
 </div>
 @endsection

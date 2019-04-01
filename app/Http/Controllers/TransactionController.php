@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Transaction;
 use Illuminate\Http\Request;
 use DB;
 use Auth;
@@ -13,6 +12,8 @@ use App\Status;
 use App\Loan_Request;
 use App\User;
 use App\Schedule;
+use App\Transaction;
+use App\Member_Request;
 
 class TransactionController extends Controller
 {
@@ -22,58 +23,38 @@ class TransactionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function failed(){
-        $failures = DB::table('transactions')
-            ->select(DB::raw('ADDDATE(loan_request.created_at, days_payable) AS due_date') , 'member_id', 'users.lname', 'users.fname', 'collector.lname as col_lname', 'collector.fname as col_fname', 'balance' )
-            ->join('loan_request','user_id', '=', 'member_id')
-            ->join('users', 'users.id', '=', 'member_id')
-            ->join('users as collector', 'collector.id', '=', 'collector_id')
+        $failures = Transaction::select(DB::raw('ADDDATE(loan_request.created_at, days_payable) AS due_date') , 'member_id', 'users.lname', 'users.fname', 'collector.lname as col_lname', 'collector.fname as col_fname', 'balance' )->join('loan_request','user_id', '=', 'member_id')->join('users', 'users.id', '=', 'member_id')->join('users as collector', 'collector.id', '=', 'collector_id')
             ->whereIn('transactions.id', function($query){
                 $query->select(DB::raw('MAX(transactions.id)'))
                 ->from('transactions')
                 ->groupby('member_id');
-            })
-            ->where(DB::raw('ADDDATE(loan_request.created_at, days_payable)'), '<', NOW())
-            ->orderBy('transactions.created_at', 'desc')
-            ->paginate(10);
+            })->where(DB::raw('ADDDATE(loan_request.created_at, days_payable)'), '<', NOW())->orderBy('transactions.created_at', 'desc')->paginate(5);
             // No Values if transactions table empty
-
-        return view('users.collector.failed-deposit')->with('failures', $failures)->with('active', 'failed');
+        return view('users.admin.failed-deposit')->with('failures', $failures)->with('active', 'failed');
     }
     public function deliquent(){
 
-        $deliquents = DB::table('transactions')
-            ->select(DB::raw('ADDDATE(loan_request.created_at, 30) AS due_date') , 'member_id', 'users.lname', 'users.fname', 'collector.lname as col_lname', 'collector.fname as col_fname', 'balance' )
-            ->join('loan_request','user_id', '=', 'member_id')
-            ->join('users', 'users.id', '=', 'member_id')
-            ->join('users as collector', 'collector.id', '=', 'collector_id')
+        $deliquents = Transaction::select(DB::raw('ADDDATE(transactions.created_at, 30) AS due_date') , 'member_id', 'users.lname', 'users.fname', 'users.mname', 'collector.lname as col_lname', 'collector.fname as col_fname', 'collector.mname as col_mname', 'balance' )->join('loan_request','user_id', '=', 'member_id')->join('users', 'users.id', '=', 'member_id')->join('users as collector', 'collector.id', '=', 'collector_id')
             ->whereIn('transactions.id', function($query){
                 $query->select(DB::raw('MAX(transactions.id)'))
                 ->from('transactions')
                 ->groupby('member_id');
-            })
-            ->where(DB::raw('ADDDATE(loan_request.created_at, 30)'), '<', NOW())
-            ->orderBy('transactions.created_at', 'desc')
-            ->paginate(10);
+            })->where(DB::raw('ADDDATE(transactions.created_at, 30)'), '<', NOW())->orderBy('transactions.created_at', 'desc')->paginate(5);
+            // dd($deliquents);
             // No Values if transactions table empty
-
-        return view('users.collector.deliquent')->with('deliquents', $deliquents)->with('active', 'deliquent');
+        return view('users.admin.deliquent')->with('deliquents', $deliquents)->with('active', 'deliquent');
     }
     public function index()
     {
         if ( Auth::user()->user_type == 2 ) {
-            $transactions = Transaction::where('confirmed',1)->orderBy('id', 'desc')->paginate(10);
-            return view('users.admin.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
+            $transactions = Transaction::join('users', 'users.id', '=' ,'member_id')->select('trans_type', 'transactions.created_at', 'lname', 'fname', 'mname', 'amount')->where('confirmed',1)->orderBy('transactions.created_at', 'desc')->paginate(10);
+            $memberRequests = Member_Request::where('approved', null)->paginate(5);
+            return view('users.admin.dashboard')->with('transactions', $transactions)->with('active', 'dashboard')->with('memReq', $memberRequests);
         } else if ( Auth::user()->user_type == 1 ) {
-            // return dd($transactions);
-            $transactions = Transaction::where([['collector_id', Auth::user()->id], ['confirmed', 1]])->orderBy('created_at', 'DESC')->paginate(10);
+            $transactions = Transaction::join('users', 'users.id', '=', 'member_id' )->select('transactions.created_at', 'lname', 'fname', 'mname', 'trans_type', 'amount')->where([['collector_id', Auth::user()->id], ['confirmed', 1]])->orderBy('transactions.created_at', 'DESC')->paginate(10);
             return view('users.collector.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
         } else {
-            // $transactions = Transaction::where([['member_id', '=', Auth::user()->id], ['confirmed',1]])->paginate(10);
-            $transactions = DB::table('transactions')->join('users', 'users.id', '=', 'collector_id')
-                ->select('amount', 'lname', 'fname', 'mname', 'trans_type', 'transactions.created_at')
-                ->where('member_id', Auth::user()->id)->whereNotNull('confirmed')
-                ->paginate(5);
-            // dd($transactions);
+            $transactions = Transaction::join('users', 'users.id', '=', 'collector_id')->select('amount', 'lname', 'fname', 'mname', 'trans_type', 'transactions.created_at')->where('member_id', Auth::user()->id)->whereNotNull('confirmed')->orderBy('transactions.created_at')->paginate(5);
             return view('users.member.transactions')->with('transactions', $transactions)->with('active', 'transactions');
         }
         // $transactions = DB::table('transactions')
@@ -135,7 +116,7 @@ class TransactionController extends Controller
         $this->validate($request, [
             'amount' => ['required', 'numeric'],
             'type' => ['required','numeric'],
-            'id' => ['required', 'numeric'],
+            'memID' => ['required', 'numeric'],
         ], $messages);
 
     // ***************************      Start           ***************************
@@ -143,7 +124,7 @@ class TransactionController extends Controller
             // If the transaction is a DEPOSIT
 
             $transact = New Transaction;
-            $transact->member_id = $request->id;
+            $transact->member_id = $request->memID;
             $transact->collector_id = Auth::user()->id;
             $transact->trans_type = $request->type;
             $transact->amount = $request->amount;
@@ -157,7 +138,7 @@ class TransactionController extends Controller
             $sched->start_date = Carbon::now()->format('Y-m-d');
             $sched->end_date = Carbon::now()->format('Y-m-d');
             $sched->save();
-
+            
             // Get the sched_id
             $transact->sched_id = $sched->id;
             $transact->save();
@@ -165,21 +146,18 @@ class TransactionController extends Controller
             return redirect()->back()->with('success', 'Waiting to confirm from the Member');
             
         } else if ($request->type == 3) {
-
-            // 
-
             // If the transaction is a Loan Payment [ $trans_type = 3 ]
             $transact = New Transaction;    
-            $transact->member_id = $request->id;
+            $transact->member_id = $request->memID;
             $transact->trans_type = $request->type;
             $transact->token = $request->token;
 
             // Add new condition where transaction: member id is null or no existing loan payment transaction execute this code 
-            if (Transaction::where('member_id','=', $request->id)->first() == NULL) {
+            if (Transaction::where('member_id','=', $request->memID)->first() == NULL) {
 
                 // If this is the first transaction made by the member
                 $loan_request = Loan_Request::where([
-                    ['user_id', '=', $request->id],
+                    ['user_id', '=', $request->memID],
                     ['confirmed', '=', 1],
                     ['received', '=', 1],
                     ['get', '=', 0]
@@ -200,10 +178,16 @@ class TransactionController extends Controller
                 // return $transact->member_id;
                 // Member is continuing to pay his/her loan
                 $loan_request = Loan_Request::where([
-                    ['user_id', '=', $request->id],
+                    ['user_id', '=', $request->memID],
                     ['confirmed', '=', 1],
                     ['paid', '=', null]
                 ])->first();        // Get the latest update of the loan_request
+
+                // This block the incoming transaction of loan payment if member not receive the loan money
+                // if(!$loan_request->received){
+                //     return redirect()->back()->with('error', "User doesn't have any payments");
+                // }
+
                 if (is_null($loan_request)) {
                     // There are no more loan payments by the user
                     return redirect()->route('transaction-collect')->with('error', "User doesn't have any payments");
@@ -301,8 +285,7 @@ class TransactionController extends Controller
         $loan_request = Loan_Request::where('id', $transact->request_id)->first();
         $transact->confirmed = 1;
         $loan_request->balance = $loan_request->balance - $transact->amount;
-        // return 'hi';
-
+        
         // if $loan_request->balance has no value change paid status to 1
         if(!$loan_request->balance){
             $loan_request->paid = 1;
@@ -313,7 +296,8 @@ class TransactionController extends Controller
             $update_dis->save();
 
             // this code update the patronage amounr of the users
-            $update_pat = Status::where('user_id', Auth::user()->id)->first();
+            $update_pat = new Status;
+            $update_pat->user_id = Auth::user()->id;
             $update_pat->patronage_refund = $update_pat->patronage_refund + $loan_request->loan_amount * 0.06 * 0.4;
             $update_pat->save();
         }

@@ -29,7 +29,7 @@
 </head>
 <body>
     @include('inc.navbar')
-    <main class="main-content py-3 position-relative">
+    <main class="main-content py-3">
         @include('inc.messages')
         <div class="container">
             @yield('content')

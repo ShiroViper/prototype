@@ -8,9 +8,10 @@
 @section('content')
 <div class="row">
     <div class="col-sm col-md-10 col-xl-8">
-        <h3 class="header">Update {{$user->fname}}'s Information</h3>
+        <h3 class="header">Update {{$user->fname}}'s Profile</h3>
         {!! Form::open(['action' => ['ProfilesController@update', $user->id], 'method' => 'POST']) !!}
-        <div class="py-3">
+        @csrf
+        {{-- <div class="py-3">
             {{Form::hidden('_method', 'PUT')}}
             {{ Form::submit('Save Changes', ['class' => 'btn btn-success edit-button']) }}
             @csrf
@@ -21,21 +22,36 @@
             @else
                 <a class="btn btn-outline-danger ml-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/member/profile"><i class="fas fa-times fa-lg"></i></a>
             @endif
-        </div>
-        <div class="card">
-            <h6 class="card-header">User information</h6>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col">Member ID</div>
-                        <div class="col font-weight-bold">{{ $user->id }}</div>
+        </div> --}}
+        <div class="card mt-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="header">User Information</h5>
+                    <div class="px-2">
+                        @if(Auth::user()->user_type == 2)
+                            <a class="btn btn-outline-danger mr-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/admin/profile"><i class="fas fa-times fa-lg"></i></a>
+                        @elseif(Auth::user()->user_type == 1)
+                            <a class="btn btn-outline-danger mr-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/collector/profile"><i class="fas fa-times fa-lg"></i></a>
+                        @else
+                            <a class="btn btn-outline-danger mr-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/member/profile"><i class="fas fa-times fa-lg"></i></a>
+                        @endif
+                        {{Form::hidden('_method', 'PUT')}}
+                        {{ Form::submit('Save Changes', ['class' => 'btn btn-success edit-button']) }}
                     </div>
-                </li>
+                </div>
+            <ul class="list-group list-group-flush">
+                @if (Auth::user()->user_type == 2)
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col">Member ID</div>
+                            <div class="col font-weight-bold">{{ $user->id }}</div>
+                        </div>
+                    </li>
+                @endif
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col">Last Name</div>
                         <div class="col font-weight-bold">
-                            {{ Form::text('lname', $user->lname, ['class' => 'form-control']) }}
+                            {{ Form::text('lname', $user->lname, ['class' =>  $errors->has('lname') ? 'form-control is-invalid' : 'form-control']) }}
                             @if ($errors->has('lname'))
                                 <div class="invalid-feedback">{{ $errors->first('lname') }}</div>
                             @endif{{ $errors->first('email') }}
@@ -46,7 +62,7 @@
                     <div class="row">
                         <div class="col">First Name</div>
                         <div class="col font-weight-bold">
-                            {{ Form::text('fname', $user->fname, ['class' => 'form-control']) }}
+                            {{ Form::text('fname', $user->fname, ['class' =>  $errors->has('fname') ? 'form-control is-invalid' : 'form-control']) }}
                             @if ($errors->has('fname'))
                                 <div class="invalid-feedback">{{ $errors->first('fname') }}</div>
                             @endif
@@ -58,7 +74,7 @@
                         <div class="col">Middle Name</div>
                         <div class="col font-weight-bold">
                             <small class="danger">*Optional</small>
-                            {{ Form::text('mname', $user->mname, ['class' => 'form-control']) }}
+                            {{ Form::text('mname', $user->mname, ['class' =>  $errors->has('mname') ? 'form-control is-invalid' : 'form-control']) }}
                             @if ($errors->has('mname'))
                                 <div class="invalid-feedback">{{ $errors->first('mname') }}</div>
                             @endif
@@ -70,15 +86,15 @@
                     <div class="row">
                         <div class="col">Email</div>
                         <div class="col font-weight-bold">{{ $user->email }}</div>
-                        {{ Form::email('email', $user->email, ['class' => 'form-control', 'hidden']) }}
+                        {{ Form::email('email', $user->email, ['class' =>  $errors->has('email') ? 'form-control is-invalid' : 'form-control', 'hidden']) }}
                     </div>
                 </li>
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col">Contact Number</div>
                         <div class="col font-weight-bold">
-                            <small>*11 Digits</small>
-                            {{ Form::number('cell_num', $user->cell_num, ['class' => 'form-control']) }}
+                            {{-- <small>*11 Digits</small> --}}
+                            {{ Form::text('cell_num', $user->cell_num, ['class' =>  $errors->has('cell_num') ? 'form-control is-invalid' : 'form-control']) }}
                             @if ($errors->has('cell_num'))
                                 <div class="invalid-feedback">{{ $errors->first('cell_num') }}</div>
                             @endif
@@ -91,7 +107,7 @@
                     </div>
                     <div class="row">
                         <div class="col font-weight-bold">
-                            {{ Form::textarea('address', $user->address, ['class' => 'form-control', 'rows' => 3, 'placeholder' => 'Street number, Barangay, City/Town, Province, Philippines, Zip Code']) }}
+                            {{ Form::textarea('address', $user->address, ['class' =>  $errors->has('address') ? 'form-control is-invalid' : 'form-control', 'rows' => 3, 'placeholder' => 'Street number, Barangay, City/Town, Province, Philippines, Zip Code']) }}
                             @if ($errors->has('address'))
                                 <div class="invalid-feedback">{{ $errors->first('address') }}</div>
                             @endif
