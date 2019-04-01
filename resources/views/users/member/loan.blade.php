@@ -67,7 +67,8 @@
             <div class="card shadow">
                 <div class="card-body note-box border-warning border-left d-flex flex-column rounded">
                     <div class="h4">
-                        {{ $savings == null ? 'No Savings' : '₱'.$savings->savings }}
+                        {{-- {{ $savings == null ?  'No Savings' : ($savings->savings == null ? 'No Savings': '₱'.$savings->savings)  }} --}}
+                        {{ $savings && $savings->savings != null ? '₱'.$savings->savings : 'No Savings' }}
                     </div>
                     <div>Current Savings</div>
                 </div>

@@ -183,7 +183,7 @@
                                             <tr class="table-secondary font-weight-bold clickable" data-toggle="modal" data-target="#histReqModal"  data-id="{{ $request->id }}" data-cdate="{{ date('F d, Y H:i:s A', strtotime($request->created_at)) }}" data-udate="{{ date('F d, Y H:i:s A', strtotime($request->updated_at)) }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}" data-paid="{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}">
                                         @endif
                                             <td>{{ date("h:i A  F d, Y", strtotime($request->updated_at)) }}</td>
-                                            <td>₱ {{ number_format($request->loan_amount * 0.06 * $request->days_payable + $request->loan_amount, 2) }}</td>
+                                            <td>₱ {{ number_format($request->loan_amount, 2) }}</td>
                                             <td>{{ $request->days_payable }} Months</td>
                                             <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
                                             <td>{{ $request->received ? 'Yes' : 'No'}}</td>
