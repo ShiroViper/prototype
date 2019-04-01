@@ -283,6 +283,7 @@ class TransactionController extends Controller
     public function accept ($id){
         $transact = Transaction::where([['id','=', $id], ['confirmed','=', NULL]])->first();
         $loan_request = Loan_Request::where('id', $transact->request_id)->first();
+        $status = Status::where('user_id', Auth::user()->id)->first();
         $transact->confirmed = 1;
         $loan_request->balance = $loan_request->balance - $transact->amount;
         
@@ -292,16 +293,23 @@ class TransactionController extends Controller
             
             // this code update the distribution amount in id 1, the constant/default row 
             $update_dis = Status::where('user_id', 1)->first();
-            $update_dis->distribution = $update_dis->distribution + $loan_request->loan_amount * 0.06 * 0.6;
+            $update_dis->distribution = $update_dis->distribution + $loan_request->loan_amount * 0.06 * $loan_request->days_payable * 0.6;
             $update_dis->save();
 
-            // this code update the patronage amounr of the users
-            $update_pat = new Status;
-            $update_pat->user_id = Auth::user()->id;
-            $update_pat->patronage_refund = $update_pat->patronage_refund + $loan_request->loan_amount * 0.06 * 0.4;
-            $update_pat->save();
+            // this check if member status is already in DB
+            if($status){
+                // this code update the patronage amounr of the users
+                $update_pat = Status::where('user_id', Auth::user()->id)->first();
+                $update_pat->patronage_refund = $update_pat->patronage_refund + $loan_request->loan_amount * 0.06 * $loan_request->days_payable * 0.4;
+                $update_pat->save();
+            }else{
+                // else new status row
+                $update_pat = new Status;
+                $update_pat->user_id = Auth::user()->id;
+                $update_pat->patronage_refund = $update_pat->patronage_refund + $loan_request->loan_amount * 0.06 * $loan_request->days_payable * 0.4;
+                $update_pat->save();
+            }
         }
-
         $loan_request->save();
         $transact->save();
         return redirect()->back()->with('success', 'Confirmed Successfully');

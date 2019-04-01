@@ -152,6 +152,7 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::post('/cancel/archive/', 'MemberController@update')->name('member-cancel-archive');
         Route::get('/cancel/destroy', 'MemberController@destroy')->name('member-cancel-destroy');
         Route::get('/change_pass', 'MemberController@changePassword')->name('change-password');
+        Route::post('/change', 'MemberController@change')->name('change');
     });
 
 
