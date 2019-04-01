@@ -10,17 +10,20 @@ var tags = [
     "ambot"
 ];
 
-$('#memName').autocomplete({
+$('#memName, #colName').autocomplete({
     // source: members,
     source: typeof members === 'undefined' ? collectors : members,
     select: function ( event, ui ) {
         event.preventDefault();
         $("input#memName").val(ui.item.label);
         $("input#memID").val(ui.item.value);
+        $("input#colName").val(ui.item.label);
+        $("input#colID").val(ui.item.value);
     },
     focus: function(event, ui) {
         event.preventDefault();
         $("#memName").val(ui.item.label);
+        $("#colName").val(ui.item.label);
     },
     // minLength: 1,
     // create: function () {
@@ -35,7 +38,7 @@ $('#memName').autocomplete({
 });
 
 $(function () {
-    $('input#memName').keyup(function (e) {
+    $('input#memName, input#colName').keyup(function (e) {
         if (e.key === "Escape") {
             $(this).val("");
             // alert('keyup');

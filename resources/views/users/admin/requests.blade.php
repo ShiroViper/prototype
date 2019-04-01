@@ -130,7 +130,7 @@
                                     @if($request->received != 1 && $request->confirmed != 0)
                                         <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/process/{{ $request->id }}/edit">Transfer</a></td>
                                     @else
-                                        <td>N/A</td>
+                                        <td><span class="badge badge-success"><small>Money Transferred</small></span></td>
                                     @endif
                                 </tr>
                             @endforeach

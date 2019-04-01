@@ -190,16 +190,26 @@ class MemberController extends Controller
 
     public function change(Request $request)
     {
-        return dd($request->input());
         $messages = [
             'required' => 'This field is required',
         ];
-
         $this->validate($request, [
-            'password_confirmation' => ['confirmed', 'string'],
+            'old_password'=>['required', 'string'],
+            'password'=>['required', 'string', 'min:4'],
+            'password_confirmation'=>['required', 'string'],
         ], $messages);
 
-        $user = new User;
+        if(!Hash::check($request->old_password, Auth::user()->password)){
+            return redirect()->back()->with('error', 'Old password not matched');
+        }else if($request->password != $request->password_confirmation){
+            return redirect()->back()->with('error', 'New password not matched');
+        }
+
+        $user = User::where('id', Auth::user()->id)->first();
+        $user->password = bcrypt($request->password_confirmation);
+        $user->save();
+        
+        return redirect()->route('profile-index')->with('success', 'Password changed Successfully');
         
     }
 }

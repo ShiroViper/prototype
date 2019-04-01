@@ -73,7 +73,8 @@ class LoanRequestsController extends Controller
         // ================================================
 
         $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
-        return view('users.member.loan')->with('token', $token)->with('unpaid', $unpaid)->with('active', 'loan');
+        $current_savings = Status::where('user_id', Auth::user()->id)->first();
+        return view('users.member.loan')->with('token', $token)->with('unpaid', $unpaid)->with('active', 'loan')->with('savings', $current_savings);
     }
 
     /**
@@ -97,9 +98,10 @@ class LoanRequestsController extends Controller
 
         $this->validate($request, [
             'amount' => ['required', 'numeric', 'min:5'],   
-            'reason' => ['required'],
+            'reason' => ['required', 'string'],
+            'other' => ['nullable', 'sometimes'],
             'pass' => ['required'],
-            'months' => ['required','numeric', 'min:1', 'max:12']
+            'months' => ['required', 'numeric', 'min:1', 'max:12']
         ], $messages);
 
         // Loan * .06 = monthly interest * months payable = interest to pay + loan amount = loan to pay 
@@ -130,7 +132,7 @@ class LoanRequestsController extends Controller
         $comment->token = $request->token; // prevent from being spammed
         $comment->save();
 
-        return redirect()->action('LoanRequestsController@index');
+        return redirect()->action('LoanRequestsController@index')->with('success', 'Request sent');
     }
 
     /**
@@ -202,9 +204,11 @@ class LoanRequestsController extends Controller
         
         // A schedule belongs to a certain loan request (relationships)
         $sched = new Schedule;
-        // Add 1 day from the start of the loan payment to give the members a breathing room
-        $sched->start_date = Carbon::now()->addDay();
-        $sched->end_date = Carbon::now()->addDays(1 + $rq->days_payable);
+        
+        // Start it now, indicating that the member's loan request has started.
+        // but hte counting is starting after the first month is finished
+        $sched->start_date = Carbon::now();
+        $sched->end_date = $sched->start_date->copy()->addMonths($rq->days_payable+1);
         $sched->sched_type = 2;
         $sched->user_id = $rq->user_id;
         $sched->save();

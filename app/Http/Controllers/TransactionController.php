@@ -13,6 +13,7 @@ use App\Loan_Request;
 use App\User;
 use App\Schedule;
 use App\Transaction;
+use App\Member_Request;
 
 class TransactionController extends Controller
 {
@@ -47,7 +48,8 @@ class TransactionController extends Controller
     {
         if ( Auth::user()->user_type == 2 ) {
             $transactions = Transaction::join('users', 'users.id', '=' ,'member_id')->select('trans_type', 'transactions.created_at', 'lname', 'fname', 'mname', 'amount')->where('confirmed',1)->orderBy('transactions.created_at', 'desc')->paginate(10);
-            return view('users.admin.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
+            $memberRequests = Member_Request::where('approved', null)->paginate(5);
+            return view('users.admin.dashboard')->with('transactions', $transactions)->with('active', 'dashboard')->with('memReq', $memberRequests);
         } else if ( Auth::user()->user_type == 1 ) {
             $transactions = Transaction::join('users', 'users.id', '=', 'member_id' )->select('transactions.created_at', 'lname', 'fname', 'mname', 'trans_type', 'amount')->where([['collector_id', Auth::user()->id], ['confirmed', 1]])->orderBy('transactions.created_at', 'DESC')->paginate(10);
             return view('users.collector.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
@@ -144,19 +146,18 @@ class TransactionController extends Controller
             return redirect()->back()->with('success', 'Waiting to confirm from the Member');
             
         } else if ($request->type == 3) {
-            dd('ubos', $request);
             // If the transaction is a Loan Payment [ $trans_type = 3 ]
             $transact = New Transaction;    
-            $transact->member_id = $request->id;
+            $transact->member_id = $request->memID;
             $transact->trans_type = $request->type;
             $transact->token = $request->token;
 
             // Add new condition where transaction: member id is null or no existing loan payment transaction execute this code 
-            if (Transaction::where('member_id','=', $request->id)->first() == NULL) {
+            if (Transaction::where('member_id','=', $request->memID)->first() == NULL) {
 
                 // If this is the first transaction made by the member
                 $loan_request = Loan_Request::where([
-                    ['user_id', '=', $request->id],
+                    ['user_id', '=', $request->memID],
                     ['confirmed', '=', 1],
                     ['received', '=', 1],
                     ['get', '=', 0]
@@ -177,7 +178,7 @@ class TransactionController extends Controller
                 // return $transact->member_id;
                 // Member is continuing to pay his/her loan
                 $loan_request = Loan_Request::where([
-                    ['user_id', '=', $request->id],
+                    ['user_id', '=', $request->memID],
                     ['confirmed', '=', 1],
                     ['paid', '=', null]
                 ])->first();        // Get the latest update of the loan_request
@@ -282,24 +283,33 @@ class TransactionController extends Controller
     public function accept ($id){
         $transact = Transaction::where([['id','=', $id], ['confirmed','=', NULL]])->first();
         $loan_request = Loan_Request::where('id', $transact->request_id)->first();
+        $status = Status::where('user_id', Auth::user()->id)->first();
         $transact->confirmed = 1;
         $loan_request->balance = $loan_request->balance - $transact->amount;
-
+        
         // if $loan_request->balance has no value change paid status to 1
         if(!$loan_request->balance){
             $loan_request->paid = 1;
             
             // this code update the distribution amount in id 1, the constant/default row 
             $update_dis = Status::where('user_id', 1)->first();
-            $update_dis->distribution = $update_dis->distribution + $loan_request->loan_amount * 0.06 * 0.6;
+            $update_dis->distribution = $update_dis->distribution + $loan_request->loan_amount * 0.06 * $loan_request->days_payable * 0.6;
             $update_dis->save();
 
-            // this code update the patronage amounr of the users
-            $update_pat = Status::where('user_id', Auth::user()->id)->first();
-            $update_pat->patronage_refund = $update_pat->patronage_refund + $loan_request->loan_amount * 0.06 * 0.4;
-            $update_pat->save();
+            // this check if member status is already in DB
+            if($status){
+                // this code update the patronage amounr of the users
+                $update_pat = Status::where('user_id', Auth::user()->id)->first();
+                $update_pat->patronage_refund = $update_pat->patronage_refund + $loan_request->loan_amount * 0.06 * $loan_request->days_payable * 0.4;
+                $update_pat->save();
+            }else{
+                // else new status row
+                $update_pat = new Status;
+                $update_pat->user_id = Auth::user()->id;
+                $update_pat->patronage_refund = $update_pat->patronage_refund + $loan_request->loan_amount * 0.06 * $loan_request->days_payable * 0.4;
+                $update_pat->save();
+            }
         }
-
         $loan_request->save();
         $transact->save();
         return redirect()->back()->with('success', 'Confirmed Successfully');

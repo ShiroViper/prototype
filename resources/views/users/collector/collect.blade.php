@@ -61,7 +61,12 @@ for (var i = 0; i < tmp.length; i++) {
     // alert(tmp[i].id);
     item = {}
     item["value"] = tmp[i].id;
-    item["label"] = tmp[i].lname+", "+tmp[i].fname+" "+tmp[i].mname;
+    if (tmp[i].mname == null) {
+        item["label"] = tmp[i].lname+", "+tmp[i].fname;
+    } else {
+        item["label"] = tmp[i].lname+", "+tmp[i].fname+" "+tmp[i].mname;
+    }
+
     members.push(item);
 }
 // console.log(members);

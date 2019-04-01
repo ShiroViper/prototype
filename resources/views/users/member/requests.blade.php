@@ -20,7 +20,7 @@
 
 {{-- Show list of data that waiting to confirm --}}
 @if (count($pending_mem_con))
-    <div class="row pt-3">
+    <div class="row pt-3 mb-5">
         <div class="col">
             <div class="card">
                 <h6 class="card-header">Pending Confirmation</h6>
@@ -48,9 +48,9 @@
                                         {{-- <td>{{$item->trans_type}} </td> --}}
                                         <td class="d-flex flex-row">
                                             @if($item->trans_type == 1 )
-                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/d_accept">Accept</a>
+                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/d_accept">Confirm</a>
                                             @else
-                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/accept">Accept</a>
+                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/accept">Confirm</a>
                                             @endif
                                         </td>
                                     </tr>
@@ -110,7 +110,7 @@
     </div>
 @endif
 
-<div class="row pt-3">
+<div class="row mt-3">
     <div class="col">
         <div class="card">
             <h6 class="card-header">Pending Requests</h6>
@@ -157,7 +157,7 @@
     </div>
 </div>
 
-<div class="row pt-5">
+<div class="row mt-5">
         <div class="col">
             <div class="card">
                 <h6 class="card-header">Requests History</h6>
@@ -183,7 +183,7 @@
                                             <tr class="table-secondary font-weight-bold clickable" data-toggle="modal" data-target="#histReqModal"  data-id="{{ $request->id }}" data-cdate="{{ date('F d, Y H:i:s A', strtotime($request->created_at)) }}" data-udate="{{ date('F d, Y H:i:s A', strtotime($request->updated_at)) }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}" data-paid="{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}">
                                         @endif
                                             <td>{{ date("h:i A  F d, Y", strtotime($request->updated_at)) }}</td>
-                                            <td>₱ {{ number_format($request->loan_amount * 0.06 * $request->days_payable + $request->loan_amount, 2) }}</td>
+                                            <td>₱ {{ number_format($request->loan_amount, 2) }}</td>
                                             <td>{{ $request->days_payable }} Months</td>
                                             <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
                                             <td>{{ $request->received ? 'Yes' : 'No'}}</td>

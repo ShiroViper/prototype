@@ -20,14 +20,15 @@ Auth::routes();
 Route::middleware(['guest'])->group(function () {
     Route::view('/', 'welcome', ['active' => 'welcome']);
     Route::view('/about', 'about', ['active' => 'about']);
-    Route::view('/terms', 'terms', ['active' => 'terms']);
+    // Route::view('/terms', 'terms', ['active' => 'terms']);
+    Route::post('/request', 'MemberRequestController@memberRequest');
 });
-
-Route::post('/request', 'MemberRequestController@memberRequest');
 
 Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     Route::prefix('admin')->middleware('admin-routes')->group(function () {
         Route::get('/dashboard', 'TransactionController@index')->name('admin-dashboard');
+        Route::get('{id}/accept', 'MemberRequestController@accept');
+        Route::get('{id}/decline', 'MemberRequestController@decline');
         Route::get('/adminTrans', 'TransactionController@adminTransaction')->name('admin-trans');
         Route::resource('/users', 'UsersController', [
             'names' => [
@@ -151,6 +152,7 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::post('/cancel/archive/', 'MemberController@update')->name('member-cancel-archive');
         Route::get('/cancel/destroy', 'MemberController@destroy')->name('member-cancel-destroy');
         Route::get('/change_pass', 'MemberController@changePassword')->name('change-password');
+        Route::post('/change', 'MemberController@change')->name('change');
     });
 
 

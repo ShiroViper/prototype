@@ -39,12 +39,12 @@
     }
     </style>
 
-<h2 class="welcome-title text-primary mt-3">Terms and Conditions</h2>
-<div class="justify">
-    <div class="row my-4 mb-5">
+<h2 class="welcome-title mt-3 display-5">Terms and Conditions</h2>
+<div class="justify lead">
+    <div class="row mt-3 mb-5">
         <div class="col">
             <div class="terms-content">
-                <p>These terms and conditions outline the rules and regulations for the use of Alkansya's Website.</p> <br /> 
+                <p>These terms and conditions outline the rules and regulations for the use of Alkansya's Website.</p>
                 
                 <p>By accessing this website we assume you accept these terms and conditions in full. Do not continue to use Alkansya's website 
                 if you do not accept all of the terms and conditions stated on this page.</p>
@@ -62,28 +62,49 @@
             </div>
         </div>
     </div>
-    <div class="row my-4">
+    <div class="row my-5">
         <div class="col">
-            <div class="terms-title h5 text-info pb-3">License</div>
-            <div class="terms-content border-left border-info pl-5">
-                
-                <p>Unless otherwise stated, Alkansya and/or it’s licensors own the intellectual property rights for
-                    all material on Alkansya. All intellectual property rights are reserved. You may view and/or print
-                    pages from https://alkansya.com/termsAndConditions <!--Change the subdomain--> for your own personal use subject to restrictions set in these terms and conditions.</p>
-                    <p>You must not:</p>
-                    <ol>
-                        <li>Republish material from https://alkansya.com</li>
-                        <li>Sell, rent or sub-license material from https://alkansya.com</li>
-                        <li>Reproduce, duplicate or copy material from https://alkansya.com</li>
-                    </ol>
-                    <p>Redistribute content from Alkansya (unless content is specifically made for redistribution).</p>
+            <div class="terms-title h4 pb-2">Our Services</div>
+            <div class="terms-content">
+                <p>Alkansya serves as an online savings bank for the people in the organization in a particular area with an aim to provide financial assistance to those who are in need of money</p>
+                <p>Rules and Regulations:</p>
+                <ol>
+                    <li>Application for member starts on the early months every year. The registration of members depends on the <b>Administrator's</b> decision.</li>
+                    <li>The minimum loan amount depends on the member's savings.</li>
+                    <li>Loan Request <b>MUST</b> not be greater than the <b>Member's savings</b>.</li>
+                    <li>The minimum deposit per year is ₱1825, having a saving that is greater than the said amount increases that amount once the member withdraws it by the end of the year.</li>
+                    <li>Deactivating your account let's the member withdraw his/her current savings regardless of the member's number of shares and its patronage refund.</li>
+                    {{-- <mark class="text-info"><u>https://alkansya.com</u></mark>
+                    <mark class="text-info"><u>https://alkansya.com</u></mark> --}}
+                </ol>
+                <p>
+                    <h5>Note:</h5>
+                    <li>Requesting a loan that is greater than the member's savings is up to the <b>Administrator's discretion</b> in accepting the said request.</li>
+                </p>
             </div>
         </div>
     </div>
-    <div class="row my-4">
+    <div class="row my-5">
         <div class="col">
-            <div class="terms-title h5 text-success pb-3">Reservation of Rights</div>
-            <div class="terms-content border-left border-success pl-5">
+            <div class="terms-title h4 pb-2">License</div>
+            <div class="terms-content">
+                <p>Unless otherwise stated, Alkansya and/or it’s licensors own the intellectual property rights for
+                all material on Alkansya. All intellectual property rights are reserved. You may view and/or print
+                pages from https://alkansya.com/termsAndConditions <!--Change the subdomain--> for your own personal use subject to restrictions set in these terms and conditions.</p>
+                <p>You must not:</p>
+                <ol>
+                    <li>Republish material from https://alkansya.com</li>
+                    <li>Sell, rent or sub-license material from https://alkansya.com</li>
+                    <li>Reproduce, duplicate or copy material from https://alkansya.com</li>
+                </ol>
+                <p>Redistribute content from Alkansya (unless content is specifically made for redistribution).</p>
+            </div>
+        </div>
+    </div>
+    <div class="row my-5">
+        <div class="col">
+            <div class="terms-title h4 pb-2">Reservation of Rights</div>
+            <div class="terms-content">
                 <p>We reserve the right at any time and in its sole discretion to request that you remove all links or any particular
                     link to our Web site. You agree to immediately remove all links to our Web site upon such request. We also
                     reserve the right to amend these terms and conditions and its linking policy at any time. By continuing
@@ -91,10 +112,10 @@
             </div>
         </div>
     </div>
-    <div class="row my-4">
+    <div class="row my-5">
         <div class="col">
-            <div class="terms-title h5 text-warning pb-3">Content Liability</div>
-            <div class="terms-content border-left border-warning pl-5">
+            <div class="terms-title h4 pb-2">Content Liability</div>
+            <div class="terms-content">
                 <p>We shall have no responsibility or liability for any content appearing on your Web site. You agree to indemnify
                     and defend us against all claims arising out of or based upon your Website. No link(s) may appear on any
                     page on your Web site or within any context containing content or materials that may be interpreted as
@@ -103,10 +124,10 @@
             </div>
         </div>
     </div>
-    <div class="row my-4">
+    <div class="row my-5">
         <div class="col">
-            <div class="terms-title h5 text-danger pb-3">Disclaimer</div>
-            <div class="terms-content border-left border-danger pl-5">
+            <div class="terms-title h4 pb-2">Disclaimer</div>
+            <div class="terms-content">
                 <p>To the maximum extent permitted by applicable law, we exclude all representations, warranties and conditions relating to our website and the use of this website (including, without limitation, any warranties implied by law in respect of satisfactory quality, fitness for purpose and/or the use of reasonable care and skill). Nothing in this disclaimer will:</p>
                 <ol>
                     <li>limit or exclude our or your liability for death or personal injury resulting from negligence;</li>
@@ -123,10 +144,10 @@
             </div>
         </div>
     </div>
-    <div class="row my-4">
+    <div class="row my-5">
         <div class="col">
-            <div class="terms-title h5 text-info pb-3">Privacy Policy</div>
-            <div class="terms-content border-left border-info pl-5">
+            <div class="terms-title h4 pb-2">Privacy Policy</div>
+            <div class="terms-content">
                 <h5>Your privacy is critically important to us.</h5>
 
                 <p>It is Alkansya’s policy to respect your privacy regarding any information we may collect while operating our website. 
@@ -140,29 +161,29 @@
             </div>
         </div>
     </div>
-    <div class="row my-4">
+    <div class="row my-5">
         <div class="col">
-            <div class="terms-title h5 text-success pb-3">Gathering of Personally-Identifying Information</div>
-            <div class="terms-content border-left border-success pl-5">
+            <div class="terms-title h4 pb-2">Gathering of Personally-Identifying Information</div>
+            <div class="terms-content">
                 <p>Certain visitors to Alkansya’s websites choose to interact with Alkansya in ways that require Alkansya to gather personally-identifying information. 
                     The amount and type of information that Alkansya gathers depends on the nature of the interaction.</p>
             </div>
         </div>
     </div>
-    <div class="row my-4">
+    <div class="row my-5">
         <div class="col">
-            <div class="terms-title h5 text-warning pb-3">Security</div>
-            <div class="terms-content border-left border-warning pl-5">
+            <div class="terms-title h4 pb-2">Security</div>
+            <div class="terms-content">
                 <p>The security of your Personal Information is important to us, but remember that no method of transmission over the Internet, 
                     or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your Personal Information, 
                     we cannot guarantee its absolute security.</p>
             </div>
         </div>
     </div>
-    <div class="row my-4">
+    <div class="row my-5">
         <div class="col">
-            <div class="terms-title h5 text-danger pb-3">Protection of Certain Personally-Identifying Information</div>
-            <div class="terms-content border-left border-danger pl-5">
+            <div class="terms-title h4 pb-2">Protection of Certain Personally-Identifying Information</div>
+            <div class="terms-content">
                 <p>Alkansya discloses potentially personally-identifying and personally-identifying information only to those of its employees, contractors and affiliated organizations that:
                     <br>
         
@@ -181,18 +202,18 @@
             </div>
         </div>
     </div>
-    <div class="row my-4">
+    <div class="row my-5">
         <div class="col">
-            <div class="terms-title h5 text-info pb-3">Privacy Policy Changes</div>
-            <div class="terms-content border-left border-info pl-5">
+            <div class="terms-title h4 pb-2">Privacy Policy Changes</div>
+            <div class="terms-content">
                 <p>Although most changes are likely to be minor, Alkansya may change its Privacy Policy from time to time, and in Alkansya’s sole discretion. Alkansya encourages users to frequently check this page for any changes to its Privacy Policy. Your continued use of this site after any change in this Privacy Policy will constitute your acceptance of such change.</p>
             </div>
         </div>
     </div>
-    <div class="row my-4">
+    <div class="row mt-5">
         <div class="col">
-            <div class="terms-title h5 text-success pb-3">Contact Us</div>
-            <div class="terms-content border-left border-success pl-5">
+            <div class="terms-title h4 pb-2">Contact Us</div>
+            <div class="terms-content">
                 <p>If you have any questions, complaints, or comments regarding these Terms and Conditions, please contact us via email: alkansya@gmail.com or via contact number: 0936 526 4573 </p>
             </div>
         </div>

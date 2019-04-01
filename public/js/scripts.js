@@ -19,9 +19,6 @@ $('tr .no-modal').on("click", function (e) {
   e.stopPropagation();
 });
 
-
-$("#other").hide();
-
 $('#reason').change(function () {
   var selected = $('#reason').val();
   // console.log(selected);
@@ -106,6 +103,8 @@ $('#histReqModal').on('show.bs.modal', function (event) {
 });
 
 $(function () { 
+
+  $("#other").hide();
   /**
    * Spinner for calendar
    */

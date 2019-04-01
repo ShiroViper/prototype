@@ -75,7 +75,8 @@
                 {{-- ADMINISTRATOR --}}
                 @if (Auth::user()->user_type == 2)
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/admin/dashboard">Transactions</a>
+                        {{-- Formerly Transactions --}}
+                        <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/admin/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'create' ? ' active callout' : '' }}" href="/admin/users/create">

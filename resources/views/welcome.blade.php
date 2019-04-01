@@ -13,13 +13,15 @@
     <div class="container">
         <div class="main-header">
             <div class="row">
-                <div class="col">
+                <div class="col col-md col-lg">
                     <div class="text-primary">
                         <span class="welcome-title header pr-2">Welcome to</span> <span class="brand-title-header">ALKANSYA</span>
                     </div>
-                    <div class="featured-desc my-3">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut earum doloremque quas a maiores amet expedita modi, ea magnam quis eum corrupti, deleniti quia tenetur eligendi illum tempora nemo eos?</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis repudiandae hic nesciunt cum, non, recusandae quod dolor earum deleniti ipsam ipsum vitae fugiat aliquid quasi molestiae vel architecto mollitia, nobis.</p>
+                    <div class="featured-desc lead my-3">
+                        <p>
+                            Join us and be part of an organization that aims to help people in their financial needs. 
+                        </p>
+                        <p>Alkansya is a mobile responsive web application system that is used to gain access to features like account management, money transfer, deposit, loan and payment. Managed by a non-profit organization located in Compostela, Cebu, Alkanysa turns the manual procedure of sinking fund into a process that is systematic with the help of the internet.</p>
                     </div>
                     <div class="row py-3">
                         <div class="col col-sm col-md col-lg-10 col-xl-6">
@@ -33,12 +35,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="col col-md-4 featured-img">
+                <div class="col col-md-4 col-lg-6 featured-img">
                     <img src="img/img.png" alt="" class="img-fluid">
                 </div>
             </div>
         </div>
-        <div class="addon-feature pt-5">
+        {{-- <div class="addon-feature pt-5">
             <div class="row mb-3">
                 <div class="col">
                     <span class="text-info title-header">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</span>
@@ -57,7 +59,7 @@
                             </div>
                         </div>
                         <div class="row px-3">
-                             <div class="col col-md featured-desc">
+                             <div class="col col-md featured-desc lead">
                                 <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse cupiditate a quis laboriosam facilis omnis non dolorum modi aperiam.</span>
                             </div>
                         </div>
@@ -73,7 +75,7 @@
                                 <img src="img/rr.png" alt="" class="img-fluid" style="max-height: 60px;">
                             </div>
                             <div class="row px-3">
-                                <div class="col col-md featured-desc">
+                                <div class="col col-md featured-desc lead">
                                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor, facilis vitae! Aperiam numquam vitae, facilis illo, nostrum itaque provident maiores.</p>
                                 </div>
                             </div>
@@ -90,7 +92,7 @@
                                 <img src="img/tu.png" alt="" class="img-fluid" style="max-height: 60px;">
                             </div>
                             <div class="row px-3">
-                                <div class="col col-md featured-desc">
+                                <div class="col col-md featured-desc lead">
                                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam odio esse cumque earum minima quidem qui doloremque hic possimus porro.</p>
                                 </div>
                             </div>
@@ -98,7 +100,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 </div>
   
@@ -113,69 +115,90 @@
                 </button>
             </div>
             <div class="modal-body">
-                <h6>Please enter your credentials</h6>
-                {!!Form::open(['action'=> 'MemberRequestController@memberRequest', 'method'=>'POST']) !!}
-                    @csrf
+                <div class="container">
+                    <h6>Please enter your credentials</h6>
+                    {!!Form::open(['action'=> 'MemberRequestController@memberRequest', 'method'=>'POST']) !!}
+                        @csrf
 
-                    <div class="form-group">
-                        {{ Form::label('lname', 'Last Name') }}
-                        {{ Form::text('lname', '', ['class' => $errors->has('lname') ? 'form-control is-invalid' : 'form-control']) }}
-                        @if ($errors->has('lname'))
-                            <div class="invalid-feedback">{{ $errors->first('lname') }}</div>
-                        @endif
-                    </div>
+                        <div class="form-group">
+                            {{ Form::label('lname', 'Last Name') }}
+                            {{ Form::text('lname', '', ['class' => $errors->has('lname') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('lname'))
+                                <div class="invalid-feedback">{{ $errors->first('lname') }}</div>
+                            @endif
+                        </div>
 
-                    <div class="form-group">
-                        {{ Form::label('fname', 'First Name') }}
-                        {{ Form::text('fname', '', ['class' => $errors->has('fname') ? 'form-control is-invalid' : 'form-control']) }}
-                        @if ($errors->has('fname'))
-                            <div class="invalid-feedback">{{ $errors->first('fname') }}</div>
-                        @endif
-                    </div>
+                        <div class="form-group">
+                            {{ Form::label('fname', 'First Name') }}
+                            {{ Form::text('fname', '', ['class' => $errors->has('fname') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('fname'))
+                                <div class="invalid-feedback">{{ $errors->first('fname') }}</div>
+                            @endif
+                        </div>
 
-                    <div class="form-group">
-                        {{ Form::label('mname', 'Middle Name') }}
-                        {{ Form::text('mname', '', ['class' => $errors->has('mname') ? 'form-control is-invalid' : 'form-control']) }}
-                        @if ($errors->has('mname'))
-                            <div class="invalid-feedback">{{ $errors->first('mname') }}</div>
-                        @endif
-                    </div>
+                        <div class="form-group">
+                            {{ Form::label('mname', 'Middle Name') }}
+                            <small class="text-muted">(Optional)</small>
+                            {{ Form::text('mname', '', ['class' => $errors->has('mname') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('mname'))
+                                <div class="invalid-feedback">{{ $errors->first('mname') }}</div>
+                            @endif
+                        </div>
 
-                    <div class="form-group">
-                        {{ Form::label('email', 'Email') }}
-                        {{ Form::email('email', '', ['class' => $errors->has('email') ? 'form-control is-invalid' : 'form-control']) }}
-                        @if ($errors->has('email'))
-                            <div class="invalid-feedback">{{ $errors->first('email') }}</div>
-                        @endif
-                    </div>
-                    <small class="text-muted"><b>Note</b>: Please wait for our administrator to validate your request.</small>
-                    <div class="pt-3">
-                        {{ Form::submit('Submit', ['class' => 'btn btn-primary btn-block mb-3']) }}
-                    </div>
-                {!!Form::close()!!}
-                {{-- <form method="POST" action="/request" >  
-                    <div class="form-group">
-                        <label for="">Last Name</label>
-                        <input type="text" class="form-control" name="lname">
-                    </div>
-                    <div class="form-group">
-                        <label for="">First Name</label>
-                        <input type="text" class="form-control" name="fname">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Middle Name</label>
-                        <small>*Optional</small>
-                        <input type="text" class="form-control" name="mname">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Email Address</label>
-                        <input type="email" class="form-control" name="email">
-                    </div>
-                    <small class="text-muted"><b>Note</b>: Please wait for our administrator to validate your request.</small>
-                    <div class="py-3">
-                        <button type="submit" class="btn btn-primary btn-block">Submit</button>
-                    </div>
-                </form> --}}
+                        <div class="form-group">
+                            {{ Form::label('cell_num', 'Contact Number') }}
+                            {{ Form::text('cell_num', '', ['class' => $errors->has('cell_num') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('cell_num'))
+                                <div class="invalid-feedback">{{ $errors->first('cell_num') }}</div>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            {{ Form::label('email', 'Email') }}
+                            {{ Form::email('email', '', ['class' => $errors->has('email') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('email'))
+                                <div class="invalid-feedback">{{ $errors->first('email') }}</div>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            {{ Form::label('address', 'Complete Address', ['class' => 'mb-0']) }}
+                            <div class="mb-2"><small class="text-muted">Street number, Barangay, City/Town, Province, Philippines, Zip Code</small></div>
+                            {{ Form::textarea('address', '', ['class' => $errors->has('address') ? 'form-control is-invalid' : 'form-control', 'rows' => 2]) }}
+                            @if ($errors->has('address'))
+                                <div class="invalid-feedback">{{ $errors->first('address') }}</div>
+                            @endif
+                        </div>
+
+                        <small class="text-muted"><b>Note</b>: Please wait for our administrator to verify your request.</small>
+                        <div class="pt-3">
+                            {{ Form::submit('Submit', ['class' => 'btn btn-primary btn-block mb-3']) }}
+                        </div>
+                    {!!Form::close()!!}
+                    {{-- <form method="POST" action="/request" >  
+                        <div class="form-group">
+                            <label for="">Last Name</label>
+                            <input type="text" class="form-control" name="lname">
+                        </div>
+                        <div class="form-group">
+                            <label for="">First Name</label>
+                            <input type="text" class="form-control" name="fname">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Middle Name</label>
+                            <small>*Optional</small>
+                            <input type="text" class="form-control" name="mname">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Email Address</label>
+                            <input type="email" class="form-control" name="email">
+                        </div>
+                        <small class="text-muted"><b>Note</b>: Please wait for our administrator to validate your request.</small>
+                        <div class="py-3">
+                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                        </div>
+                    </form> --}}
+                </div>
             </div>
         </div>
     </div>
