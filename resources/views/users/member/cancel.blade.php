@@ -27,7 +27,7 @@
             <div class="lead">
                 <p>Once your account is approved for cancellation, you can become a member once again after the current year ends.</p>
                 <p><b class="h5">Patronage refund</b> can be claimed if your <b class="h5">savings</b> has reached the minimun ₱1825.</p>
-                <p><b class="h5">Savings</b> can be claim without deduction.</p>
+                <p><b class="h5">Savings</b> can be claimed without deduction.</p>
                 <p>Cancellation of account is available when their are no current loan.</p>
                 <p>This request is subject to change</p>
             </div>           

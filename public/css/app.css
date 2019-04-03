@@ -16339,6 +16339,38 @@ readers do not read off random characters that represent icons */
   font-weight: 400;
 }
 
+.bg-highblue {
+  background: #bce8f1 !important;
+}
+
+.bg-cyan {
+  background: #17a2b8 !important;
+}
+
+.border-cyan {
+  border-color: #169eb3 !important;
+}
+
+.bg-orange {
+  background: #fd7e14 !important;
+}
+
+.bg-green {
+  background: #28a745 !important;
+}
+
+.bg-teal {
+  background: #20c997 !important;
+}
+
+.bg-purple {
+  background: #6f42c1 !important;
+}
+
+.bg-pink {
+  background: #e83e8c !important;
+}
+
 .progress-bar-vertical {
   width: 20px;
   min-height: 238px;

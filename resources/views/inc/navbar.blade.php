@@ -143,10 +143,10 @@
                                 <a class="nav-link{{ $active == 'transactions' ? ' active callout' : '' }}" href="/member/transactions">Transactions</a>
                             </li>
                             <li class="nav-item px-3 h6">
-                                <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/requests/create">Loan</a>
+                                <a class="nav-link{{ $active == 'loan' ? ' active callout' : '' }}" href="/member/requests/create">Request a Loan</a>
                             </li>
                             <li class="nav-item px-3 h6">
-                                <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/member/requests">Requests</a>
+                                <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/member/requests">Loan Requests</a>
                             </li>
                             {{-- <li class="nav-item px-3 h6">
                                 <a class="nav-link{{ $active == 'status' ? ' active callout' : '' }}" href="/member/status">Status</a>

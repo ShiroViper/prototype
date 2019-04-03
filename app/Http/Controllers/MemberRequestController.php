@@ -24,7 +24,7 @@ class MemberRequestController extends Controller
             'lname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'mname' => ['nullable', 'string', 'regex:/^[\pL\s\-]+$/u'],
-            'email' => ['required', 'string', 'unique:users', 'email'],
+            'email' => ['required', 'string', 'unique:member__requests,email', 'unique:users', 'email'],
             'cell_num' => ['required', 'string', 'numeric', 'unique:member__requests,contact', 'unique:users', 'digits:11'],
             'address' => ['required', 'string']
         ], $messages);

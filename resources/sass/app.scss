@@ -12,6 +12,9 @@
 
 // Custom CSS
 
+// Utilities
+@import 'utilities/colors.scss';
+
 // Components
 @import 'components/verticalbar.scss';
 @import 'components/content.scss';
@@ -30,6 +33,7 @@
 @import 'overrides/typography.scss';
 @import 'overrides/variables.scss';
 @import 'overrides/table';
+
 
 
 

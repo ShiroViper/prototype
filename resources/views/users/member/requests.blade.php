@@ -1,25 +1,12 @@
 @extends('layouts.app')
 
 @section('title')
-<title>Alkansya - Requests</title>
+<title>Alkansya - Loan Requests</title>
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col">
-            <h3 class="header float-left">Requests</h3>
-            <div class="badge badge-pill badge-primary ml-3 px-2">Compound Interest: 6%</div>
-            {{-- <p class="float-right">* Compound Interest: 6%</p> --}}
-        @if(!$unpaid)
-            <div class="float-right">
-                <a class="badge badge-pill badge-success shadow border py-2" role="button" data-toggle="tooltip" data-placement="top" title="Add Loan Request" href="/member/requests/create"><span class="h5"><i class="fas fa-plus fa-lg"></i></a>
-            </div>
-        @endif
-    </div>
-</div>
-
 {{-- Show list of data that waiting to confirm --}}
-@if (count($pending_mem_con))
+{{-- @if (count($pending_mem_con)) --}}
     <div class="row pt-3 mb-5">
         <div class="col">
             <div class="card">
@@ -65,10 +52,10 @@
             </div>
         </div>
     </div>
-@endif
+{{-- @endif --}}
 
-@if (count($pending_mem_receive) > 0)
-    <div class="row pt-3">
+{{-- @if (count($pending_mem_receive) > 0) --}}
+    <div class="row pt-3 my-5">
         <div class="col">
             <div class="card">
                 <h6 class="card-header">Pending Money</h6>
@@ -108,7 +95,20 @@
             </div>
         </div>
     </div>
-@endif
+{{-- @endif --}}
+
+<div class="row">
+    <div class="col">
+            <h3 class="header float-left">Pending Requests</h3>
+            <div class="badge badge-pill badge-primary ml-3 px-2">Compound Interest: 6%</div>
+            {{-- <p class="float-right">* Compound Interest: 6%</p> --}}
+        @if(!$unpaid)
+            <div class="float-right">
+                <a class="badge badge-pill badge-success shadow border py-2" role="button" data-toggle="tooltip" data-placement="top" title="Add Loan Request" href="/member/requests/create"><span class="h5"><i class="fas fa-plus fa-lg"></i></a>
+            </div>
+        @endif
+    </div>
+</div>
 
 <div class="row mt-3">
     <div class="col">
@@ -159,6 +159,7 @@
 
 <div class="row mt-5">
         <div class="col">
+            <h3 class="header mb-3">Request History</h3>
             <div class="card">
                 <h6 class="card-header">Requests History</h6>
                 <div class="container">

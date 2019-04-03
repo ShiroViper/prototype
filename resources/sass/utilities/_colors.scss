@@ -1,0 +1,37 @@
+$current: #F7DE7C;
+$paid: #00CC66;
+$loan: #F87930;
+$select: #124A8E;
+$highlighted: #bce8f1;
+
+.bg-highblue {
+    background: $highlighted !important;
+}
+
+.bg-cyan {
+    background: $cyan !important;
+}
+
+.border-cyan {
+    border-color: darken($cyan, 1%) !important;
+}
+
+.bg-orange {
+    background: $orange !important;
+}
+
+.bg-green {
+    background: $green !important;
+}
+
+.bg-teal {
+    background: $teal !important;
+}
+
+.bg-purple {
+    background: $purple !important;
+}
+
+.bg-pink {
+    background: $pink !important;
+}

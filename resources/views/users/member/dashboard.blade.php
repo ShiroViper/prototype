@@ -8,8 +8,14 @@
     @push('scripts')
         <script src="{{ asset('js/scripts.js') }}"></script>
     @endpush
-    @if (is_null($user))
-        <p class="header display-5 mt-3">My Account</p>
+    @if (is_null($user))   
+        <span class="header h6 py-3">Notifications</span>
+    
+        <div class="bg-highblue d-flex flex-row align-items-center px-3 py-2 my-2">
+            <span>₱100.00 Money received from Collector, Collector</span><small class="ml-auto"><a href="transactions">View Details</a></small>
+        </div>
+        <hr>
+        <p class="header display-5 pt-3">My Account</p>
         {{-- <div class="row">
             <div class="col-sm p-2">
                 <div class="card shadow-sm" style="max-width: 18rem">
@@ -31,7 +37,7 @@
         <div class="card-deck pb-5">
             <div class="card shadow-sm">
                 <div class="card-body d-flex justify-content-center align-items-center flex-column">
-                    <div class="border rounded-circle p-2 bg-light"><i class="text-primary fas fa-piggy-bank fa-lg"></i></div>
+                    <div class="border border-primary rounded-circle p-2 bg-light"><i class="text-primary fas fa-piggy-bank fa-lg"></i></div>
                     <h5 class="pt-2 header display-5 font-weight-bold text-center">
                         {{ $savings && $savings->savings != null ? '₱ '.$savings->savings : '₱ 0.00' }}
                     </h5>
@@ -40,7 +46,7 @@
             </div>
             <div class="card shadow-sm">
                 <div class="card-body d-flex justify-content-center align-items-center flex-column">
-                    <div class="border rounded-circle p-2 bg-light"><i class="text-success fas fa-wallet fa-lg"></i></div>
+                    <div class="border border-success rounded-circle p-2 bg-light"><i class="text-success fas fa-wallet fa-lg"></i></div>
                     <h5 class="pt-2 header display-5 font-weight-bold text-center">
                         {{ $patronage && $patronage->patronage_refund != null ? '₱ '.$patronage->patronage_refund : '₱ 0.00' }}
                     </h5>
@@ -49,7 +55,7 @@
             </div>
             <div class="card shadow-sm">
                 <div class="card-body d-flex justify-content-center align-items-center flex-column">
-                    <div class="border rounded-circle p-2 bg-light"><i class="text-warning fas fa-coins fa-lg"></i></div>
+                    <div class="border border-warning rounded-circle p-2 bg-light"><i class="text-warning fas fa-coins fa-lg"></i></div>
                     <h5 class="pt-2 header display-5 font-weight-bold text-center">
                         {{ $loan ? '₱'.$loan->balance : '₱ 0.00' }}
                     </h5>
