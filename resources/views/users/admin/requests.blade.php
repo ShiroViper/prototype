@@ -121,7 +121,7 @@
                                 <tr >
                                     <td>{{ date("h:i A  F d, Y", strtotime($request->updated_at)) }}</td>
                                     <td>{{$request->user->lname}}, {{$request->user->fname}} {{$request->user->mname}} </td>
-                                    <td>₱ {{ number_format($request->loan_amount  * 0.06 * $request->days_payable + $request->loan_amount, 2) }}</td>
+                                    <td>₱ {{ number_format($request->loan_amount,2 ) }}</td>
                                     <td>{{ $request->days_payable }} Months</td>
                                     <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
                                     <td>{{ $request->received ? 'Yes' : ($request->confirmed ? 'No': 'N/A')}} </td>  

@@ -12,6 +12,13 @@
 
 @if ($account_status)
     <div class="col-6">
+        <div class="row">
+            <div class="col">
+                <div class="py-3">
+                    <a class="btn btn-light border" role="button" href="/collector/profile"><i class="fas fa-arrow-left"></i>  Back </a>
+                </div>
+            </div>
+        </div>
         @if($account_status->confirmed == NULL)
         <h2 class="display-5 header">Requires Confirmation from the administration</h2>
         <p>If you dont request this cancellation of account click <a href="/member/cancel/destroy"> Revoke Cancellation Request </a> . </p>

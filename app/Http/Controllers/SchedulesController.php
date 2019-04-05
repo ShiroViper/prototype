@@ -144,6 +144,7 @@ class SchedulesController extends Controller
                             break;
                         }
                     }
+                    // dd($collector->lname ? 'naa ko dinhi' : 'wala lagi  ');
                 //     $('html, body').animate({
                 //     scrollTop: $("#div1").offset().top
                 // }, 2000);
@@ -439,6 +440,7 @@ class SchedulesController extends Controller
                 ])->first()) {
                 return view('users.member.dashboard')->with('user', $user)->with('active', 'dashboard');
             } else {
+
                 // return view('users.member.status')->with('loan', $loan)->with('savings', $savings)->with('patronage', $patronage)->with('active', 'status');
                 return view('users.member.dashboard')->with(compact('calendar_details'))->with('active', 'dashboard')->with('user', null)->with('loan', $loan)->with('savings', $savings)->with('patronage', $patronage);
             }

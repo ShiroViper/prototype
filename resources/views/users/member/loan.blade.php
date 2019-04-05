@@ -18,7 +18,7 @@
 
             {{ Form::label('amount', 'Loan Amount', ['class' => 'h6']) }}
             <div class="form-group">
-                    {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'placeholder' => 'Enter amount', 'min'=>'5', 'step' => '.01', 'required']) }}
+                    {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'placeholder' => 'Enter amount', 'min'=>'200', 'step' => '.01', 'required']) }}
                 @if ($errors->has('amount'))
                     <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
                 @endif
@@ -34,18 +34,18 @@
 
             {{ Form::label('reason', 'Reason', ['class' => 'h6']) }}
             <div class="form-group">
-                <select name="reason" id="reason" class="form-control" required>
+                <select name="reason" id="reason" class="form-control {{$errors->has('reason') ? ' is-invalid s' : '' }} " required>
                     <option selected hidden>-- Select Reason --</option>
                     <option value="For Personal Use">For Personal Use</option>
                     <option value="For Emergency Use">For Emergency Use</option>
                     <option value="3">Other</option>
                 </select>
                 <textarea name="other" id="other" rows="1" class="form-control mt-2" placeholder="Other (please specify)"></textarea>
-            </div>
-            {{-- {{ Form::textarea('reason', '', ['class' => $errors->has('reason') ? 'form-control is-invalid' : 'form-control', 'rows' => 1, 'required', 'placeholder' => 'Other, please specify']) }}
+            </div>            
             @if ($errors->has('reason'))
-                <div class="invalid-feedback">{{ $errors->first('reason') }}</div>
-            @endif --}}
+                {{-- <div class="invalid-feedback">Please Select</div> --}}
+                Please select <br> 
+            @endif
             
             <label for="pass"> Password</label>
             <div class="form-group">
@@ -73,6 +73,9 @@
                     <div>Current Savings</div>
                 </div>
             </div>
+            Note: <br>
+            200 minimum loan amount. <br>
+            personal and other reason is equal to savings while emergency reason is acceptable to loan above the savings but it's the admin decision wheter to accept or decline the loan request. <br>
         </div>
     </div>
 @else

@@ -115,7 +115,7 @@ class MemberController extends Controller
         // $update_archive->inactive = 1;
         // $update_archive->save();
 
-        return redirect()->route('member-cancel')->with('success', 'Requires confirmation from the administration');
+        return redirect()->back()->with('success', 'Requires confirmation from the administration');
 
     }
 
@@ -136,7 +136,7 @@ class MemberController extends Controller
 
         $destroy->delete();
 
-        return redirect()->route('member-cancel')->with('success', 'Successfully Revoked cancellation of account requests');
+        return redirect()->back()->with('success', 'Successfully Revoked cancellation of account requests');
     }
 
     public function cancel(){

@@ -119,19 +119,20 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::post('/cancel/archive/', 'MemberController@update')->name('member-cancel-archive');
         Route::get('/cancel/destroy', 'MemberController@destroy')->name('member-cancel-destroy');
         Route::get('/change_pass', 'MemberController@changePassword')->name('change-password');
+
     });
 
     Route::prefix('collector')->group(function () {
         Route::get('/failed', 'TransactionController@failed')->name('collector-failed');
-        Route::get('/deliquent', 'TransactionController@deliquent')->name('collector-deliquent');
-        
+        Route::get('/deliquent', 'TransactionController@deliquent')->name('collector-deliquent');        
+        Route::get('/member_searched', ['as'=>'search', 'uses'=>'TransactionController@partial_store']);
+        Route::get('/transaction', 'TransactionController@index')->name('collector-dashboard');
         Route::resource('/transaction','TransactionController',[
             'names'=>[
-                // 'index'=>'collector-dashboard',
+                'index'=>'collector-dashboard',
                 'create'=>'transaction-collect' 
             ]
         ]);
-        Route::get('/transaction', 'TransactionController@index')->name('collector-dashboard');
         Route::resource('/profile', 'ProfilesController',[
             'names' => [
                 'index' => 'profile-index',
@@ -148,9 +149,9 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
             ]
         ]);
 
-        Route::get('/cancel', 'MemberController@cancel')->name('member-cancel');
-        Route::post('/cancel/archive/', 'MemberController@update')->name('member-cancel-archive');
-        Route::get('/cancel/destroy', 'MemberController@destroy')->name('member-cancel-destroy');
+        Route::get('/cancel', 'MemberController@cancel')->name('collector-cancel');
+        Route::post('/cancel/archive/', 'MemberController@update')->name('collector-cancel-archive');
+        Route::get('/cancel/destroy', 'MemberController@destroy')->name('collector-cancel-destroy');
         Route::get('/change_pass', 'MemberController@changePassword')->name('change-password');
         Route::post('/change', 'MemberController@change')->name('change');
     });

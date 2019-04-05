@@ -97,6 +97,9 @@
                     {{ Form::label('date', 'Date', ['class' => 'h6']) }}
                     {{ Form::date('date',\Carbon\Carbon::now(), ['class' => 'form-control', 'readonly']) }}
                 </div>
+                {{-- Token --}}
+                @csrf
+                {{Form::hidden('token', $token)}}
                 <div class="form-group">
                     {{ Form::label('colName', 'Collector Name', ['class' => 'h6']) }}
                     {{ Form::text('colName', '', ['class' => $errors->has('colName') ? 'form-control is-invalid' : 'form-control']) }}

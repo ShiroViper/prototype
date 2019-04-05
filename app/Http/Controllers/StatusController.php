@@ -23,8 +23,6 @@ class StatusController extends Controller
                 $patronage = Status::where('user_id', Auth::user()->id)->first();
                 $loan = Loan_Request::where([['user_id',Auth::user()->id], ['confirmed', 1], ['received',1], ['paid', NULL]])->first();
 
-                // dd($savings, $patronage, $loan);
-
                 return view('users.member.status')->with('loan', $loan)->with('savings', $savings)->with('patronage', $patronage)->with('active', 'status');
             break;
 

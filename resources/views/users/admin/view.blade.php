@@ -41,12 +41,14 @@
                         <div class="col font-weight-bold">{{ $user->fname }}</div>
                     </div>
                 </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col col-sm">Middle Name</div>
-                        <div class="col font-weight-bold">{{ $user->mname }}</div>
-                    </div>
-                </li>
+                @if($user->mname)
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col col-sm">Middle Name</div>
+                            <div class="col font-weight-bold">{{ $user->mname }}</div>
+                        </div>
+                    </li>
+                @endif
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col col-sm">Email</div>

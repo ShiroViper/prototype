@@ -90,6 +90,30 @@ class LoanRequestsController extends Controller
             return redirect()->action('LoanRequestsController@index');
         }
 
+        //This check every end year
+        $months = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ,12);
+        $get_end_month = array_slice($months, date('n'));
+        $count_end_month = count($get_end_month) - 1;
+
+        $status = Status::where('user_id', Auth::user()->id)->first();
+        // check if member savings is null or less than 200 
+        if($status->savings == null || $status->savings < 200){
+            // check if reason is not emergency loan
+            if($request->reason != 'For Emergency Use'){
+                dd($request->reason);
+                return redirect()->back()->with('error', 'Request loan available atleast ₱ 200 savings ')->withInput(Input::except('pass'));
+            }
+        // check if amount is greater than current savings and reason is not emergency loan
+        }else if($request->amount > $status->savings && $request->reason != 'For Emergency Use'){
+            return redirect()->back()->with('error', 'Request loan above the savings not accepted')->withInput(Input::except('pass'));
+        // check if months payable is greater than the current end year
+        }else if($request->months > $count_end_month ){
+            return redirect()->back()->with('error', 'Months payable should not beyond the current end year')->withInput(Input::except('pass'));
+        // check if password is not match
+        }else if(!Hash::check($request->pass, Auth::user()->password)){
+            return redirect()->back()->with('error', 'Wrong Password')->withInput(Input::except('pass'));
+        }
+        
         $messages = [
             'required' => 'This field is required',
             'alpha' => 'Please use only alphabetic characters',
@@ -97,7 +121,7 @@ class LoanRequestsController extends Controller
         ];
 
         $this->validate($request, [
-            'amount' => ['required', 'numeric', 'min:5'],   
+            'amount' => ['required', 'numeric', 'min:200'],   
             'reason' => ['required', 'string'],
             'other' => ['nullable', 'sometimes'],
             'pass' => ['required'],
@@ -108,17 +132,14 @@ class LoanRequestsController extends Controller
         // example: 1500 * 0.06 = 90 * 4 = 360 + 1500 = 1860
         $loan_to_pay = $request->amount * 0.06 * $request->months + $request->amount;
 
-        // check if password is not match
-        if(!Hash::check($request->pass, Auth::user()->password)){
-            return redirect()->back()->with('error', 'Wrong Password')->withInput(Input::except('pass'));
-        }
-
         $lr = new Loan_Request;
         $lr->loan_amount = $request->input('amount');
         $lr->days_payable = $request->input('months');
         $lr->balance = $loan_to_pay;
         $lr->get = 0;
         $lr->user_id = Auth::user()->id;
+        $lr->per_month_amount = $loan_to_pay / $lr->days_payable;
+        $lr->per_month_updated_at = strtotime(NOW().'+ 1 months');
 
         // sched_id is NULL for now since it still hasn't been approved
         $lr->sched_id = null;
