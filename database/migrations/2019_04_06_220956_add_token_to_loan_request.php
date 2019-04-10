@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPerMonthAmountPerMonthDateToLoanRequestTable extends Migration
+class AddTokenToLoanRequest extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,7 @@ class AddPerMonthAmountPerMonthDateToLoanRequestTable extends Migration
     public function up()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            $table->decimal('per_month_amount', 10, 2)->nullable()->after('balance');
-            $table->string('per_month_from')->nullable()->after('per_month_amount');
-            $table->string('per_month_to')->nullable()->after('per_month_from');
+            $table->string('token')->nullable()->after('per_month_to');
         });
     }
 
@@ -28,9 +26,7 @@ class AddPerMonthAmountPerMonthDateToLoanRequestTable extends Migration
     public function down()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            $table->dropcolumn('per_month_amount');
-            $table->dropcolumn('per_month_from');
-            $table->dropcolumn('per_month_to');
+            $table->dropColumn('per_month_to');
         });
     }
 }

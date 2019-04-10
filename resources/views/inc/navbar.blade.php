@@ -36,7 +36,7 @@
         <div class="current-user-container ml-auto">
             <div class="dropdown">
                 <a class="h6 text-decoration-none text-capitalize dropdown-toggle" href="#" role="button" id="currentUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                   {{ Auth::user()->lname }}, {{ Auth::user()->fname }} 
+                   {{ Auth::user()->lname }}, {{ Auth::user()->fname }} {{Auth::user()->mname}} 
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="currentUser">
                     {{-- <a href="/admin/terms" class="dropdown-item">Terms and Conditions</a> --}}
@@ -99,17 +99,11 @@
                             @endif
                         </a>
                     </li>
-                    {{-- <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'process' ? ' active callout' : '' }}" href="/admin/process/create">Loan Process</a>
-                    </li> --}}
                     <li class="nav-item px-3 h6">
                         <a class="nav-link {{$active == 'deliquent' ? 'active callout' : ''}} " href="/admin/deliquent">Deliquent</a>
                     </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link" href="#">Receipts</a>
-                    </li>
                     {{-- <li class="nav-item px-3 h6">
-                        <a class="nav-link" href="/admin/failed">Failed Deposit</a>
+                        <a class="nav-link{{ $active == 'status' ? ' active callout' : '' }}" href="/admin/status">Status</a>
                     </li> --}}
                     
                 {{-- COLLECTOR --}}
@@ -126,11 +120,8 @@
                     <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'request' ? ' active callout' : '' }}" href="/collector/process">Requests</a>
                     </li>
-                    {{-- <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'failed' ? ' active callout' : '' }}" href="/collector/failed">Failed Deposit</a>
-                    </li> --}}
                     <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'receipt' ? ' active callout' : '' }}" href="#">Receipts</a>
+                        <a class="nav-link{{ $active == 'status' ? ' active callout' : '' }}" href="/collector/status">Status</a>
                     </li>
                 {{-- MEMBER --}}
                 @else
@@ -148,12 +139,6 @@
                             <li class="nav-item px-3 h6">
                                 <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/member/requests">Requests</a>
                             </li>
-                            {{-- <li class="nav-item px-3 h6">
-                                <a class="nav-link{{ $active == 'status' ? ' active callout' : '' }}" href="/member/status">Status</a>
-                            </li>
-                            <li class="nav-item px-3 h6">
-                                <a class="nav-link{{ $active == 'cancel' ? ' active callout' : '' }}" href="/member/cancel">Cancel</a>
-                            </li> --}}
                         @endif
                     @endif
                 @endif

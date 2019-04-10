@@ -78,11 +78,13 @@
                     </div>
                 </li>
                 @if($loan_request)
-                    @if($loan_request->per_month_amount)
+                {{-- {{dd(date('F d, Y', strtotime($loan_request->per_month_from)))}} --}}
+                    @if($loan_request->per_month_amount <= 0)
+                    {{-- {{dd($loan_request)}} --}}
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col col-md col-lg-6">
-                                    <span>Over Paid <br> From {{$loan_request ? (  $loan_request->per_month_date ? date('F d, Y', strtotime($loan_request->per_month_date)) : '' ) : ''}} <br> To {{$loan_request ? (  $loan_request->per_month_date ? date('F d, Y', strtotime($loan_request->per_month_date. '+ 1 months')) : '' ) : ''}} </span>
+                                    <span>Over Paid <br> From {{$loan_request ? (  $loan_request->per_month_from ? date('F d, Y', $loan_request->per_month_from) : '' ) : ''}} <br> To {{$loan_request ? (  $loan_request->per_month_to ? date('F d, Y', $loan_request->per_month_to) : '' ) : ''}} </span>
                                 </div>
                                 <div class="col col-md col-lg">
                                     <h6>₱ {{abs($loan_request->per_month_amount)}}.00 </h6>
@@ -93,7 +95,7 @@
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col col-md col-lg-6">
-                                    <span>Loan Balance <br> From {{$loan_request ? (  $loan_request->per_month_date ? date('F d, Y', strtotime($loan_request->per_month_date)) : '' ) : ''}} <br> To {{$loan_request ? (  $loan_request->per_month_date ? date('F d, Y', strtotime($loan_request->per_month_date. '+ 1 months')) : '' ) : ''}} </span>
+                                    <span>Loan Balance <br> From {{$loan_request ? (  $loan_request->per_month_amount ? date('F d, Y', $loan_request->per_month_from) : '' ) : ''}} <br> To {{$loan_request ? (  $loan_request->per_month_to ? date('F d, Y', $loan_request->per_month_to) : '' ) : ''}} </span>
                                 </div>
                                 <div class="col col-md col-lg">
                                     <h6> {{ $loan_request ? ($loan_request->per_month_amount >= 0 ? '₱ '. $loan_request->per_month_amount  : '₱ 0.00') : '₱ 0.00' }}</h6>

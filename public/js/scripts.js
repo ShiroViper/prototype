@@ -130,3 +130,9 @@ $(function () {
   //   window.history.back();
   // });
 });
+
+
+// for tooltip
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});

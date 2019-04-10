@@ -59,8 +59,8 @@
                     </h5>
                     {{-- <small >Current Loan Balance For This Month</small> --}}
                     <small> Click Here</small>
-                    <small> {{$loan ? ($loan->per_month_amount <=0 ? 'Over Paid' : '' ) : 'Current Loan Balance'}} </small> 
-                    <small> From {{$loan ? (  $loan->per_month_date ? date('F d, Y', strtotime($loan->per_month_date)) : '' ) : ''}} <br> To {{$loan ? (  $loan->per_month_date ? date('F d, Y', strtotime($loan->per_month_date. '+ 1 months')) : '' ) : ''}} 
+                    <small> {{$loan ? ($loan->per_month_amount <=0 ? 'Over Paid' : 'Current Loan Balance ' ) : 'Current Loan Balance'}} </small>
+                    <small> From {{$loan ? (  $loan->per_month_from ? date('F d, Y', $loan->per_month_from) : '' ) : ''}} <br> To {{$loan ? (  $loan->per_month_to ? date('F d, Y', $loan->per_month_to) : '' ) : ''}} 
                     </small>
             </div>
         </div>
@@ -158,6 +158,25 @@
                                     </div>
                                     <div class="col col-md col-lg">
                                         <h6>{{$loan ? ($loan->loan_amount ? '₱ '.number_format($loan->loan_amount, 2) : 'No Current Loan') : 'No Current Loan' }} </h6>
+                                    </div>
+                                </div>
+                            </li>  
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col col-md col-lg-4">
+                                        <span>Monthly Payment</span>
+                                    </div>
+                                    <div class="col col-md col-lg">
+                                        {{-- This trick the member's loan balance stop from paying --}}
+                                        {{-- <h6>{{$loan ? ($loan->loan_amount ? ($loan->loan_amount * 0.06 * $loan->days_payable + $loan->loan_amount) / $loan->payable ) : '' }} </h6> --}}
+                                        @php
+                                            if($loan){
+                                                if($loan->loan_amount){
+                                                   $per_month_amount =  ($loan->loan_amount * 0.06 * $loan->days_payable + $loan->loan_amount) / $loan->days_payable ;
+                                                   echo '<h6>₱ '.number_format($per_month_amount, 2). '</h6>';
+                                                }
+                                            }
+                                        @endphp
                                     </div>
                                 </div>
                             </li>  

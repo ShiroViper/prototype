@@ -57,6 +57,7 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
 
         Route::get('/failed', 'TransactionController@failed')->name('admin-failed');
         Route::get('/deliquent', 'TransactionController@deliquent')->name('admin-deliquent');
+        Route::get('/transaction/{id}/generate', 'TransactionController@generatepdf')->name('generate-pdf');
         Route::resource('/transaction','TransactionController',[
             'names'=>[
                 'index'=>'admin-dashboard',
@@ -77,6 +78,9 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::get('/cancel/{id}/reject', 'MemberController@reject')->name('admin-cancel-reject');
         Route::get('/change_pass', 'MemberController@changePassword')->name('change-password');
         Route::post('/change_pass/change', 'MemberController@change');
+
+        Route::get('/status', 'StatusController@index')->name('admin-status');
+        Route::get('/receive/{id}/accept', 'StatusController@accept')->name('admin-accept');
     });
 
     Route::prefix('member')->group(function () {
@@ -98,10 +102,11 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         ]);
         // TWO REDUNDUNDANT REDIRECTS??? : okay na
         Route::get('/transactions', 'TransactionController@index')->name('member-transactions');
-        Route::get('/sent/{id}/accept', 'TransactionController@accept')->name('loan-payment-accept');
+        Route::get('/sent/{id}/{token}/accept', 'TransactionController@accept')->name('loan-payment-accept');
         Route::get('/sent/{id}/d_accept', 'TransactionController@deposit_accept')->name('deposit-accept');
+        Route::get('/transaction/{id}/generate', 'TransactionController@generatepdf')->name('generate-pdf');
         
-        Route::get('/receive/{id}/accept', 'ProcessController@accept')->name('member-accept');
+        Route::get('/receive/{id}/{token}/accept', 'ProcessController@accept')->name('member-accept');
         // Route::get('/process/{id}/edit', 'ProcessController@col_edit')->name('member-process');
         Route::resource('/process', 'ProcessController', [
             'names' => [
@@ -110,16 +115,12 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'store' => 'member-process-store'
             ]
         ]);
-        // Route::resource('/status', 'StatusController', [
-        //     'names' => [
-        //         'index' => 'member-status'
-        //     ]
-        // ]);
+        
         Route::get('/cancel', 'MemberController@cancel')->name('member-cancel');
         Route::post('/cancel/archive/', 'MemberController@update')->name('member-cancel-archive');
         Route::get('/cancel/destroy', 'MemberController@destroy')->name('member-cancel-destroy');
         Route::get('/change_pass', 'MemberController@changePassword')->name('change-password');
-
+        
     });
 
     Route::prefix('collector')->group(function () {
@@ -127,6 +128,7 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::get('/deliquent', 'TransactionController@deliquent')->name('collector-deliquent');        
         Route::get('/member_searched', ['as'=>'search', 'uses'=>'TransactionController@partial_store']);
         Route::get('/transaction', 'TransactionController@index')->name('collector-dashboard');
+        Route::get('/transaction/{id}/generate', 'TransactionController@generatepdf')->name('generate-pdf');
         Route::resource('/transaction','TransactionController',[
             'names'=>[
                 'index'=>'collector-dashboard',
@@ -139,7 +141,7 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
                 'show' => 'profile-show'
             ]
         ]);
-        Route::get('/receive/{id}/accept', 'ProcessController@accept')->name('collector-accept');
+        Route::get('/receive/{id}/{token}/accept', 'ProcessController@accept')->name('collector-accept');
         Route::get('/process/{id}/edit', 'ProcessController@col_edit')->name('collector-process');
         Route::resource('/process', 'ProcessController', [
             'names' => [
@@ -154,6 +156,9 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::get('/cancel/destroy', 'MemberController@destroy')->name('collector-cancel-destroy');
         Route::get('/change_pass', 'MemberController@changePassword')->name('change-password');
         Route::post('/change', 'MemberController@change')->name('change');
+
+        Route::get('/status', 'StatusController@index')->name('collector-status');
+        Route::get('{token}/transfer/money', 'StatusController@transfer')->name('collector-transfer');
     });
 
 

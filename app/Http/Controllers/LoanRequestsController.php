@@ -50,8 +50,18 @@ class LoanRequestsController extends Controller
                 ->select('transactions.id', 'amount','lname','fname', 'mname', 'trans_type', 'transactions.updated_at')
                 ->where('confirmed', NULL)->where('member_id', Auth::user()->id)->orderBy('updated_at', 'asc')->paginate(5);
 
+            /* This for finding duplicate token in table */
+            $token = Str::random(10);
+            $check_token = Process::select('token')->get();
+            for ($x = 0; $x < count($check_token); $x++){
+                if($check_token[$x]->token == $token){
+                    $token = Str::random(10);
+                }
+            }
+            // ================================================
+
         //    dd($pending_mem_con, Auth::user()->id);
-            return view('users.member.requests')->with('pending_mem_con',$pending_mem_con)->with('pending_mem_receive', $pending_mem_receive)->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
+            return view('users.member.requests')->with('token', $token)->with('pending_mem_con',$pending_mem_con)->with('pending_mem_receive', $pending_mem_receive)->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         }
     }
 
@@ -139,7 +149,6 @@ class LoanRequestsController extends Controller
         $lr->get = 0;
         $lr->user_id = Auth::user()->id;
         $lr->per_month_amount = $loan_to_pay / $lr->days_payable;
-        $lr->per_month_updated_at = strtotime(NOW().'+ 1 months');
 
         // sched_id is NULL for now since it still hasn't been approved
         $lr->sched_id = null;

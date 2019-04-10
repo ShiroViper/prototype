@@ -7,6 +7,7 @@
 @section('content')
 
 <h3 class="header mt-2">Requests</h3>
+<input type="hidden" value="{{$token}} ">
 
 @if(count($pending_to_mem) > 0)
     <div class="row pt-3">
@@ -65,7 +66,7 @@
                                             <tr >
                                                 <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
                                                 <td class="d-flex flex-row">
-                                                    <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/collector/receive/{{ $item->request_id }}/accept">Accept</a>
+                                                    <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/collector/receive/{{ $item->request_id }}/{{$token}}/accept">Accept</a>
                                                 </td>
                                             </tr>
                                         @endif
@@ -152,7 +153,7 @@
                                         <td>{{date('h:i A F d, Y', strtotime($item->updated_at)) }} </td>
                                         <td>{{ $item->lname.', '. $item->fname. ' '.$item->mname }}</td>
                                         <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
-                                        <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/collector/receive/{{ $item->request_id }}/accept">Transfer</a></td>
+                                        <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/collector/receive/{{ $item->request_id }}/{{$token}}/accept">Transfer</a></td>
                                     </tr>
                                 @endforeach
                             @else

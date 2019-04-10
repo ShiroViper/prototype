@@ -22,6 +22,7 @@
                 @if ($errors->has('memID'))
                     <div class="invalid-feedback">Member Not Found</div>
                 @endif
+
                 {{-- Never EVER reload! The ID's value will refresh --}}
                 <input type="hidden" id="memID" name="memID">
                 {{-- {{ Form::hidden('memID', '', array('id' => 'memID') )}} --}}            
