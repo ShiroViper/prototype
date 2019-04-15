@@ -21,3 +21,36 @@ $yellow: #ffed4a;
 $green: #38c172;
 $teal: #4dc0b5;
 $cyan: #6cb2eb;
+
+.bg-indigo {
+    background: $indigo;
+}
+
+.bg-purple {
+    background: $purple;
+}
+
+.bg-pink {
+    background: $pink;
+}
+
+.bg-teal {
+    background: $teal;
+}
+
+.bg-orange {
+    background: $orange;
+}
+
+.bg-cyan {
+    background: $cyan;
+}
+
+$enable-gradients: true;
+
+// Gradients 
+
+.bg-gradient-primary {
+    background-image: linear-gradient(to right, 
+    #3C8CE7 #00EAFF)
+}

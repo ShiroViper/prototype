@@ -12,6 +12,11 @@
 
 // Custom CSS
 
+// Overrides
+@import 'overrides/typography.scss';
+@import 'overrides/variables.scss';
+@import 'overrides/table';
+
 // Components
 @import 'components/verticalbar.scss';
 @import 'components/content.scss';
@@ -25,12 +30,6 @@
 // Modules
 @import 'modules/login.scss';
 @import 'modules/welcome.scss';
-
-// Overrides
-@import 'overrides/typography.scss';
-@import 'overrides/variables.scss';
-@import 'overrides/table';
-
 
 
 

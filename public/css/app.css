@@ -16339,6 +16339,96 @@ readers do not read off random characters that represent icons */
   font-weight: 400;
 }
 
+.title-header,
+.header,
+.about-header {
+  font-family: "Roboto", sans-serif;
+}
+
+.featured-desc,
+.about-desc {
+  font-family: "Source Sans Pro", sans-serif;
+}
+
+.brand-title-header {
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+  font-size: 1.5rem;
+}
+
+.welcome-title {
+  font-size: 1.5rem;
+}
+
+.title-header {
+  font-size: 1.25rem;
+}
+
+.featured-desc {
+  letter-spacing: 0.25px;
+}
+
+.display-5 {
+  font-size: 2.5rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+@media screen and (min-width: 768px) {
+  .al-about-paragraph {
+    padding: 0 8.25rem 0 8.25rem;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .brand-title-header,
+  .welcome-title {
+    font-size: 3rem;
+    line-height: 1.2;
+  }
+
+  .featured-desc {
+    font-size: 1.25rem;
+  }
+
+  .title-header {
+    font-size: 1.5rem;
+  }
+}
+
+.bg-indigo {
+  background: #6574cd;
+}
+
+.bg-purple {
+  background: #9561e2;
+}
+
+.bg-pink {
+  background: #f66D9b;
+}
+
+.bg-teal {
+  background: #4dc0b5;
+}
+
+.bg-orange {
+  background: #f6993f;
+}
+
+.bg-cyan {
+  background: #6cb2eb;
+}
+
+.bg-gradient-primary {
+  background-image: linear-gradient(to right, #3C8CE7 #00EAFF);
+}
+
+.clickable-row,
+.clickable {
+  cursor: pointer;
+}
+
 .progress-bar-vertical {
   width: 20px;
   min-height: 238px;
@@ -16528,61 +16618,5 @@ readers do not read off random characters that represent icons */
   .box {
     padding: 1rem;
   }
-}
-
-.title-header,
-.header,
-.about-header {
-  font-family: "Roboto", sans-serif;
-}
-
-.featured-desc,
-.about-desc {
-  font-family: "Source Sans Pro", sans-serif;
-}
-
-.brand-title-header {
-  font-family: "Roboto", sans-serif;
-  font-weight: 900;
-  font-size: 1.5rem;
-}
-
-.welcome-title {
-  font-size: 1.5rem;
-}
-
-.title-header {
-  font-size: 1.25rem;
-}
-
-.featured-desc {
-  letter-spacing: 0.25px;
-}
-
-.display-5 {
-  font-size: 2.5rem;
-  font-weight: 400;
-  line-height: 1;
-}
-
-@media screen and (min-width: 992px) {
-  .brand-title-header,
-  .welcome-title {
-    font-size: 3rem;
-    line-height: 1.2;
-  }
-
-  .featured-desc {
-    font-size: 1.25rem;
-  }
-
-  .title-header {
-    font-size: 1.5rem;
-  }
-}
-
-.clickable-row,
-.clickable {
-  cursor: pointer;
 }
 

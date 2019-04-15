@@ -5,8 +5,20 @@
 @endsection
 
 @section('content')
-<div class="main-feature">
-    <div class="container">
+<div class="container">
+    <div class="main-feature">
+        <h1 class="brand-title-header text-primary text-center">About Us</h1>
+        <hr>
+        <div class="row">
+            <div class="col-sm-12 lead text-justify al-about-paragraph mt-3">
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti ullam tempore aperiam numquam repellendus, obcaecati necessitatibus ab placeat libero ut non, voluptate mollitia nemo delectus rem perferendis adipisci iusto maxime!</p>
+                
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime optio sint et? Exercitationem tenetur, sapiente ab recusandae itaque voluptatem voluptas eligendi autem eum excepturi corrupti voluptates expedita, omnis dignissimos voluptate?</p>
+            </div>
+            <img src="" alt="" class="img-fluid">
+        </div>
+    </div>
+    <div class="main-feature">
         <h1 class="brand-title-header text-primary text-center">The Team</h1>
         <hr>
         <div class="row">
