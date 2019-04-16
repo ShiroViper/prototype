@@ -10,8 +10,11 @@
 @endpush
 @if(!$unpaid)
     <h3 class="header mt-2">Request Loan</h3>
+    {{-- <div class="bg-teal p-3 text-white">
+        The minimum loan amount is ₱200.
+    </div> --}}
     <div class="row">
-        <div class="col-sm-10 col-md-7 col-lg-5 my-3 order-2 order-md-1">  
+        <div class="col-sm-10 col-md-7 col-lg-5 order-2 order-md-1 my-3">  
             {!! Form::open(['action' => 'LoanRequestsController@store', 'method' => 'POST']) !!}
             @csrf
             {{Form::hidden('token', $token) }}
@@ -19,6 +22,7 @@
             {{ Form::label('amount', 'Loan Amount', ['class' => 'h6']) }}
             <div class="form-group">
                     {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'placeholder' => 'Enter amount', 'min'=>'200', 'step' => '.01', 'required']) }}
+                    <small class="text-muted">The minimum loan amount is ₱200.</small>
                 @if ($errors->has('amount'))
                     <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
                 @endif
@@ -63,7 +67,7 @@
             {{-- <button class="btn btn-primary" role="button" data-toggle="modal" data-target="#termsModal">Continue</button> --}}
             {!! Form::close() !!}
         </div>
-        <div class="col-sm col-md offset-lg-1 col-lg-4 my-3 order-1 order-md-2">  
+        <div class="col-sm col-md offset-lg-1 col-lg-4 order-1 order-md-2 my-3 pt-3">  
             <div class="card shadow">
                 <div class="card-body note-box border-warning border-left d-flex flex-column rounded">
                     <div class="h4">
@@ -73,9 +77,9 @@
                     <div>Current Savings</div>
                 </div>
             </div>
-            Note: <br>
+            {{-- Note: <br>
             200 minimum loan amount. <br>
-            personal and other reason is equal to savings while emergency reason is acceptable to loan above the savings but it's the admin decision wheter to accept or decline the loan request. <br>
+            personal and other reason is equal to savings while emergency reason is acceptable to loan above the savings but it's the admin decision wheter to accept or decline the loan request. <br> --}}
         </div>
     </div>
 @else

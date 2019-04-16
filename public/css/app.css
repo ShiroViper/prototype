@@ -16420,8 +16420,8 @@ readers do not read off random characters that represent icons */
   background: #6cb2eb;
 }
 
-.bg-gradient-primary {
-  background-image: linear-gradient(to right, #3C8CE7 #00EAFF);
+.bg-gradient-gray {
+  background-image: linear-gradient(to right, #D7E1EC, #FFFFFF) !important;
 }
 
 .clickable-row,

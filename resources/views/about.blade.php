@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="container">
-    <div class="main-feature">
+    {{-- <div class="main-feature">
         <h1 class="brand-title-header text-primary text-center">About Us</h1>
         <hr>
         <div class="row">
@@ -17,7 +17,7 @@
             </div>
             <img src="" alt="" class="img-fluid">
         </div>
-    </div>
+    </div> --}}
     <div class="main-feature">
         <h1 class="brand-title-header text-primary text-center">The Team</h1>
         <hr>

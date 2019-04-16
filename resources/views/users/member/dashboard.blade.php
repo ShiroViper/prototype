@@ -55,12 +55,12 @@
                 <div class="card-body d-flex justify-content-center align-items-center flex-column">
                     <div class="border rounded-circle p-2 bg-light"><i class="text-warning fas fa-coins fa-lg"></i></div>
                     <h5 class="pt-2 header display-5 font-weight-bold text-center">
-                        {{ $loan ? ($loan->per_month_amount <= 0 ? '₱'.abs($loan->per_month_amount). '.00' : $loan->per_month_amount ) : '₱ 0.00' }}
+                        {{ $loan ? ($loan->per_month_amount <= 0 ? '₱'.abs($loan->per_month_amount) : '₱'.$loan->per_month_amount ) : '₱ 0.00' }}
                     </h5>
                     {{-- <small >Current Loan Balance For This Month</small> --}}
-                    <small> Click Here</small>
                     <small> {{$loan ? ($loan->per_month_amount <=0 ? 'Over Paid' : 'Current Loan Balance ' ) : 'Current Loan Balance'}} </small>
-                    <small> From {{$loan ? (  $loan->per_month_from ? date('F d, Y', $loan->per_month_from) : '' ) : ''}} <br> To {{$loan ? (  $loan->per_month_to ? date('F d, Y', $loan->per_month_to) : '' ) : ''}} 
+                    <a class="text-primary clickable"><small>View Details</small></a>
+                    {{-- <small> From {{$loan ? (  $loan->per_month_from ? date('F d, Y', $loan->per_month_from) : '' ) : ''}} <br> To {{$loan ? (  $loan->per_month_to ? date('F d, Y', $loan->per_month_to) : '' ) : ''}}  --}}
                     </small>
             </div>
         </div>

@@ -110,8 +110,8 @@ class LoanRequestsController extends Controller
         if($status->savings == null || $status->savings < 200){
             // check if reason is not emergency loan
             if($request->reason != 'For Emergency Use'){
-                dd($request->reason);
-                return redirect()->back()->with('error', 'Request loan available atleast ₱ 200 savings ')->withInput(Input::except('pass'));
+                // dd($request->reason);
+                // return redirect()->back()->with('error', 'Request loan available atleast ₱ 200 savings')->withInput(Input::except('pass'));
             }
         // check if amount is greater than current savings and reason is not emergency loan
         }else if($request->amount > $status->savings && $request->reason != 'For Emergency Use'){
@@ -123,6 +123,8 @@ class LoanRequestsController extends Controller
         }else if(!Hash::check($request->pass, Auth::user()->password)){
             return redirect()->back()->with('error', 'Wrong Password')->withInput(Input::except('pass'));
         }
+
+        // dd($request);
         
         $messages = [
             'required' => 'This field is required',

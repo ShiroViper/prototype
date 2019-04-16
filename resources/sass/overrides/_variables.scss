@@ -50,7 +50,8 @@ $enable-gradients: true;
 
 // Gradients 
 
-.bg-gradient-primary {
+.bg-gradient-gray {
     background-image: linear-gradient(to right, 
-    #3C8CE7 #00EAFF)
+    #D7E1EC, #FFFFFF) !important;
 }
+

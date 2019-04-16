@@ -156,7 +156,7 @@
 	<link rel="stylesheet" href="{{ asset('css/app.css')}}">
 </head>
 <body>
-    <div class="main-login">
+    <div class="main-login bg-gradient-gray">
         <div class="main-login-container mx-auto">
             <div class="container">
                 <div class="d-flex flex-column align-items-center">
