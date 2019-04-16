@@ -156,7 +156,7 @@ class TransactionController extends Controller
             }
         }
         // return dd(1557046598, strtotime(NOW()), 1557046598 > strtotime(NOW()));
-
+        // dd($loan_request);
         return view('users.collector.collect2')->with('active', 'collect')->with('check_for_pending', $check_for_pending)->with('token', $token)->with('member', $member)->with('loan_request', $loan_request);
     }
 
