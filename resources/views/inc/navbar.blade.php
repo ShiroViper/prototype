@@ -79,6 +79,15 @@
                         <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/admin/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item px-3 h6">
+                        <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/admin/requests">Requests 
+                            @if (isset($counter) && $counter > 0)
+                                <span class="badge badge-pill badge-danger">
+                                    {{ $counter }}
+                                </span>
+                            @endif
+                        </a>
+                    </li>
+                    <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'create' ? ' active callout' : '' }}" href="/admin/users/create">
                             <!-- <span class="sr-only">(current)</span> -->
                             Add Member
@@ -89,15 +98,6 @@
                     </li>
                     <li class="nav-item px-3 h6">
                         <a class="nav-link{{ $active == 'sched' ? ' active callout' : '' }}" href="/admin/calendar">Calendar</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/admin/requests">Requests 
-                            @if (isset($counter) && $counter > 0)
-                                <span class="badge badge-pill badge-danger">
-                                    {{ $counter }}
-                                </span>
-                            @endif
-                        </a>
                     </li>
                     <li class="nav-item px-3 h6">
                         <a class="nav-link {{$active == 'deliquent' ? 'active callout' : ''}} " href="/admin/deliquent">Deliquent</a>

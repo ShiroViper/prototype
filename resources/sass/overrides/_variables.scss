@@ -26,24 +26,48 @@ $cyan: #6cb2eb;
     background: $indigo;
 }
 
+.text-indigo {
+    color: $indigo;
+}
+
 .bg-purple {
     background: $purple;
+}
+
+.text-purple {
+    color: $purple;
 }
 
 .bg-pink {
     background: $pink;
 }
 
+.text-pink {
+    color: $pink;
+}
+
 .bg-teal {
     background: $teal;
+}
+
+.text-teal {
+    color: $teal;
 }
 
 .bg-orange {
     background: $orange;
 }
 
+.text-orange {
+    color: $orange;
+}
+
 .bg-cyan {
     background: $cyan;
+}
+
+.text-cyan {
+    color: $cyan;
 }
 
 $enable-gradients: true;

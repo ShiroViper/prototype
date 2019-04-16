@@ -16400,24 +16400,48 @@ readers do not read off random characters that represent icons */
   background: #6574cd;
 }
 
+.text-indigo {
+  color: #6574cd;
+}
+
 .bg-purple {
   background: #9561e2;
+}
+
+.text-purple {
+  color: #9561e2;
 }
 
 .bg-pink {
   background: #f66D9b;
 }
 
+.text-pink {
+  color: #f66D9b;
+}
+
 .bg-teal {
   background: #4dc0b5;
+}
+
+.text-teal {
+  color: #4dc0b5;
 }
 
 .bg-orange {
   background: #f6993f;
 }
 
+.text-orange {
+  color: #f6993f;
+}
+
 .bg-cyan {
   background: #6cb2eb;
+}
+
+.text-cyan {
+  color: #6cb2eb;
 }
 
 .bg-gradient-gray {

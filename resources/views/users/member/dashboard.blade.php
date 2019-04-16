@@ -40,7 +40,7 @@
             </div>
             <div class="card shadow-sm">
                 <div class="card-body d-flex justify-content-center align-items-center flex-column">
-                    <div class="border rounded-circle p-2 bg-light"><i class="text-success fas fa-wallet fa-lg"></i></div>
+                    <div class="border rounded-circle p-2 bg-light"><i class="text-success fas fa-hand-holding-usd fa-lg"></i></div>
                     <h5 class="pt-2 header display-5 font-weight-bold text-center">
                         {{ $patronage && $patronage->patronage_refund != null ? '₱ '.round($patronage->patronage_refund).'.00' : '₱ 0.00' }}
                     </h5>
