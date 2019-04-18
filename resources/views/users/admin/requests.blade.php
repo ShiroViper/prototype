@@ -6,7 +6,7 @@
 
 @section('content')
 @if(count($pending_cancel) > 0)
-<h3 class="header mt-2">Request for Account Deactivation</h3>
+<h3 class="header mt-2">Request for Account Deactivation [modal for comments deactivation]</h3>
 <div class="row mb-5">
     <div class="col">
         {{-- <h6 class="card-header">Cancellation of account Requests</h6> --}}
@@ -45,7 +45,7 @@
 </div>
 @endif
 
-<h3 class="header mt-2">Requests</h3>
+<h3 class="header mt-2">Requests [modal for comments loan requests]</h3>
 <div class="row">
     <div class="col">
         {{-- <h6 class="card-header">Pending Requests</h6> --}}

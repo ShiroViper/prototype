@@ -26,7 +26,7 @@ class AddTokenToLoanRequest extends Migration
     public function down()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            $table->dropColumn('per_month_to');
+            // $table->dropColumn('token');
         });
     }
 }

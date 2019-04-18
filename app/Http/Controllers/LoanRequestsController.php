@@ -110,7 +110,6 @@ class LoanRequestsController extends Controller
         if($status->savings == null || $status->savings < 200){
             // check if reason is not emergency loan
             if($request->reason != 'For Emergency Use'){
-                dd($request->reason);
                 return redirect()->back()->with('error', 'Request loan available atleast ₱ 200 savings ')->withInput(Input::except('pass'));
             }
         // check if amount is greater than current savings and reason is not emergency loan
@@ -158,7 +157,11 @@ class LoanRequestsController extends Controller
         // Create a new comment row for every loan request
         $comment = New Comment;
         $comment->request_id = $lr->id;
-        $comment->comments = $request->reason;
+        if($request->reason == 3){
+            $comment->comments = $request->other;
+        }else{
+            $comment->comments = $request->reason;
+        }
         $comment->token = $request->token; // prevent from being spammed
         $comment->save();
 

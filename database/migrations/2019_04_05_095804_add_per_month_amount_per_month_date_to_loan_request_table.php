@@ -28,9 +28,9 @@ class AddPerMonthAmountPerMonthDateToLoanRequestTable extends Migration
     public function down()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            $table->dropcolumn('per_month_amount');
-            $table->dropcolumn('per_month_from');
-            $table->dropcolumn('per_month_to');
+            // $table->dropColumn('per_month_amount');
+            // $table->dropColumn('per_month_from');
+            // $table->dropColumn('per_month_to');
         });
     }
 }

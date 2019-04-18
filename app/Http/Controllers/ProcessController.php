@@ -92,7 +92,7 @@ class ProcessController extends Controller
             $process->collector_id = $check->id;
             $process->token = $request->token;
             $process->save();
-            return redirect()->route('admin-requests')->with('success', 'Wating to Accept Collector: '.$check->lname. ' '.$check->fname);
+            return redirect()->back()->with('success', 'Wating to Accept Collector: '.$check->lname. ' '.$check->fname);
         }else{
             return redirect()->back()->withInput()->with('error', 'Collector: Not found');
         }

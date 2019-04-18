@@ -7,20 +7,24 @@
 @section('content')
 
 
-<h3 class="header mt-2">Collected money as of {{date('F d, Y', strtotime(NOW()))}}</h3>
+<h3 class="header mt-2">total money as of {{date('F d, Y', strtotime(NOW()))}}</h3>
 <div class="row">
-    <div class="col-4">  
+    <div class="col-3">  
         deposit <br>
         {{$deposit.'.00'}}
         {{-- {{dd($loan_from_member)}} --}}
     </div>
-    <div class="col-4">  
+    <div class="col-3">  
         loan payment from the member <br>
         {{$loan_payment.'.00'}}
     </div>
-    <div class="col-4">  
+    <div class="col-3">  
         distrubution <br>
         {{round($distribution->distribution).'.00'}}
+    </div>
+    <div class="col-3">  
+        patronage <br>
+        {{round($patronage).'.00'}}
     </div>
     {{-- @if($check->admin_confirmed == null) 
         <a href="/collector/transfer/money"><button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Transfer all money gathered to admin">Transfer to Admin   </button></a>
