@@ -64,68 +64,68 @@
     </div>
 </nav>
 
-<nav class="navbar navbar-dark bg-dark border-bottom navbar-expand-xl">
-    <div class="container">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menuNav" aria-controls="menuNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="menuNav">
-            <ul class="navbar-nav">
-            {{-- Checks the type of User if .. --}}
-                {{-- ADMINISTRATOR --}}
-                @if (Auth::user()->user_type == 2)
-                    <li class="nav-item px-3 h6">
-                        {{-- Formerly Transactions --}}
-                        <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/admin/dashboard">Dashboard</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'create' ? ' active callout' : '' }}" href="/admin/users/create">
-                            <!-- <span class="sr-only">(current)</span> -->
-                            Add Member
-                        </a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'manage' ? ' active callout' : '' }}" href="/admin/users">Manage</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'sched' ? ' active callout' : '' }}" href="/admin/calendar">Calendar</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/admin/requests">Requests 
-                            @if (isset($counter) && $counter > 0)
-                                <span class="badge badge-pill badge-danger">
-                                    {{ $counter }}
-                                </span>
-                            @endif
-                        </a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link {{$active == 'deliquent' ? 'active callout' : ''}} " href="/admin/deliquent">Deliquent</a>
-                    </li>
-                    {{-- <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'status' ? ' active callout' : '' }}" href="/admin/status">Status</a>
-                    </li> --}}
-                    
-                {{-- COLLECTOR --}}
-                @elseif (Auth::user()->user_type == 1)
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/collector/transaction">Transactions</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'collect' ? ' active callout' : '' }}" href="/collector/transaction/create">Collection</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'deliquent' ? ' active callout' : '' }}" href="/collector/deliquent">Deliquent</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'request' ? ' active callout' : '' }}" href="/collector/process">Requests</a>
-                    </li>
-                    <li class="nav-item px-3 h6">
-                        <a class="nav-link{{ $active == 'status' ? ' active callout' : '' }}" href="/collector/status">Status</a>
-                    </li>
-                {{-- MEMBER --}}
-                @else
-                    @if(Auth::user()->inactive == 0)
+@if(Auth::user()->inactive != 1)
+    <nav class="navbar navbar-dark bg-dark border-bottom navbar-expand-xl">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menuNav" aria-controls="menuNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menuNav">
+                <ul class="navbar-nav">
+                {{-- Checks the type of User if .. --}}
+                    {{-- ADMINISTRATOR --}}
+                    @if (Auth::user()->user_type == 2)
+                        <li class="nav-item px-3 h6">
+                            {{-- Formerly Transactions --}}
+                            <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/admin/dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'requests' ? ' active callout' : '' }}" href="/admin/requests">Requests 
+                                @if (isset($counter) && $counter > 0)
+                                    <span class="badge badge-pill badge-danger">
+                                        {{ $counter }}
+                                    </span>
+                                @endif
+                            </a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'create' ? ' active callout' : '' }}" href="/admin/users/create">
+                                <!-- <span class="sr-only">(current)</span> -->
+                                Add Member
+                            </a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'manage' ? ' active callout' : '' }}" href="/admin/users">Manage</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'sched' ? ' active callout' : '' }}" href="/admin/calendar">Calendar</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link {{$active == 'deliquent' ? 'active callout' : ''}} " href="/admin/deliquent">Deliquent</a>
+                        </li>
+                        {{-- <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'status' ? ' active callout' : '' }}" href="/admin/status">Status</a>
+                        </li> --}}
+                        
+                    {{-- COLLECTOR --}}
+                    @elseif (Auth::user()->user_type == 1)
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/collector/transaction">Transactions</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'collect' ? ' active callout' : '' }}" href="/collector/transaction/create">Collection</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'deliquent' ? ' active callout' : '' }}" href="/collector/deliquent">Deliquent</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'request' ? ' active callout' : '' }}" href="/collector/process">Requests</a>
+                        </li>
+                        <li class="nav-item px-3 h6">
+                            <a class="nav-link{{ $active == 'status' ? ' active callout' : '' }}" href="/collector/status">Status</a>
+                        </li>
+                    {{-- MEMBER --}}
+                    @else
                         <li class="nav-item px-3 h6">
                             <a class="nav-link{{ $active == 'dashboard' ? ' active callout' : '' }}" href="/member/dashboard">Dashboard</a>
                         </li>
@@ -141,10 +141,10 @@
                             </li>
                         @endif
                     @endif
-                @endif
-            {{-- END IF STATEMENT --}}
-            </ul>
+                {{-- END IF STATEMENT --}}
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+@endif
 @endguest

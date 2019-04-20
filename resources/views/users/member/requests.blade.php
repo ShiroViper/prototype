@@ -17,6 +17,40 @@
         @endif
     </div>
 </div>
+ang action ani butanga nya.
+{{-- Show list of pending distribution confirmation --}}
+@if ($distribution)
+    <div class="row pt-3 mb-5">
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">Pending Confirmation</h6>
+                <div class="container">
+                    <div class="table-responsive">
+                        <table class="table table-hover" >
+                            <thead>
+                                <tr>
+                                    <th>Distribution Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>₱ {{number_format($distribution->amount, 2)}} </td>
+                                    <td class="d-flex flex-row">
+                                        {{-- <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/d_accept">Confirm</a> --}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        {{ $pending_mem_con->links() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 
 {{-- Show list of data that waiting to confirm --}}
 @if (count($pending_mem_con))

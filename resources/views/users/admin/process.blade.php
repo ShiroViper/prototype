@@ -102,11 +102,10 @@
                 {{Form::hidden('token', $token)}}
                 <div class="form-group">
                     {{ Form::label('colName', 'Collector Name', ['class' => 'h6']) }}
-                    {{ Form::text('colName', '', ['class' => $errors->has('colName') ? 'form-control is-invalid' : 'form-control']) }}
+                    {{ Form::text('colName', '', ['class' => $errors->has('colID') ? 'form-control is-invalid' : 'form-control']) }}
                     <input type="hidden" id="colID" name="colID" value="{{ old('colID') }}">
                     @if ($errors->has('colID'))
-                        <div class="invalid-feedback">Collector Not Found</div>
-                        Collector Not Found
+                        <div class="invalid-feedback d-block">Collector Not Found</div>
                     @endif
                 </div>
                 {{ Form::submit('Transfer to Collector', ['class' => 'btn btn-primary']) }}

@@ -6,7 +6,7 @@
 
 @section('content')
 @if(count($pending_cancel) > 0)
-<h3 class="header mt-2">Request for Account Deactivation [modal for comments deactivation]</h3>
+<h3 class="header mt-2">Request for Account Deactivation</h3>
 <div class="row mb-5">
     <div class="col">
         {{-- <h6 class="card-header">Cancellation of account Requests</h6> --}}
@@ -17,7 +17,9 @@
                         <tr>
                             <th>Date Requested</th>
                             <th>Name</th>
-                            <th>Comments (testing only)</th>
+                            <th>Savings</th>
+                            <th>Patronage Refund</th>
+                            <th>Reason</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -26,7 +28,9 @@
                             {{-- <tr data-toggle="modal" data-target="#LoanModal"> --}}
                             <tr >
                                 <td>{{ date("F d, Y", strtotime($item->created_at)) }}</td>
-                                <td>{{ $item->user->lname.', '. $item->user->fname.' '. $item->user->mname }}</td>
+                                <td>{{ $item->lname.', '. $item->fname.' '. $item->mname }}</td>
+                                <td>₱ {{number_format(round($item->savings), 2)}} </td>
+                                <td> {{ $item->savings >= 1825 ? '₱'.number_format(round($item->patronage_refund), 2) : 'N/A' }} </td>
                                 <td>{{ $item->comments }} </td>
                                 <td class="d-flex flex-row">
                                     <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/cancel/{{ $item->id }}/accept">Accept</a>
@@ -45,7 +49,7 @@
 </div>
 @endif
 
-<h3 class="header mt-2">Requests [modal for comments loan requests]</h3>
+<h3 class="header mt-2">Requests</h3>
 <div class="row">
     <div class="col">
         {{-- <h6 class="card-header">Pending Requests</h6> --}}
@@ -58,6 +62,7 @@
                             <th>Member</th>
                             <th>Loan Requested</th>
                             <th>Payables</th>
+                            <th>Reason</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -67,9 +72,10 @@
                                 {{-- <tr data-toggle="modal" data-target="#LoanModal"> --}}
                                 <tr >
                                     <td>{{ date("h:i A  F d, Y", strtotime($item->created_at)) }}</td>
-                                    <td>{{ $item->user->lname.', '. $item->user->fname.' '. $item->user->mname }}</td>
+                                    <td>{{ $item->lname.', '. $item->fname.' '. $item->mname }}</td>
                                     <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
                                     <td>{{ $item->days_payable }} Months</td>
+                                    <td>{{$item->comments}} </td>
                                     <td class="d-flex flex-row">
                                         <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/requests/{{ $item->id }}/accept">Accept</a>
                                         <a class="btn btn-outline-secondary mx-2 no-modal" role="button" href="/admin/requests/{{ $item->id }}/reject">Decline</a>

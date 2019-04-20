@@ -25,11 +25,6 @@
         @elseif($account_status->confirmed == 1)
             <h2>Account has been canceled by the administration</h2>
             <div class="row">
-                <div class="col">
-                    <div class="py-3">
-                        <a class="btn btn-light border" role="button" href="/member/profile"><i class="fas fa-arrow-left"></i>  Back </a>
-                    </div>
-                </div>
             </div>
         @endif
     </div>

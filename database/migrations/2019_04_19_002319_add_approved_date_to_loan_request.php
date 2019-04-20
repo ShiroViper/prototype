@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTokenToLoanRequest extends Migration
+class AddApprovedDateToLoanRequest extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddTokenToLoanRequest extends Migration
     public function up()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            $table->string('token')->nullable()->after('per_month_to');
+            $table->string('date_approved')->nullable()->after('created_at');
         });
     }
 
@@ -26,7 +26,7 @@ class AddTokenToLoanRequest extends Migration
     public function down()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            // $table->dropColumn('token');
+            //
         });
     }
 }

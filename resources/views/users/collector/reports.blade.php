@@ -5,6 +5,9 @@
 @endsection
 
 @section('content')
+@push('scripts')
+    <script src="{{ asset('js/scripts.js') }}"></script>
+@endpush
 
 <h3 class="header mt-2">Requests</h3>
 

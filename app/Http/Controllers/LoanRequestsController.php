@@ -18,6 +18,7 @@ use App\Schedule;
 use App\Status;
 use App\Comment;
 use App\Process;
+use App\Distribution;
 
 class LoanRequestsController extends Controller
 {
@@ -30,16 +31,19 @@ class LoanRequestsController extends Controller
     {
         if (Auth::user()->user_type == 2) {
             // Pending_cancel for cancellation of accounts
-            $pending_cancel = Comment::whereNotNull('user_id')->whereNull('confirmed')->orderBy('updated_at', 'asc')->paginate(5);
+            $pending_cancel = Comment::join('status', 'status.user_id', '=', 'comments.user_id')->join('users', 'users.id', '=', 'comments.user_id')->select('comments.id', 'savings', 'patronage_refund', 'comments.created_at', 'comments', 'lname', 'mname', 'fname')->whereNotNull('comments.user_id')->whereNull('comments.confirmed')->orderBy('comments.updated_at', 'asc')->paginate(5);
             $lr = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(5);
-            $pending = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNull('confirmed')->paginate(5);
-            // dd($pending_cancel);
+            $pending = Loan_Request::join('comments', 'request_id', '=', 'loan_request.id')->join('users', 'users.id', '=', 'loan_request.user_id')->select( 'lname', 'mname', 'fname', 'loan_request.created_at', 'loan_amount', 'days_payable', 'comments')->orderBy('loan_request.created_at', 'desc')->whereNull('loan_request.confirmed')->paginate(5);
+            // dd($pending);
+            // dd($pending);
             return view('users.admin.requests')->with('pending_cancel', $pending_cancel)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
 
         } else {
             $lr = Loan_Request::orderBy('updated_at', 'desc')->where('user_id', Auth::user()->id)->whereNotNull('confirmed')->paginate(5);
             $pending = Loan_Request::orderBy('created_at', 'desc')->where('user_id', Auth::user()->id)->where('confirmed', NULL)->paginate(5);
             $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
+            $distribution = Distribution::where('user_id', Auth::user()->id)->first();
+            // dd($distribution->amount);
             
             // for transferring money to member
             $pending_mem_receive = Process::join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'collector_id')->select('processes.id', 'transfer', 'request_id', 'collector_id', 'processes.updated_at','lname', 'fname','mname', 'loan_amount')->where([['user_id', Auth::user()->id],['transfer',3]])->orderBy('updated_at', 'asc')->paginate(5);
@@ -61,7 +65,7 @@ class LoanRequestsController extends Controller
             // ================================================
 
         //    dd($pending_mem_con, Auth::user()->id);
-            return view('users.member.requests')->with('token', $token)->with('pending_mem_con',$pending_mem_con)->with('pending_mem_receive', $pending_mem_receive)->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
+            return view('users.member.requests')->with('token', $token)->with('distribution', $distribution)->with('pending_mem_con',$pending_mem_con)->with('pending_mem_receive', $pending_mem_receive)->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         }
     }
 
@@ -82,9 +86,10 @@ class LoanRequestsController extends Controller
         }
         // ================================================
 
-        $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
+        $paid = Loan_Request::where([['user_id', Auth::user()->id], ['paid', null]])->orwhere([['user_id', Auth::user()->id], ['paid_using_savings', null]])->first();
+        $status = Status::where('user_id', Auth::user()->id)->first();
         $current_savings = Status::where('user_id', Auth::user()->id)->first();
-        return view('users.member.loan')->with('token', $token)->with('unpaid', $unpaid)->with('active', 'loan')->with('savings', $current_savings);
+        return view('users.member.loan')->with('token', $token)->with('status', $status)->with('paid', $paid)->with('active', 'loan')->with('savings', $current_savings);
     }
 
     /**
@@ -122,6 +127,8 @@ class LoanRequestsController extends Controller
         }else if(!Hash::check($request->pass, Auth::user()->password)){
             return redirect()->back()->with('error', 'Wrong Password')->withInput(Input::except('pass'));
         }
+
+        // dd($request);
         
         $messages = [
             'required' => 'This field is required',
@@ -136,6 +143,7 @@ class LoanRequestsController extends Controller
             'pass' => ['required'],
             'months' => ['required', 'numeric', 'min:1', 'max:12']
         ], $messages);
+        // return 'hji';
 
         // Loan * .06 = monthly interest * months payable = interest to pay + loan amount = loan to pay 
         // example: 1500 * 0.06 = 90 * 4 = 360 + 1500 = 1860

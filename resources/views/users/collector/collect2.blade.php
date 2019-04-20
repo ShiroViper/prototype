@@ -6,11 +6,15 @@
 
 @section('content')
 
+@push('scripts')
+    <script src="{{ asset('js/scripts.js') }}"></script>
+@endpush
+
 <a class="btn btn-light border" role="button" href="/collector/transaction/create"><i class="fas fa-arrow-left"></i>  Back to list</a>
 <h3 class="header mt-2">Collect Payment</h3>
 
 <div class="row">
-    <div class="col-6">  
+    <div class="col-md-6">  
         {!!Form::open(['action'=> 'TransactionController@store', 'method'=>'POST']) !!}
             @csrf
             {{Form::hidden('token', $token)}}
@@ -65,11 +69,11 @@
     </div>
     <div class="col-lg my-3 offset-lg-1">
         <div class="card">
-            <h6 class="card-header">Member Information</h6>
+            <h6 class="card-header">Loan Request Information</h6>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col col-md col-lg-4">
+                        <div class="col col-md col-lg">
                             <span>Member Name</span>
                         </div>
                         <div class="col col-md col-lg">
@@ -77,28 +81,71 @@
                         </div>
                     </div>
                 </li>
-                @if($loan_request)
+                {{-- {{dd($loan_request ? $loan_request->paid_using_savings != null : '', $loan)}} --}}
+                @if($loan_request ? !$loan_request->paid_using_savings != null : '')
                 {{-- {{dd(date('F d, Y', strtotime($loan_request->per_month_from)))}} --}}
                     @if($loan_request->per_month_amount <= 0)
                     {{-- {{dd($loan_request)}} --}}
                         <li class="list-group-item">
                             <div class="row">
-                                <div class="col col-md col-lg-6">
-                                    <span>Over Paid <br> From {{$loan_request ? (  $loan_request->per_month_from ? date('F d, Y', $loan_request->per_month_from) : '' ) : ''}} <br> To {{$loan_request ? (  $loan_request->per_month_to ? date('F d, Y', $loan_request->per_month_to) : '' ) : ''}} </span>
+                                <div class="col col-md col-lg">
+                                    Remaining Loan Balance
                                 </div>
                                 <div class="col col-md col-lg">
-                                    <h6>₱ {{abs($loan_request->per_month_amount)}}.00 </h6>
+                                    <h6>₱ {{ $loan_request->balance }}</h6>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            {{-- <div class="row">
+                                <div class="col col-md col-lg">
+                                    Loan payment this month
+                                </div>
+                                <div class="col col-md col-lg">
+                                    <h6>₱ {{ round(($loan_request->loan_amount * 0.06  * $loan_request->days_payable + $loan_request->loan_amount) / $loan_request->days_payable, 2) - abs($loan_request->per_month_amount) }} </h6>
+                                </div>
+                            </div> --}}
+                            <div class="row">
+                                <div class="col col-md col-lg">
+                                    <small class="text-muted">Over Payment</small>
+                                </div>
+                                <div class="col col-md col-lg">
+                                    <small class="text-muted"><h6>₱ {{ abs($loan_request->per_month_amount) }} </h6></small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col col-md col-lg">
+                                    Duration
+                                </div>
+                                <div class="col col-md col-lg">
+                                    <h6>
+                                        {{ $loan_request ? (  $loan_request->per_month_amount ? date('F d, Y', $loan_request->per_month_from) : '' ) : ''}}  to {{$loan_request ? (  $loan_request->per_month_to ? date('F d, Y', $loan_request->per_month_to) : '' ) : ''}}
+                                    </h6>
                                 </div>
                             </div>
                         </li>
                     @else
                         <li class="list-group-item">
                             <div class="row">
-                                <div class="col col-md col-lg-6">
-                                    <span>Loan Balance <br> From {{$loan_request ? (  $loan_request->per_month_amount ? date('F d, Y', $loan_request->per_month_from) : '' ) : ''}} <br> To {{$loan_request ? (  $loan_request->per_month_to ? date('F d, Y', $loan_request->per_month_to) : '' ) : ''}} </span>
+                                <div class="col col-md col-lg">
+                                    Loan payment this month
                                 </div>
                                 <div class="col col-md col-lg">
                                     <h6> {{ $loan_request ? ($loan_request->per_month_amount >= 0 ? '₱ '. $loan_request->per_month_amount  : '₱ 0.00') : '₱ 0.00' }}</h6>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col col-md col-lg">
+                                    Duration
+                                </div>
+                                <div class="col col-md col-lg">
+                                    <h6>
+                                        {{ $loan_request ? (  $loan_request->per_month_amount ? date('F d, Y', $loan_request->per_month_from) : '' ) : ''}}  to {{$loan_request ? (  $loan_request->per_month_to ? date('F d, Y', $loan_request->per_month_to) : '' ) : ''}}
+                                    </h6>
                                 </div>
                             </div>
                         </li>
@@ -106,7 +153,7 @@
                 @else
                     <li class="list-group-item">
                         <div class="row">
-                            <div class="col col-md col-lg-4">
+                            <div class="col col-md col-lg">
                                 Loan
                             </div>
                             <div class="col col-md col-lg">
@@ -117,8 +164,8 @@
                 @endif
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col col-md col-lg-4">
-                            <span>Pending Conrirmation</span>
+                        <div class="col col-md col-lg">
+                            <span>Pending Confirmation</span>
                         </div>
                         <div class="col col-md col-lg">
                             @if(count($check_for_pending) > 0)

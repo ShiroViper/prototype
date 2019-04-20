@@ -199,6 +199,7 @@ class ProcessController extends Controller
             $received->received = 1;
             $received->per_month_from = strtotime(NOW());
             $received->per_month_to = strtotime(NOW().'+ 1 months');
+            $received->date_approved = strtotime(NOW());
             // dd(date('F d, Y', $received->per_month_updated_at), $received->per_month_updated_at);
             $process->transfer = 4;
             $process->token = $token;

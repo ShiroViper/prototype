@@ -28,10 +28,10 @@
                             {{-- <a href="/login" class="btn btn-outline-secondary px-3">Already a member</a> --}}
 
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#member">
+                            <button type="button" class="btn btn-primary px-3" data-toggle="modal" data-target="#member">
                                 I want to be a member
                             </button>
-                            <a href="/login" class="btn btn-outline-primary ml-3">Members Sign In</a>
+                            <a href="/login" class="btn btn-outline-primary ml-3 px-4">Members Sign In</a>
                         </div>
                     </div>
                 </div>
@@ -114,6 +114,9 @@
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <div class="bg-orange border text-white text-center p-3">
+                Please wait for the Administrator to verify your request
+            </div>
             <div class="modal-body">
                 <div class="container">
                     <h6>Please enter your credentials</h6>
@@ -170,8 +173,8 @@
                             @endif
                         </div>
 
-                        <small class="text-muted"><b>Note</b>: Please wait for our administrator to verify your request.</small>
-                        <div class="pt-3">
+                        {{-- <small class="text-muted"><b>Note</b>: Please wait for our administrator to verify your request.</small> --}}
+                        <div class="pt-2">
                             {{ Form::submit('Submit', ['class' => 'btn btn-primary btn-block mb-3']) }}
                         </div>
                     {!!Form::close()!!}

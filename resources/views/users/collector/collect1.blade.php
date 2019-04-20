@@ -8,7 +8,7 @@
 
 <h3 class="header mt-2">Collect Payment</h3>
 <div class="row">
-    <div class="col-6">  
+    <div class="col-md-6">  
         {!!Form::open(['action'=> 'TransactionController@partial_store', 'method'=>'GET']) !!}
             {{-- @csrf --}}
             {{Form::hidden('token', $token)}}
