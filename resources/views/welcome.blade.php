@@ -24,14 +24,14 @@
                         <p>Alkansya is a mobile responsive web application system that is used to gain access to features like account management, money transfer, deposit, loan and payment. Managed by a non-profit organization located in Compostela, Cebu, Alkanysa turns the manual procedure of sinking fund into a process that is systematic with the help of the internet.</p>
                     </div>
                     <div class="row py-3">
-                        <div class="col col-sm col-md col-lg-10 col-xl-6">
+                        <div class="col col-sm col-md col-lg-10 col-xl-6 d-flex align-items-sm-center">
                             {{-- <a href="/login" class="btn btn-outline-secondary px-3">Already a member</a> --}}
 
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary px-3" data-toggle="modal" data-target="#member">
+                            <button type="button" class="btn btn-primary px-3 mt-3" data-toggle="modal" data-target="#member">
                                 I want to be a member
                             </button>
-                            <a href="/login" class="btn btn-outline-primary ml-3 px-4">Members Sign In</a>
+                            <a href="/login" class="btn btn-outline-primary ml-3 px-4 mt-3">Members Sign In</a>
                         </div>
                     </div>
                 </div>
