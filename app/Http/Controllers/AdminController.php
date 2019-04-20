@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use DB;
 use Auth;
 use App\User;
+use App\Status;
+use App\Distribution;
 
 class AdminController extends Controller
 {
@@ -62,6 +64,33 @@ class AdminController extends Controller
 
         return view('users.collector.deliquent')->with('deliquents', $deliquents)->with('active', 'deliquents');
     }
+
+    public function distribute(){
+        $status = Status::where('user_id', 1)->first();
+        $user = User::where([['user_type', 0], ['setup', 1], ['inactive', '!=', 1]])->get();
+        $user_count = count($user);
+
+        if($status->distribution <= 0 && date('n', strtotime(NOW())) > 3){
+            return redirect()->back()->with('error', 'Action Invalid! Distribution is done');
+        }else if($status->distribution > 0 && date('n', strtotime(NOW())) > 3){
+            
+            $distribute = $status->distribution / $user_count;
+            foreach($user as $u){
+                $dis = New Distribution;
+                $dis->user_id = $u->id;
+                $dis->amount = $distribute;
+                $dis->save();
+            }
+
+            $status->save();
+            return redirect()->back()->with('success', 'Pending confirmation from member');
+        }
+    }
+
+    public function accept(){
+        return 'i';
+    }
+
     public function index()
     {
         // $user = User::find(Auth::user()->id);

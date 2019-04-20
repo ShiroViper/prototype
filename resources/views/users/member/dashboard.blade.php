@@ -31,11 +31,15 @@
         <div class="card-deck pb-5">
             <div class="card shadow-sm">
                 <div class="card-body d-flex justify-content-center align-items-center flex-column">
-                    <div class="border rounded-circle p-2 bg-light"><i class="text-primary fas fa-piggy-bank fa-lg"></i></div>
+                    <div class="border rounded-circle p-2 bg-light" ><i class="text-primary fas fa-piggy-bank fa-lg"></i></div>
                     <h5 class="pt-2 header display-5 font-weight-bold text-center">
-                        {{ $savings && $savings->savings != null ? '₱ '.$savings->savings : '₱ 0.00' }}
+                        {{ $savings && $savings->savings != null ? $savings->savings >= 0 ? '₱ '.$savings->savings : '₱ '.number_format($savings->savings, 2) : '₱ 0.00' }}
                     </h5>
-                    <small>Savings</small>
+                    @if($savings->savings >= 0)                        
+                        <small>Savings</small>
+                    @else
+                        <h1 class="text-danger ">Debt</h1>
+                    @endif
                 </div>
             </div>
             <div class="card shadow-sm">

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTurnOverToTransactionsTable extends Migration
+class AddPaidUsingSavingsToLoanRequest extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddTurnOverToTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::table('transactions', function (Blueprint $table) {
-            $table->integer('turn_over')->nullable()->after('confirmed');
+        Schema::table('loan_request', function (Blueprint $table) {
+            $table->integer('paid_using_savings')->nullable()->after('paid');
         });
     }
 
@@ -25,8 +25,8 @@ class AddTurnOverToTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::table('transactions', function (Blueprint $table) {
-            // $table->dropcolumn('turn_over');
+        Schema::table('loan_request', function (Blueprint $table) {
+            //
         });
     }
 }

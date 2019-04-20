@@ -81,29 +81,30 @@
                         </div>
                     </div>
                 </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col col-md col-lg">
-                            Remaining Loan Balance
-                        </div>
-                        <div class="col col-md col-lg">
-                            <h6>₱ {{ $loan_request->balance }}</h6>
-                        </div>
-                    </div>
-                </li>
-                @if($loan_request)
+                {{-- {{dd($loan_request ? $loan_request->paid_using_savings != null : '', $loan)}} --}}
+                @if($loan_request ? !$loan_request->paid_using_savings != null : '')
                 {{-- {{dd(date('F d, Y', strtotime($loan_request->per_month_from)))}} --}}
                     @if($loan_request->per_month_amount <= 0)
                     {{-- {{dd($loan_request)}} --}}
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col col-md col-lg">
+                                    Remaining Loan Balance
+                                </div>
+                                <div class="col col-md col-lg">
+                                    <h6>₱ {{ $loan_request->balance }}</h6>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            {{-- <div class="row">
+                                <div class="col col-md col-lg">
                                     Loan payment this month
                                 </div>
                                 <div class="col col-md col-lg">
                                     <h6>₱ {{ round(($loan_request->loan_amount * 0.06  * $loan_request->days_payable + $loan_request->loan_amount) / $loan_request->days_payable, 2) - abs($loan_request->per_month_amount) }} </h6>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="row">
                                 <div class="col col-md col-lg">
                                     <small class="text-muted">Over Payment</small>
@@ -149,6 +150,17 @@
                             </div>
                         </li>
                     @endif
+                @else
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col col-md col-lg">
+                                Loan
+                            </div>
+                            <div class="col col-md col-lg">
+                               <h6> No Current Loan</h6>
+                            </div>
+                        </div>
+                    </li>
                 @endif
                 <li class="list-group-item">
                     <div class="row">

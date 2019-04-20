@@ -92,7 +92,7 @@ class ProcessController extends Controller
             $process->collector_id = $check->id;
             $process->token = $request->token;
             $process->save();
-            return redirect()->route('admin-requests')->with('success', 'Wating to Accept Collector: '.$check->lname. ' '.$check->fname);
+            return redirect()->back()->with('success', 'Wating to Accept Collector: '.$check->lname. ' '.$check->fname);
         }else{
             return redirect()->back()->withInput()->with('error', 'Collector: Not found');
         }
@@ -199,6 +199,7 @@ class ProcessController extends Controller
             $received->received = 1;
             $received->per_month_from = strtotime(NOW());
             $received->per_month_to = strtotime(NOW().'+ 1 months');
+            $received->date_approved = strtotime(NOW());
             // dd(date('F d, Y', $received->per_month_updated_at), $received->per_month_updated_at);
             $process->transfer = 4;
             $process->token = $token;

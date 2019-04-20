@@ -7,31 +7,43 @@
 @section('content')
 
 
-<h3 class="header mt-2">Collected money as of {{date('F d, Y', strtotime(NOW()))}}</h3>
+<h3 class="header mt-2">Status as of {{date('F d, Y', strtotime(NOW()))}}</h3>
+ang pag distribute sa kwarta ig end year
+<div class="row">
+    <div class="col">
+        <div class="py-3">
+            @php
+                $title = date('n', strtotime(NOW())) > 11 ? 'Distribute Money' : 'This Function can be use during December'; 
+                $path = date('n', strtotime(NOW())) > 3 ? '/admin/distribute' : '#'; 
+            @endphp
+            <a href="{{$path}} "><button class="btn btn-light border" data-toggle="tooltip" data-placement="top" title = "{{$title}} " >Distribute</button></a>
+        </div>
+    </div>
+</div>
 <div class="card-deck pb-5 mt-3">
     <div class="card shadow-sm">
         <div class="card-body d-flex justify-content-center align-items-center flex-column">
             <div class="border rounded-circle p-2 bg-light"><i class="text-success fas fa-money-bill-alt fa-lg"></i></div>
             <h5 class="pt-2 header display-5 font-weight-bold text-center">
-                {{ '₱'.$deposit }}
+                {{ '₱'.number_format(round($status->savings), 2) }}
             </h5>
-            <small>Deposit</small>
+            <small>Member's Savings</small>
         </div>
     </div>
     <div class="card shadow-sm">
         <div class="card-body d-flex justify-content-center align-items-center flex-column">
             <div class="border rounded-circle p-2 bg-light"><i class="text-primary fas fa-chart-line fa-lg"></i></div>
             <h5 class="pt-2 header display-5 font-weight-bold text-center">
-                {{ '₱'.$loan_payment }}
+                {{ '₱'.number_format(round($status->patronage_refund), 2) }}
             </h5>
-            <small>Interest made from loan</small>
+            <small>Patronage Refund</small>
         </div>
     </div>
     <div class="card shadow-sm">
         <div class="card-body d-flex justify-content-center align-items-center flex-column">
             <div class="border rounded-circle p-2 bg-light"><i class="text-orange fas fa-wallet fa-lg"></i></div>
             <h5 class="pt-2 header display-5 font-weight-bold text-center">
-                {{ '₱'.round($distribution->distribution) }}
+                {{ '₱'.number_format(round($status->distribution), 2) }}
             </h5>
             <small>Distribution</small>
         </div>
@@ -43,11 +55,11 @@
         deposit <br>
         {{$deposit.'.00'}}
     </div>
-    <div class="col-4">  
+    <div class="col-3">  
         loan payment from the member <br>
         {{$loan_payment.'.00'}}
     </div>
-    <div class="col-4">  
+    <div class="col-3">  
         distrubution <br>
         {{round($distribution->distribution).'.00'}}
     </div>
@@ -157,4 +169,7 @@
 <div class="d-flex justify-content-center mt-3">
     {{ $transactions->links() }}
 </div>
+@push('scripts')
+    <script src="{{asset ('js/scripts.js')}} "></script>
+@endpush
 @endsection

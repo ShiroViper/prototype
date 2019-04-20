@@ -81,9 +81,11 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
 
         Route::get('/status', 'StatusController@index')->name('admin-status');
         Route::get('/receive/{id}/accept', 'StatusController@accept')->name('admin-accept');
+
+        Route::get('/distribute', 'AdminController@distribute')->name('admin-distribute');
     });
 
-    Route::prefix('member')->group(function () {
+    Route::prefix('member')->middleware('member-routes')->group(function () {
         Route::get('/dashboard', 'SchedulesController@index')->name('member-dashboard');
         // When the user has not yet setup his account [The calendar wont show]
         Route::post('/dashboard/setup', 'UsersController@setup')->name('member-setup');
@@ -120,10 +122,12 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::post('/cancel/archive/', 'MemberController@update')->name('member-cancel-archive');
         Route::get('/cancel/destroy', 'MemberController@destroy')->name('member-cancel-destroy');
         Route::get('/change_pass', 'MemberController@changePassword')->name('change-password');
+
+        Route::get('/accept/distribution', 'AdminController@accept')->name('member-distribution');
         
     });
 
-    Route::prefix('collector')->group(function () {
+    Route::prefix('collector')->middleware('collector-routes')->group(function () {
         Route::get('/failed', 'TransactionController@failed')->name('collector-failed');
         Route::get('/deliquent', 'TransactionController@deliquent')->name('collector-deliquent');        
         Route::get('/member_searched', ['as'=>'search', 'uses'=>'TransactionController@partial_store']);

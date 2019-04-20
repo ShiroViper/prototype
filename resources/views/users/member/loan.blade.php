@@ -8,7 +8,7 @@
 @push('scripts')
     <script src="{{ asset('js/scripts.js') }}"></script>
 @endpush
-@if(!$unpaid)
+@if($paid ? $status->savings > 0 : '')
     <h3 class="header mt-2">Request Loan</h3>
     {{-- <div class="bg-teal p-3 text-white">
         The minimum loan amount is ₱200.
@@ -82,7 +82,12 @@
             personal and other reason is equal to savings while emergency reason is acceptable to loan above the savings but it's the admin decision wheter to accept or decline the loan request. <br> --}}
         </div>
     </div>
-@else
+@elseif($status->savings <= 0)
+    <div class="failed-loan d-flex justify-content-center align-items-center">
+        <h6 class="display-5 header text-center">Cannot Loan: No Savings or In Debt </h6>
+    </div>
+    
+@else 
     {{-- <h3 class="header mt-3 text-center">Request Loan Not Available</h3>
     <h3 class="header mt-3 text-center">Please Settle your loan</h3> --}}
     <div class="failed-loan d-flex justify-content-center align-items-center">
