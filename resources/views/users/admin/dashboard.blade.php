@@ -85,7 +85,58 @@
                             </span>' : '' !!}
                         <h6 class="header mb-3">Loan Requests</h6>
                          @if (count($pending) > 0)
-                            
+                            <div class="accordion" id="dashboard-admin-lr-accordion">
+                                @foreach ($pending as $key => $item)
+                                    <div class="list-group">
+                                        <div class="accordion" id="dashboard-admin-lr-accordion">
+                                            <div class="list-group">
+                                                <div class="list-body">
+                                                    <div class="list-group-item list-group-item-action list-header" data-toggle="collapse" href="#collapse{{ $key }}" role="button" aria-expanded="false" aria-controls="collapse{{ $key }}">
+                                                    <div class="row d-flex justify-content-center align-items-center">
+                                                        <div class="col-sm">
+                                                            {{ $item->comments }}
+                                                        </div>
+                                                        <div class="col-sm text-right">
+                                                            <a class="card-link" data-toggle="collapse" href="#collapse{{ $key }}" role="button" aria-expanded="false" aria-controls="collapse{{ $key }}">
+                                                                <small>More Details <i class="fas fa-chevron-down"></i></small>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <div id="collapse{{ $key }}" class="collapse" aria-labelledby="heading{{ $key }}" data-parent="#dashboard-admin-lr-accordion">
+                                                        <div class="list-content border">
+                                                            <p>{{ $item->lname.', '. $item->fname.' '. $item->mname }}</p>
+                                                            <p>₱ {{ number_format($item->loan_amount, 2) }}</p>
+                                                            <p>{{ $item->days_payable }} Month/s</p>
+                                                            <div>
+                                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/requests/{{ $item->id }}/accept">Accept</a>
+                                                                <a class="btn btn-outline-secondary mx-2 no-modal" role="button" href="/admin/requests/{{ $item->id }}/reject">Decline</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                                    {{-- @foreach ($turn_over as $key => $item)
+                                        <div class="card">
+                                            <div class="card-header" id="head{{ $key }}">
+                                            <h2 class="mb-0">
+                                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ $key }}" aria-expanded="true" aria-controls="collapse{{ $key }}">
+                                                Collapsible Group Item #1
+                                                </button>
+                                            </h2>
+                                            </div>
+    
+                                            <div id="collapse{{ $key }}" class="collapse show" aria-labelledby="head{{ $key }}" data-parent="#dashboard-admin-lr-accordion">
+                                            <div class="card-body">
+                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                            </div>
+                                            </div>
+                                        </div>
+                                    @endforeach --}}
                         @else
                             <div class="p-3 header text-center bg-light text-muted"><small>No Entries Found</small></div>
                         @endif
@@ -240,50 +291,55 @@
             </table>
         </div> --}}
 
-        <h5 class="header text-primary my-3"><i class="fas fa-list mr-3"></i>Transactions</h5>
-        <div class="card">
-            <div class="card-body">
-                @if (count($transactions) > 0)
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th class="border-0">Account</th>
-                                    <th class="border-0">Date & Time</th>
-                                    <th class="border-0">Member</th>
-                                    <th class="border-0">Amount</th>
-                                    <th class="border-0">PDF</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($transactions as $trans)
-                                <tr>
-                                    @if($trans->trans_type == 1 )
-                                        <td>Savings: Deposit</td>
-                                    @else
-                                        <td>My Loan: Loan Payment</td>
-                                    @endif
-                                    <td>{{date("h:i A M d, Y", strtotime($trans->created_at))}}</td>
-                                    <td>{{$trans->lname}}, {{$trans->fname}} {{$trans->mname}} </td>
-                                    <td>₱ {{number_format($trans->amount, 2)}}</td>
-                                    <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/transaction/{{Crypt::encrypt($trans->id)}}/generate"> Generate</a> </td>
-                                </tr>  
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <div class="d-flex justify-content-center mt-3">
-                            {{ $transactions->links() }}
-                        </div>
+        <h5 class="header text-primary my-3 pt-2"><i class="fas fa-list mr-3"></i>Transactions</h5>
+        <div class="row">
+            <div class="col-sm my-3">
+                <div class="card">
+                    <div class="card-body">
+                        @if (count($transactions) > 0)
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Date & Time</th>
+                                            <th>Member</th>
+                                            <th colspan="2">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($transactions as $trans)
+                                        <tr>
+                                            @if($trans->trans_type == 1 )
+                                                <td>Deposit</td>
+                                            @else
+                                                <td>Loan Payment</td>
+                                            @endif
+                                            <td>{{date("h:i A M d, Y", strtotime($trans->created_at))}}</td>
+                                            <td>{{$trans->lname}}, {{$trans->fname}} {{$trans->mname}} </td>
+                                            <td class="border-right-0">₱ {{number_format($trans->amount, 2)}}</td>
+                                            <td class="text-right border-left-0">
+                                                <a class="btn btn-outline-primary mx-2 no-modal btn-sm" role="button" href="/admin/transaction/{{Crypt::encrypt($trans->id)}}/generate" data-toggle="tooltip" data-placement="top" title="Download PDF"><i class="fas fa-download"></i></a>
+                                            </td>
+                                        </tr>  
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                <div class="d-flex justify-content-center mt-3">
+                                    {{ $transactions->links() }}
+                                </div>
+                            </div>
+                        @else
+                            <div class="p-3 header text-center bg-light text-muted"><small>No Entries Found</small></div>
+                        @endif
                     </div>
-                @else
-                    <div class="p-3 header text-center bg-light text-muted"><small>No Entries Found</small></div>
-                @endif
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 @push('scripts')
-    <script src="{{asset ('js/scripts.js')}} "></script>
+    <script src="{{ asset('js/scripts.js') }} "></script>
 @endpush
 @endsection
