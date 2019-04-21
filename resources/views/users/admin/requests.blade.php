@@ -49,10 +49,9 @@
 </div>
 @endif
 
-<h3 class="header mt-2">Requests</h3>
+{{-- <h3 class="header mt-2">Requests</h3>
 <div class="row">
     <div class="col">
-        {{-- <h6 class="card-header">Pending Requests</h6> --}}
         <div class="container">
             <div class="table-responsive">
                 <table class="table table-hover mt-3">
@@ -69,7 +68,6 @@
                     <tbody>
                         @if (count($pending) > 0)
                             @foreach ($pending as $item)
-                                {{-- <tr data-toggle="modal" data-target="#LoanModal"> --}}
                                 <tr >
                                     <td>{{ date("h:i A  F d, Y", strtotime($item->created_at)) }}</td>
                                     <td>{{ $item->lname.', '. $item->fname.' '. $item->mname }}</td>
@@ -95,9 +93,9 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
-<h3 class="header mt-5">Requests History</h3>
+<h3 class="header mt-3">Requests History</h3>
 <div class="row">
     <div class="col">
         {{-- <h6 class="card-header">Requests History[status, received, paid move to modal] [meantime testing only]</h6> --}}
