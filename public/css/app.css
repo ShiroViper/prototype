@@ -16453,6 +16453,35 @@ readers do not read off random characters that represent icons */
   cursor: pointer;
 }
 
+.list-header,
+.list-content {
+  padding: 1rem;
+}
+
+.list-header:hover {
+  cursor: pointer;
+}
+
+.opened {
+  box-shadow: 0px 0px 10px -1px #cccccc;
+  background: rgba(178, 235, 242, 0.1) !important;
+  z-index: 10;
+}
+
+.opened .list-header {
+  background-color: rgba(178, 235, 242, 0.4);
+}
+
+.border-selected {
+  border-color: #B2EBF2 !important;
+}
+
+.notif-marker {
+  position: absolute;
+  top: -10px;
+  right: 0;
+}
+
 @-webkit-keyframes rubberBand {
   from {
     -webkit-transform: scale3d(1, 1, 1);
@@ -16618,6 +16647,10 @@ readers do not read off random characters that represent icons */
 .failed-loan,
 .full-view {
   height: calc(100vh - 226px);
+}
+
+.dashboard-notif-area {
+  background-color: #f4f7fc;
 }
 
 .pop-messages {

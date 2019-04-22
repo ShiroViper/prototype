@@ -1,4 +1,16 @@
 /**
+ * Accordion Selector
+ */
+$(".list-header").click(function () {
+  if ($(this).parent().hasClass("opened")) {
+    $(this).parent().removeClass("opened border border-selected rounded");
+  } else {
+    $(".list-group").children().removeClass("opened border border-selected rounded");
+    $(this).parent().addClass("opened border border-selected rounded");
+  }
+});
+
+/**
  * The alternative of this:
  * onclick="document.location = '/admin/{{ $user->id }}';"
  */

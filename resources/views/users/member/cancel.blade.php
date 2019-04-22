@@ -50,34 +50,38 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-sm col-md-10 col-xl-8">
-        <h5 class="h5 pb-3">Request for Deactivation of Account</h5>
-        {!!Form::open(['action'=> ['MemberController@update'], 'method'=>'POST']) !!}
-        @csrf
-        {{Form::hidden('token', $token)}}
+@if(!$paid_null)
+    <div class="row">
+        <div class="col-sm col-md-10 col-xl-8">
+            <h5 class="h5 pb-3">Request for Deactivation of Account</h5>
+            {!!Form::open(['action'=> ['MemberController@update'], 'method'=>'POST']) !!}
+            @csrf
+            {{Form::hidden('token', $token)}}
+            
+            <div class="form-group">
+                {{ Form::label('reason', 'Reason', ['class' => 'h6']) }}
+                {{ Form::textarea('reason', '', ['class' => $errors->has('reason') ? 'form-control is-invalid' : 'form-control', 'rows' => 2, 'required']) }}
+                @if ($errors->has('reason'))
+                    <div class="invalid-feedback">{{ $errors->first('reason') }}</div>
+                @endif
+            </div>
         
-        <div class="form-group">
-            {{ Form::label('reason', 'Reason', ['class' => 'h6']) }}
-            {{ Form::textarea('reason', '', ['class' => $errors->has('reason') ? 'form-control is-invalid' : 'form-control', 'rows' => 2, 'required']) }}
-            @if ($errors->has('reason'))
-                <div class="invalid-feedback">{{ $errors->first('reason') }}</div>
-            @endif
+            <div class="form-group">
+                <label for="password" class="h6"> Password</label>
+                <input id="password" type="password" name="pass" class="form-control" required>
+                @if ($errors->has('pass'))
+                    <div class="invalid-feedback">{{ $errors->first('pass') }}</div>
+                @endif
+            </div>
+        
+            {{ Form::submit('Submit Request', ['class' => 'btn btn-primary autocomplete-btn']) }}
+        
+            {!!Form::close()!!}
         </div>
-    
-        <div class="form-group">
-            <label for="password" class="h6"> Password</label>
-            <input id="password" type="password" name="pass" class="form-control" required>
-            @if ($errors->has('pass'))
-                <div class="invalid-feedback">{{ $errors->first('pass') }}</div>
-            @endif
-        </div>
-    
-        {{ Form::submit('Submit Request', ['class' => 'btn btn-primary autocomplete-btn']) }}
-    
-        {!!Form::close()!!}
     </div>
-</div>
+@else    
+    <h1> Please Settle Your Unfinished Loan First </h1>
+@endif
 @endif
 {{-- <div class="col-6">
     -Note for cancellation of account: <br>
