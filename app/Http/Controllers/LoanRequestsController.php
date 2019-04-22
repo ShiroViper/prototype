@@ -250,7 +250,7 @@ class LoanRequestsController extends Controller
         // Start it now, indicating that the member's loan request has started.
         // but hte counting is starting after the first month is finished
         $sched->start_date = Carbon::now();
-        $sched->end_date = $sched->start_date->copy()->addMonths($rq->days_payable);
+        $sched->end_date = $sched->start_date->copy()->addMonths($rq->days_payable + 1);
         $sched->sched_type = 2;
         $sched->user_id = $rq->user_id;
         $sched->save();
