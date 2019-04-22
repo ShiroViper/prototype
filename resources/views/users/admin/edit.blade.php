@@ -103,7 +103,8 @@
                             <div class="row">
                                 <div class="col">Role</div>
                                 <div class="col">
-                                    {{ Form::select('user_type', [0 => 'Member', 1 => 'Collector'], $user->user_type, ['class' => 'form-control']) }}
+                                    <div class="font-weight-bold">{{$user->user_type == 0 ? 'Member' : 'Collector'}} </div>
+                                    {{-- {{ Form::select('user_type', [0 => 'Member', 1 => 'Collector'], $user->user_type, ['class' => 'form-control', 'disabled']) }} --}}
                                 </div>
                             </div>
                         </li>

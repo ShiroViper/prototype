@@ -30,12 +30,12 @@
     @endif
 
 </div>    
-<small class="badge badge-pill badge-info shadow border py-2 float-right" data-toggle="tooltip" data-placement="top" title="Shows a list of member ready to transfer of the loan money from the request"><span class="h6"><i class="fa fa-question-circle fa-lg" aria-hidden="true"></i></small>
+<small class="badge badge-pill badge-info shadow border py-2 float-right" data-toggle="tooltip" data-placement="top" title="Shows a list of pending transfer to member"><span class="h6"><i class="fa fa-question-circle fa-lg" aria-hidden="true"></i></small>
     <div class="row pt-3">
         <div class="col">
             <div class="card">
                 {{-- shows a list of money ready for transfer in loan request --}}
-                <h6 class="card-header float-left">Ready to transfer from member</h6>
+                <h6 class="card-header float-left">Pending Transfer to Admin</h6>
                 <div class="container">
                     <div class="table-responsive">
                         <table class="table table-hover mt-3">

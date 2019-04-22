@@ -177,7 +177,7 @@ class UsersController extends Controller
         $validator = Validator::make($request->all(), [
             'lname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
-            'mname' => ['nullable', 'string', 'regex:/^[\pL\s\-]+$/u'],
+            'mname' => ['nullable', 'string'],
             'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
             'email' => ['required', 'email', Rule::unique('users')->ignore($id)],
             'address' => ['required', 'string'],
@@ -192,7 +192,7 @@ class UsersController extends Controller
         }
 
         $user = User::find($id);
-        $user->user_type = $request->input('user_type');
+        // $user->user_type = $request->input('user_type');
         $user->lname = $request->input('lname');
         $user->fname = $request->input('fname');
         $user->mname = $request->input('mname');
