@@ -67,7 +67,8 @@ class AdminController extends Controller
 
     public function distribute(){
         $status = Status::where('user_id', 1)->first();
-        $user = User::where([['user_type', 0], ['setup', 1], ['inactive', '!=', 1]])->get();
+        // $user = User::where([['user_type', 0], ['setup', 1], ['inactive', '!=', 1]])->get();
+        $user = User::join('status', 'status.user_id', '=', 'users.id')->select('users.*')->where([['user_type', 0], ['setup', 1], ['inactive', '!=', 1],['savings', '>=', 1825]])->get();
         $user_count = count($user);
 
         if($status->distribution <= 0 && date('n', strtotime(NOW())) > 3){
@@ -76,19 +77,21 @@ class AdminController extends Controller
             
             $distribute = $status->distribution / $user_count;
             foreach($user as $u){
-                $dis = New Distribution;
-                $dis->user_id = $u->id;
-                $dis->amount = $distribute;
-                $dis->save();
+                // dd(! $temp = Distribution::where([['user_id', $u->id], ['confirmed', null]])->first(), $temp);
+                if(!Distribution::where([['user_id', $u->id], ['confirmed', null], [DB::raw('ADDDATE(created_at, INTERVAL 1 month)'), '>', NOW()]])->first() ){
+                    if(!Distribution::where([['user_id', $u->id], ['confirmed', 1], [DB::raw('ADDDATE(created_at, INTERVAL 1 month)'), '>', NOW()]])->first()){
+                        $dis = New Distribution;
+                        $dis->user_id = $u->id;
+                        $dis->amount = $distribute;
+                        $dis->save();
+                        
+                        // save this in confirmation
+                        $status->save();
+                    }
+                }
             }
-
-            $status->save();
             return redirect()->back()->with('success', 'Pending confirmation from member');
         }
-    }
-
-    public function accept(){
-        return 'i';
     }
 
     public function index()

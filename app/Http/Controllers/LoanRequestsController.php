@@ -33,17 +33,17 @@ class LoanRequestsController extends Controller
             // Pending_cancel for cancellation of accounts
             $pending_cancel = Comment::join('status', 'status.user_id', '=', 'comments.user_id')->join('users', 'users.id', '=', 'comments.user_id')->select('comments.id', 'savings', 'patronage_refund', 'comments.created_at', 'comments', 'lname', 'mname', 'fname')->whereNotNull('comments.user_id')->whereNull('comments.confirmed')->orderBy('comments.updated_at', 'asc')->paginate(5);
             $lr = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(5);
-            $pending = Loan_Request::join('comments', 'request_id', '=', 'loan_request.id')->join('users', 'users.id', '=', 'loan_request.user_id')->select( 'lname', 'mname', 'fname', 'loan_request.created_at', 'loan_amount', 'days_payable', 'comments')->orderBy('loan_request.created_at', 'desc')->whereNull('loan_request.confirmed')->paginate(5);
+            $pending = Loan_Request::join('comments', 'request_id', '=', 'loan_request.id')->join('users', 'users.id', '=', 'loan_request.user_id')->select( 'loan_request.id', 'lname', 'mname', 'fname', 'loan_request.created_at', 'loan_amount', 'days_payable', 'comments')->orderBy('loan_request.created_at', 'desc')->whereNull('loan_request.confirmed')->paginate(5);
             // dd($pending);
-            // dd($pending);
+
             return view('users.admin.requests')->with('pending_cancel', $pending_cancel)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
 
         } else {
             $lr = Loan_Request::orderBy('updated_at', 'desc')->where('user_id', Auth::user()->id)->whereNotNull('confirmed')->paginate(5);
             $pending = Loan_Request::orderBy('created_at', 'desc')->where('user_id', Auth::user()->id)->where('confirmed', NULL)->paginate(5);
             $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
-            $distribution = Distribution::where('user_id', Auth::user()->id)->first();
-            // dd($distribution->amount);
+            $distribution = Distribution::where([['user_id', Auth::user()->id], ['confirmed', null]])->first();
+            // dd($distribution);
             
             // for transferring money to member
             $pending_mem_receive = Process::join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'collector_id')->select('processes.id', 'transfer', 'request_id', 'collector_id', 'processes.updated_at','lname', 'fname','mname', 'loan_amount')->where([['user_id', Auth::user()->id],['transfer',3]])->orderBy('updated_at', 'asc')->paginate(5);
@@ -87,6 +87,7 @@ class LoanRequestsController extends Controller
         // ================================================
 
         $paid = Loan_Request::where([['user_id', Auth::user()->id], ['paid', null]])->orwhere([['user_id', Auth::user()->id], ['paid_using_savings', null]])->first();
+
         $status = Status::where('user_id', Auth::user()->id)->first();
         $current_savings = Status::where('user_id', Auth::user()->id)->first();
         return view('users.member.loan')->with('token', $token)->with('status', $status)->with('paid', $paid)->with('active', 'loan')->with('savings', $current_savings);
@@ -249,7 +250,7 @@ class LoanRequestsController extends Controller
         // Start it now, indicating that the member's loan request has started.
         // but hte counting is starting after the first month is finished
         $sched->start_date = Carbon::now();
-        $sched->end_date = $sched->start_date->copy()->addMonths($rq->days_payable+1);
+        $sched->end_date = $sched->start_date->copy()->addMonths($rq->days_payable + 1);
         $sched->sched_type = 2;
         $sched->user_id = $rq->user_id;
         $sched->save();

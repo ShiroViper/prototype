@@ -128,11 +128,13 @@
                                     <td>₱ {{ number_format($request->loan_amount,2 ) }}</td>
                                     <td>{{ $request->days_payable }} Months</td>
                                     <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
-                                    <td>{{ $request->received ? 'Yes' : ($request->confirmed ? 'No': 'N/A')}} </td>  
-                                    <td>{{ $request->confirmed ? ($request->paid ? 'Yes' : 'Ongoing') : 'N/A' }}</td>
+                                    <td>{{ $request->received ? 'Yes' : ($request->confirmed ? 'No': '')}} </td>  
+                                    <td>{{ $request->confirmed ? ($request->paid ? 'Yes' : 'Ongoing') : '' }}</td>
                                     {{-- if status is declined skip this function otherwise execur --}}
                                     @if($request->received != 1 && $request->confirmed != 0)
                                         <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/process/{{ $request->id }}/edit">Transfer</a></td>
+                                    @elseif($request->status == 0)
+                                        <td></td>
                                     @else
                                         <td><span class="badge badge-success"><small>Money Transferred</small></span></td>
                                     @endif

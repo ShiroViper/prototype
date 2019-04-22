@@ -21,7 +21,7 @@
         </div>
         @if($account_status->confirmed == NULL)
         <h2 class="display-5 header">Requires Confirmation from the administration</h2>
-        <p>If you dont request this cancellation of account click <a href="/member/cancel/destroy"> Revoke Cancellation Request </a> . </p>
+        <p>If you dont request this cancellation of account click <a href="/collector/cancel/destroy"> Revoke Cancellation Request </a> . </p>
         @elseif($account_status->confirmed == 1)
             <h2>Account has been canceled by the administration</h2>
         @endif

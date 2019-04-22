@@ -89,8 +89,11 @@ class MemberRequestController extends Controller
         return redirect()->action('UsersController@index')->with('success', 'User added successfully');
     }
 
-    public function decline()
+    public function decline($id)
     {
-        dd('declined the member');
+        $member_request = Member_Request::where('id', $id)->first();
+        $member_request->delete();
+
+        return redirect()->back()->with('success', 'Member Decline Successfully');
     }
 }
