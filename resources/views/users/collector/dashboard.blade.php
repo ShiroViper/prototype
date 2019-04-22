@@ -15,11 +15,11 @@
             <table class="table table-striped mt-3">
                 <thead>
                     <tr>
-                        <th>Account</th>
-                        <th>Date&Time</th>
+                        <th>Type</th>
+                        <th>Date & Time</th>
                         <th>Member </th>
-                        <th>Amount</th>
-                        <th>PDF</th>
+                        <th colspan="2">Amount</th>
+                        {{-- <th>PDF</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -27,14 +27,18 @@
                         @foreach ($transactions as $trans)
                         <tr>
                             @if($trans->trans_type == 1)
-                                <td>Savings: Deposit</td>
+                                <td>Deposit</td>
                             @else
-                                <td>My Loan: Loan Payment</td>
+                                <td>Loan Payment</td>
                             @endif
                             <td>{{date("h:i A M d, Y", strtotime($trans->created_at))}}</td>
                             <td>{{$trans->lname}}, {{$trans->fname}} {{$trans->mname}} </td>
-                            <td>₱ {{$trans->amount}}</td>
-                            <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/collector/transaction/{{ Crypt::encrypt($trans->id) }}/generate">Generate</a></td>
+                            <td>₱{{ $trans->amount }}</td>
+                            <td class="text-right border-left-0">
+                                <a class="btn btn-outline-secondary btn-sm" role="button" href="/collector/transaction/{{ Crypt::encrypt($trans->id) }}/generate" data-toggle="tooltip" data-placement="top" title="Download PDF">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </td>
                         </tr>  
                         @endforeach
                     @else

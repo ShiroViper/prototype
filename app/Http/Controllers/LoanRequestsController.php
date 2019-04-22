@@ -116,11 +116,11 @@ class LoanRequestsController extends Controller
         if($status->savings == null || $status->savings < 200){
             // check if reason is not emergency loan
             if($request->reason != 'For Emergency Use'){
-                return redirect()->back()->with('error', 'Request loan available atleast ₱ 200 savings ')->withInput(Input::except('pass'));
+                return redirect()->back()->with('error', 'Request loan available at least ₱ 200 savings ')->withInput(Input::except('pass'));
             }
         // check if amount is greater than current savings and reason is not emergency loan
         }else if($request->amount > $status->savings && $request->reason != 'For Emergency Use'){
-            return redirect()->back()->with('error', 'Request loan above the savings not accepted')->withInput(Input::except('pass'));
+            return redirect()->back()->with('error', 'Requested loan should be less than or equal to savings')->withInput(Input::except('pass'));
         // check if months payable is greater than the current end year
         }else if($request->months > $count_end_month ){
             return redirect()->back()->with('error', 'Months payable should not beyond the current end year')->withInput(Input::except('pass'));
@@ -140,7 +140,7 @@ class LoanRequestsController extends Controller
         $this->validate($request, [
             'amount' => ['required', 'numeric', 'min:200'],   
             'reason' => ['required', 'string'],
-            'other' => ['nullable', 'sometimes'],
+            'other' => ['nullable'],
             'pass' => ['required'],
             'months' => ['required', 'numeric', 'min:1', 'max:12']
         ], $messages);

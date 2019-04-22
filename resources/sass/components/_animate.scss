@@ -138,6 +138,11 @@
   }
 }
 
+.rotate {
+  transform: rotate(180deg);
+  transition: all .25s;
+}
+
 .tada {
   animation: 2.5s 10;
   -webkit-animation-name: tada;
