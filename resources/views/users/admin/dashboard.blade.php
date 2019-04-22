@@ -77,48 +77,79 @@
         <h5 class="header text-primary my-3"><i class="far fa-bell mr-3"></i>Notifications</h5>
         <div class="row">
             <div class="col-lg my-3">
-                <div class="card {{ count($pending) > 0 ? 'border border-warning shadow' : '' }}">
+                <div class="card {{ count($pending) > 0 ? 'border border-primary shadow' : '' }}">
                     <div class="card-body">
                         {!! count($pending) > 0 ? '<span class="fa-stack fa-sm notif-marker tada">
-                                <i class="fas fa-circle fa-stack-2x text-warning"></i>
+                                <i class="fas fa-circle fa-stack-2x text-primary"></i>
                                 <i class="fas fa-exclamation fa-stack-1x fa-inverse rubber"></i>
                             </span>' : '' !!}
-                        <h6 class="header mb-3">Loan Requests</h6>
+                        <div class="row">
+                            <div class="col">
+                                <h6 class="header mb-3">Loan Requests</h6>
+                            </div>
+                            <div class="col text-right">
+                                <a href="/admin/requests"><small>Requests History</small></a>
+                            </div>
+                        </div>
                          @if (count($pending) > 0)
                             <div class="accordion" id="dashboard-admin-lr-accordion">
-                                @foreach ($pending as $key => $item)
-                                    <div class="list-group">
-                                        <div class="accordion" id="dashboard-admin-lr-accordion">
-                                            <div class="list-group">
-                                                <div class="list-body">
-                                                    <div class="list-group-item list-group-item-action list-header" data-toggle="collapse" href="#collapse{{ $key }}" role="button" aria-expanded="false" aria-controls="collapse{{ $key }}">
-                                                    <div class="row d-flex justify-content-center align-items-center">
-                                                        <div class="col-sm">
-                                                            {{ $item->comments }}
-                                                        </div>
-                                                        <div class="col-sm text-right">
-                                                            <a class="card-link" data-toggle="collapse" href="#collapse{{ $key }}" role="button" aria-expanded="false" aria-controls="collapse{{ $key }}">
-                                                                <small>More Details <i class="fas fa-chevron-down"></i></small>
-                                                            </a>
-                                                        </div>
+                                <div class="list-group">
+                                    @foreach ($pending as $key => $item)
+                                        <div class="list-body">
+                                            <div class="list-group-item list-group-item-action list-header" data-toggle="collapse" href="#collapse{{ $key }}" role="button" aria-expanded="false" aria-controls="collapse{{ $key }}">
+                                                <div class="row d-flex justify-content-center align-items-center">
+                                                    <div class="col text-truncate">
+                                                        Loan Request from {{ $item->lname.', '. $item->fname.' '. $item->mname }}
                                                     </div>
-                                                    </div>
-                                                    <div id="collapse{{ $key }}" class="collapse" aria-labelledby="heading{{ $key }}" data-parent="#dashboard-admin-lr-accordion">
-                                                        <div class="list-content border">
-                                                            <p>{{ $item->lname.', '. $item->fname.' '. $item->mname }}</p>
-                                                            <p>₱ {{ number_format($item->loan_amount, 2) }}</p>
-                                                            <p>{{ $item->days_payable }} Month/s</p>
-                                                            <div>
-                                                                <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/requests/{{ $item->id }}/accept">Accept</a>
-                                                                <a class="btn btn-outline-secondary mx-2 no-modal" role="button" href="/admin/requests/{{ $item->id }}/reject">Decline</a>
-                                                            </div>
-                                                        </div>
+                                                    <div class="col-2 text-right">
+                                                        <a class="card-link text-secondary" data-toggle="collapse" href="#collapse{{ $key }}" role="button" aria-expanded="false" aria-controls="collapse{{ $key }}">
+                                                            <i class="fas fa-chevron-down list-chevron"></i>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div id="collapse{{ $key }}" class="collapse" aria-labelledby="heading{{ $key }}" data-parent="#dashboard-admin-lr-accordion">
+                                                <div class="list-content border">
+                                                    <div class="row">
+                                                        <div class="col-sm mb-3">
+                                                            <div class="h5 mb-0">{{ $item->lname.', '. $item->fname.' '. $item->mname }}</div>
+                                                            <small class="text-muted">Member Name</small>
+                                                        </div>
+                                                        <div class="col-sm mb-3">
+                                                            <div class="h5 mb-0">₱ {{ number_format($item->loan_amount, 2) }}</div>
+                                                            <small class="text-muted">Loan Amount</small>
+                                                        </div>
+                                                        <div class="col-sm mb-3">
+                                                            <div class="h5 mb-0">{{ $item->days_payable }} Month/s</div>
+                                                            <small class="text-muted">Payable</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                        <div class="text-justify">{{ $item->comments }}</div>
+                                                            {{-- <small class="text-muted">Comment</small> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row pt-3">
+                                                        <div class="col">
+                                                            <a class="btn btn-outline-primary btn-sm btn-block" role="button" href="/admin/requests/{{ $item->request_id }}/accept">Accept</a>
+                                                        </div>
+                                                        <div class="col">
+                                                            <a class="btn btn-outline-secondary btn-sm btn-block" role="button" href="/admin/requests/{{ $item->request_id }}/reject">Decline</a>
+                                                        </div>
+                                                    </div>
+                                                    {{-- <p>{{ $item->lname.', '. $item->fname.' '. $item->mname }}</p>
+                                                    <p>₱ {{ number_format($item->loan_amount, 2) }}</p>
+                                                    <p>{{ $item->days_payable }} Month/s</p> --}}
+                                                    {{-- <div>
+                                                        <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/requests/{{ $item->id }}/accept">Accept</a>
+                                                        <a class="btn btn-outline-secondary mx-2 no-modal" role="button" href="/admin/requests/{{ $item->id }}/reject">Decline</a>
+                                                    </div> --}}
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
                             </div>
                                     {{-- @foreach ($turn_over as $key => $item)
                                         <div class="card">
@@ -144,10 +175,10 @@
                 </div>
             </div>
             <div class="col-lg my-3">
-                <div class="card {{ count($turn_over) > 0 ? 'border border-warning shadow' : '' }}">
+                <div class="card {{ count($turn_over) > 0 ? 'border border-primary shadow' : '' }}">
                     <div class="card-body">
                         {!! count($turn_over) > 0 ? '<span class="fa-stack fa-sm notif-marker tada">
-                                <i class="fas fa-circle fa-stack-2x text-warning"></i>
+                                <i class="fas fa-circle fa-stack-2x text-primary"></i>
                                 <i class="fas fa-exclamation fa-stack-1x fa-inverse rubber"></i>
                             </span>' : '' !!}
                         <h6 class="header mb-3">Money turn-over</h6>
@@ -182,10 +213,10 @@
                 </div>
             </div>
             <div class="col-lg-12 my-3">
-                <div class="card {{ count($memReq) > 0 ? 'border border-warning shadow' : '' }}">
+                <div class="card {{ count($memReq) > 0 ? 'border border-primary shadow' : '' }}">
                     <div class="card-body">
                         {!! count($memReq) > 0 ? '<span class="fa-stack fa-sm notif-marker tada">
-                                <i class="fas fa-circle fa-stack-2x text-warning"></i>
+                                <i class="fas fa-circle fa-stack-2x text-primary"></i>
                                 <i class="fas fa-exclamation fa-stack-1x fa-inverse rubber"></i>
                             </span>' : '' !!}
                         <h6 class="header mb-3">Member Requests</h6>

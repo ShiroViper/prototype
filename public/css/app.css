@@ -16610,6 +16610,12 @@ readers do not read off random characters that represent icons */
   }
 }
 
+.rotate {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+  transition: all 0.25s;
+}
+
 .tada {
   -webkit-animation: 2.5s 10;
           animation: 2.5s 10;
