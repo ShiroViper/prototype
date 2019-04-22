@@ -206,9 +206,9 @@
                                 </div>
                             </div> --}}
                             @if (Route::has('password.request'))
-                                <a href="{{ route('password.request') }}">
+                                {{-- <a href="{{ route('password.request') }}">
                                     <small>Having problems logging in?</small>
-                                </a>
+                                </a> --}}
                             @endif
                             <div class="pt-3 cleafix">
                                 {{-- <small><a href="#">Having problems logging in?</a></small> --}}
