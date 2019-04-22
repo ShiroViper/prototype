@@ -45,11 +45,11 @@
                 <div>
                     @php
                         // $title = date('n', strtotime(NOW())) > 11 ? 'Distribute Money' : 'This Function can be use during December'; 
-                        $path = date('n', strtotime(NOW())) > 3 ? '/admin/distribute' : '#'; 
+                        $path = date('n', strtotime(NOW())) > 11 ? '/admin/distribute' : '#'; 
                         $dis = $distribution || $status->distribution == 0 ? 'hidden' : '';
                     @endphp
                     <a href="{{$path}}">
-                        <button class="btn btn-success mt-3" data-toggle="tooltip" data-placement="top" {{ date('n', strtotime(NOW())) > 3 ?  : 'hidden' }} {{$dis = $distribution || $status->distribution == 0 ? 'hidden' : ''}}>Distribute Money</button>
+                        <button class="btn btn-success mt-3" data-toggle="tooltip" data-placement="top" {{ date('n', strtotime(NOW())) > 11 ?  : 'hidden' }} {{$dis = $distribution || $status->distribution == 0 ? 'hidden' : ''}}>Distribute Money</button>
                     </a>
                 </div>
             </div>

@@ -171,7 +171,7 @@
                             @if ($errors->has('address'))
                                 <div class="invalid-feedback">{{ $errors->first('address') }}</div>
                             @endif
-                            <small class="text-muted">Default Password: 123456</small>
+                            {{-- <small class="text-muted">Default Password: 123456</small> --}}
                         </div>
 
                         {{-- <small class="text-muted"><b>Note</b>: Please wait for our administrator to verify your request.</small> --}}

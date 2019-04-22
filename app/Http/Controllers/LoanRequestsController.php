@@ -42,7 +42,7 @@ class LoanRequestsController extends Controller
             $lr = Loan_Request::orderBy('updated_at', 'desc')->where('user_id', Auth::user()->id)->whereNotNull('confirmed')->paginate(5);
             $pending = Loan_Request::orderBy('created_at', 'desc')->where('user_id', Auth::user()->id)->where('confirmed', NULL)->paginate(5);
             $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
-            $distribution = Distribution::where([['user_id', Auth::user()->id], ['confirmed', null]])->first();
+            $distribution = Distribution::join('status', 'status.user_id', '=', 'distribution.user_id')->where([['distribution.user_id', Auth::user()->id], ['confirmed', null]])->first();
             // dd($distribution);
             
             // for transferring money to member

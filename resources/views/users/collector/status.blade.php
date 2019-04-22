@@ -6,16 +6,16 @@
 
 @section('content')
 
-<h3 class="header mt-2">Total Amount As Of {{date('F d, Y', strtotime(NOW()))}}</h3>
+<h3 class="header mt-2">Status as of {{date('F d, Y', strtotime(NOW()))}}</h3>
 <div class="row">
     <div class="col-4">  
-        deposit <br>
-        {{$deposit}}
+        Member Deposits <br>
+        ₱ {{number_format($deposit, 2)}}
         {{-- {{dd($loan_from_member)}} --}}
     </div>
     <div class="col-4">  
-        loan payment from the member <br>
-        {{$loan_payment}}
+        Member Loan Payments <br>
+        ₱ {{number_format($loan_payment, 2)}}
     </div>
     @if($turn_over)
         @if ($turn_over->confirmed == 2 )
@@ -25,7 +25,7 @@
         @endif
     @elseif(count($trans) > 0)
         @if($trans[$count]->turn_over == null)
-            <a href="/collector/{{$token}}/transfer/money"><button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Transfer all money gathered to admin">Transfer to Admin   </button></a>
+            <a href="/collector/{{$token}}/transfer/money"><button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Transfer all money gathered from collector to admin">Transfer </button></a>
         @endif
     @endif
 

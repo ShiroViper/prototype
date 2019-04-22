@@ -133,7 +133,7 @@
                                     {{-- if status is declined skip this function otherwise execur --}}
                                     @if($request->received != 1 && $request->confirmed != 0)
                                         <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/process/{{ $request->id }}/edit">Transfer</a></td>
-                                    @elseif($request->status == 0)
+                                    @elseif($request->confirmed == 0)
                                         <td></td>
                                     @else
                                         <td><span class="badge badge-success"><small>Money Transferred</small></span></td>

@@ -64,6 +64,7 @@ class ProcessController extends Controller
      */
     public function store(Request $request)
     {
+
         // This check if the token is duplicate or not after the form is saved, tricks the user that he/she store only one form. (several clicks in the button  )
         if(Process::where('token', $request->token)->first()){
             return redirect()->action('Loan_RequestController@index');
@@ -71,15 +72,12 @@ class ProcessController extends Controller
 
         $messages = [
             'required' => 'This field is required',
-            // 'id' => 'Must be a valid ID Number'
             'colID' => 'Account ID not found!'
         ];
         $this->validate($request, [
             'colName' => ['required'],
             'colID' => ['required']
         ], $messages);
-
-
 
         // this check if the inputted collector id is found or not else redirect and throw an error;
         $check = User::where([['id', $request->colID], ['user_type', 1]])->first();

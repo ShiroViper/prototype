@@ -93,7 +93,7 @@ class ProfilesController extends Controller
         $user->user_type = Auth::user()->user_type;
         $user->address = $request->address;
         $user->cell_num = $request->cell_num;
-        $user->email = $request->email;
+        $request->email ? $user->email = $request->email : '';
         $user->save();
 
         return redirect()->route('profile-index')->with('active', 'profile')->with('success', 'Successfully updated your profile!');
