@@ -18,6 +18,7 @@ use App\Schedule;
 use App\Status;
 use App\Comment;
 use App\Process;
+use App\Distribution;
 
 class LoanRequestsController extends Controller
 {
@@ -30,16 +31,19 @@ class LoanRequestsController extends Controller
     {
         if (Auth::user()->user_type == 2) {
             // Pending_cancel for cancellation of accounts
-            $pending_cancel = Comment::whereNotNull('user_id')->whereNull('confirmed')->orderBy('updated_at', 'asc')->paginate(5);
+            $pending_cancel = Comment::join('status', 'status.user_id', '=', 'comments.user_id')->join('users', 'users.id', '=', 'comments.user_id')->select('comments.id', 'savings', 'patronage_refund', 'comments.created_at', 'comments', 'lname', 'mname', 'fname')->whereNotNull('comments.user_id')->whereNull('comments.confirmed')->orderBy('comments.updated_at', 'asc')->paginate(5);
             $lr = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNotNull('confirmed')->paginate(5);
-            $pending = Loan_Request::orderBy('loan_request.created_at', 'desc')->whereNull('confirmed')->paginate(5);
-            // dd($pending_cancel);
+            $pending = Loan_Request::join('comments', 'request_id', '=', 'loan_request.id')->join('users', 'users.id', '=', 'loan_request.user_id')->select( 'lname', 'mname', 'fname', 'loan_request.created_at', 'loan_amount', 'days_payable', 'comments')->orderBy('loan_request.created_at', 'desc')->whereNull('loan_request.confirmed')->paginate(5);
+            // dd($pending);
+            // dd($pending);
             return view('users.admin.requests')->with('pending_cancel', $pending_cancel)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
 
         } else {
             $lr = Loan_Request::orderBy('updated_at', 'desc')->where('user_id', Auth::user()->id)->whereNotNull('confirmed')->paginate(5);
             $pending = Loan_Request::orderBy('created_at', 'desc')->where('user_id', Auth::user()->id)->where('confirmed', NULL)->paginate(5);
             $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
+            $distribution = Distribution::where('user_id', Auth::user()->id)->first();
+            // dd($distribution->amount);
             
             // for transferring money to member
             $pending_mem_receive = Process::join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'collector_id')->select('processes.id', 'transfer', 'request_id', 'collector_id', 'processes.updated_at','lname', 'fname','mname', 'loan_amount')->where([['user_id', Auth::user()->id],['transfer',3]])->orderBy('updated_at', 'asc')->paginate(5);
@@ -50,8 +54,18 @@ class LoanRequestsController extends Controller
                 ->select('transactions.id', 'amount','lname','fname', 'mname', 'trans_type', 'transactions.updated_at')
                 ->where('confirmed', NULL)->where('member_id', Auth::user()->id)->orderBy('updated_at', 'asc')->paginate(5);
 
+            /* This for finding duplicate token in table */
+            $token = Str::random(10);
+            $check_token = Process::select('token')->get();
+            for ($x = 0; $x < count($check_token); $x++){
+                if($check_token[$x]->token == $token){
+                    $token = Str::random(10);
+                }
+            }
+            // ================================================
+
         //    dd($pending_mem_con, Auth::user()->id);
-            return view('users.member.requests')->with('pending_mem_con',$pending_mem_con)->with('pending_mem_receive', $pending_mem_receive)->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
+            return view('users.member.requests')->with('token', $token)->with('distribution', $distribution)->with('pending_mem_con',$pending_mem_con)->with('pending_mem_receive', $pending_mem_receive)->with('unpaid', $unpaid)->with('requests', $lr)->with('pending', $pending)->with('active', 'requests');
         }
     }
 
@@ -72,9 +86,10 @@ class LoanRequestsController extends Controller
         }
         // ================================================
 
-        $unpaid = Loan_Request::where('user_id', Auth::user()->id)->whereNull('paid')->orWhere('paid', false)->first();
+        $paid = Loan_Request::where([['user_id', Auth::user()->id], ['paid', null]])->orwhere([['user_id', Auth::user()->id], ['paid_using_savings', null]])->first();
+        $status = Status::where('user_id', Auth::user()->id)->first();
         $current_savings = Status::where('user_id', Auth::user()->id)->first();
-        return view('users.member.loan')->with('token', $token)->with('unpaid', $unpaid)->with('active', 'loan')->with('savings', $current_savings);
+        return view('users.member.loan')->with('token', $token)->with('status', $status)->with('paid', $paid)->with('active', 'loan')->with('savings', $current_savings);
     }
 
     /**
@@ -90,6 +105,31 @@ class LoanRequestsController extends Controller
             return redirect()->action('LoanRequestsController@index');
         }
 
+        //This check every end year
+        $months = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ,12);
+        $get_end_month = array_slice($months, date('n'));
+        $count_end_month = count($get_end_month) - 1;
+
+        $status = Status::where('user_id', Auth::user()->id)->first();
+        // check if member savings is null or less than 200 
+        if($status->savings == null || $status->savings < 200){
+            // check if reason is not emergency loan
+            if($request->reason != 'For Emergency Use'){
+                return redirect()->back()->with('error', 'Request loan available at least ₱ 200 savings ')->withInput(Input::except('pass'));
+            }
+        // check if amount is greater than current savings and reason is not emergency loan
+        }else if($request->amount > $status->savings && $request->reason != 'For Emergency Use'){
+            return redirect()->back()->with('error', 'Requested loan should be less than or equal to savings')->withInput(Input::except('pass'));
+        // check if months payable is greater than the current end year
+        }else if($request->months > $count_end_month ){
+            return redirect()->back()->with('error', 'Months payable should not beyond the current end year')->withInput(Input::except('pass'));
+        // check if password is not match
+        }else if(!Hash::check($request->pass, Auth::user()->password)){
+            return redirect()->back()->with('error', 'Wrong Password')->withInput(Input::except('pass'));
+        }
+
+        // dd($request);
+        
         $messages = [
             'required' => 'This field is required',
             'alpha' => 'Please use only alphabetic characters',
@@ -97,21 +137,17 @@ class LoanRequestsController extends Controller
         ];
 
         $this->validate($request, [
-            'amount' => ['required', 'numeric', 'min:5'],   
+            'amount' => ['required', 'numeric', 'min:200'],   
             'reason' => ['required', 'string'],
-            'other' => ['nullable', 'sometimes'],
+            'other' => ['nullable'],
             'pass' => ['required'],
             'months' => ['required', 'numeric', 'min:1', 'max:12']
         ], $messages);
+        // return 'hji';
 
         // Loan * .06 = monthly interest * months payable = interest to pay + loan amount = loan to pay 
         // example: 1500 * 0.06 = 90 * 4 = 360 + 1500 = 1860
         $loan_to_pay = $request->amount * 0.06 * $request->months + $request->amount;
-
-        // check if password is not match
-        if(!Hash::check($request->pass, Auth::user()->password)){
-            return redirect()->back()->with('error', 'Wrong Password')->withInput(Input::except('pass'));
-        }
 
         $lr = new Loan_Request;
         $lr->loan_amount = $request->input('amount');
@@ -119,6 +155,7 @@ class LoanRequestsController extends Controller
         $lr->balance = $loan_to_pay;
         $lr->get = 0;
         $lr->user_id = Auth::user()->id;
+        $lr->per_month_amount = $loan_to_pay / $lr->days_payable;
 
         // sched_id is NULL for now since it still hasn't been approved
         $lr->sched_id = null;
@@ -128,7 +165,11 @@ class LoanRequestsController extends Controller
         // Create a new comment row for every loan request
         $comment = New Comment;
         $comment->request_id = $lr->id;
-        $comment->comments = $request->reason;
+        if($request->reason == 3){
+            $comment->comments = $request->other;
+        }else{
+            $comment->comments = $request->reason;
+        }
         $comment->token = $request->token; // prevent from being spammed
         $comment->save();
 

@@ -16339,6 +16339,299 @@ readers do not read off random characters that represent icons */
   font-weight: 400;
 }
 
+.title-header,
+.header,
+.about-header {
+  font-family: "Roboto", sans-serif;
+}
+
+.featured-desc,
+.about-desc {
+  font-family: "Source Sans Pro", sans-serif;
+}
+
+.brand-title-header {
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+  font-size: 1.5rem;
+}
+
+.welcome-title {
+  font-size: 1.5rem;
+}
+
+.title-header {
+  font-size: 1.25rem;
+}
+
+.featured-desc {
+  letter-spacing: 0.25px;
+}
+
+.display-5 {
+  font-size: 2.5rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+@media screen and (min-width: 768px) {
+  .al-about-paragraph {
+    padding: 0 8.25rem 0 8.25rem;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .brand-title-header,
+  .welcome-title {
+    font-size: 3rem;
+    line-height: 1.2;
+  }
+
+  .featured-desc {
+    font-size: 1.25rem;
+  }
+
+  .title-header {
+    font-size: 1.5rem;
+  }
+}
+
+.bg-indigo {
+  background: #6574cd;
+}
+
+.text-indigo {
+  color: #6574cd;
+}
+
+.bg-purple {
+  background: #9561e2;
+}
+
+.text-purple {
+  color: #9561e2;
+}
+
+.bg-pink {
+  background: #f66D9b;
+}
+
+.text-pink {
+  color: #f66D9b;
+}
+
+.bg-teal {
+  background: #4dc0b5;
+}
+
+.text-teal {
+  color: #4dc0b5;
+}
+
+.bg-orange {
+  background: #f6993f;
+}
+
+.text-orange {
+  color: #f6993f;
+}
+
+.bg-cyan {
+  background: #6cb2eb;
+}
+
+.text-cyan {
+  color: #6cb2eb;
+}
+
+.bg-gradient-gray {
+  background-image: linear-gradient(to right, #D7E1EC, #FFFFFF) !important;
+}
+
+.clickable-row,
+.clickable {
+  cursor: pointer;
+}
+
+.list-header,
+.list-content {
+  padding: 1rem;
+}
+
+.list-header:hover {
+  cursor: pointer;
+}
+
+.opened {
+  box-shadow: 0px 0px 10px -1px #cccccc;
+  background: rgba(178, 235, 242, 0.1) !important;
+  z-index: 10;
+}
+
+.opened .list-header {
+  background-color: rgba(178, 235, 242, 0.4);
+}
+
+.border-selected {
+  border-color: #B2EBF2 !important;
+}
+
+.notif-marker {
+  position: absolute;
+  top: -10px;
+  right: 0;
+}
+
+@-webkit-keyframes rubberBand {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  30% {
+    -webkit-transform: scale3d(1.25, 0.75, 1);
+    transform: scale3d(1.25, 0.75, 1);
+  }
+
+  40% {
+    -webkit-transform: scale3d(0.75, 1.25, 1);
+    transform: scale3d(0.75, 1.25, 1);
+  }
+
+  50% {
+    -webkit-transform: scale3d(1.15, 0.85, 1);
+    transform: scale3d(1.15, 0.85, 1);
+  }
+
+  65% {
+    -webkit-transform: scale3d(0.95, 1.05, 1);
+    transform: scale3d(0.95, 1.05, 1);
+  }
+
+  75% {
+    -webkit-transform: scale3d(1.05, 0.95, 1);
+    transform: scale3d(1.05, 0.95, 1);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes rubberBand {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  30% {
+    -webkit-transform: scale3d(1.25, 0.75, 1);
+    transform: scale3d(1.25, 0.75, 1);
+  }
+
+  40% {
+    -webkit-transform: scale3d(0.75, 1.25, 1);
+    transform: scale3d(0.75, 1.25, 1);
+  }
+
+  50% {
+    -webkit-transform: scale3d(1.15, 0.85, 1);
+    transform: scale3d(1.15, 0.85, 1);
+  }
+
+  65% {
+    -webkit-transform: scale3d(0.95, 1.05, 1);
+    transform: scale3d(0.95, 1.05, 1);
+  }
+
+  75% {
+    -webkit-transform: scale3d(1.05, 0.95, 1);
+    transform: scale3d(1.05, 0.95, 1);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@-webkit-keyframes tada {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%, 20% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+  }
+
+  30%, 50%, 70%, 90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%, 60%, 80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes tada {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%, 20% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+  }
+
+  30%, 50%, 70%, 90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%, 60%, 80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.rotate {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+  transition: all 0.25s;
+}
+
+.tada {
+  -webkit-animation: 2.5s 10;
+          animation: 2.5s 10;
+  -webkit-animation-name: tada;
+  animation-name: tada;
+}
+
+.rubber {
+  -webkit-animation-name: rubberBand;
+          animation-name: rubberBand;
+  -webkit-animation-duration: 2.5s;
+          animation-duration: 2.5s;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+}
+
 .progress-bar-vertical {
   width: 20px;
   min-height: 238px;
@@ -16360,6 +16653,10 @@ readers do not read off random characters that represent icons */
 .failed-loan,
 .full-view {
   height: calc(100vh - 226px);
+}
+
+.dashboard-notif-area {
+  background-color: #f4f7fc;
 }
 
 .pop-messages {
@@ -16528,61 +16825,5 @@ readers do not read off random characters that represent icons */
   .box {
     padding: 1rem;
   }
-}
-
-.title-header,
-.header,
-.about-header {
-  font-family: "Roboto", sans-serif;
-}
-
-.featured-desc,
-.about-desc {
-  font-family: "Source Sans Pro", sans-serif;
-}
-
-.brand-title-header {
-  font-family: "Roboto", sans-serif;
-  font-weight: 900;
-  font-size: 1.5rem;
-}
-
-.welcome-title {
-  font-size: 1.5rem;
-}
-
-.title-header {
-  font-size: 1.25rem;
-}
-
-.featured-desc {
-  letter-spacing: 0.25px;
-}
-
-.display-5 {
-  font-size: 2.5rem;
-  font-weight: 400;
-  line-height: 1;
-}
-
-@media screen and (min-width: 992px) {
-  .brand-title-header,
-  .welcome-title {
-    font-size: 3rem;
-    line-height: 1.2;
-  }
-
-  .featured-desc {
-    font-size: 1.25rem;
-  }
-
-  .title-header {
-    font-size: 1.5rem;
-  }
-}
-
-.clickable-row,
-.clickable {
-  cursor: pointer;
 }
 

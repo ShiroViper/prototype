@@ -14,7 +14,7 @@
                 <th>Date & Time</th>
                 <th>Collector</th>
                 <th>Amount</th>
-                <!-- <th>Balance</th> -->
+                <th>PDF</th>
             </tr>
         </thead>
         <tbody>
@@ -29,6 +29,7 @@
                 <td>{{ date("h:i A  F d, Y", strtotime($trans->created_at)) }}</td>
                 <td>{{$trans->fname}}, {{$trans->fname}} {{$trans->mname}} </td>
                 <td>₱ {{ number_format($trans->amount, 2) }}</td>
+                <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/transaction/{{Crypt::encrypt($trans->id)}}/generate"> Generate</a> </td>
             </tr>
             @endforeach
         @else

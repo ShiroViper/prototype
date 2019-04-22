@@ -8,12 +8,16 @@ use Auth;
 use Carbon\Carbon;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Input;
 use App\Status;
 use App\Loan_Request;
 use App\User;
 use App\Schedule;
 use App\Transaction;
 use App\Member_Request;
+use App\TurnOver;
+use DateTime;
+use Illuminate\Support\Facades\Crypt;
 
 class TransactionController extends Controller
 {
@@ -47,14 +51,27 @@ class TransactionController extends Controller
     public function index()
     {
         if ( Auth::user()->user_type == 2 ) {
-            $transactions = Transaction::join('users', 'users.id', '=' ,'member_id')->select('trans_type', 'transactions.created_at', 'lname', 'fname', 'mname', 'amount')->where('confirmed',1)->orderBy('transactions.created_at', 'desc')->paginate(10);
+            // Pending Loan Requests
+            $pending = Loan_Request::join('comments', 'request_id', '=', 'loan_request.id')->join('users', 'users.id', '=', 'loan_request.user_id')->select( 'request_id', 'lname', 'mname', 'fname', 'loan_request.created_at', 'loan_amount', 'days_payable', 'comments')->orderBy('loan_request.created_at', 'desc')->whereNull('loan_request.confirmed')->paginate(5);
+
+            // Member Requests
             $memberRequests = Member_Request::where('approved', null)->paginate(5);
-            return view('users.admin.dashboard')->with('transactions', $transactions)->with('active', 'dashboard')->with('memReq', $memberRequests);
+
+            // Transactions
+            $transactions = Transaction::join('users', 'users.id', '=' ,'member_id')->select('transactions.id', 'trans_type', 'transactions.created_at', 'lname', 'fname', 'mname', 'amount')->where('confirmed',1)->orderBy('transactions.created_at', 'desc')->paginate(10);
+
+            $trans = Transaction::where([['confirmed', 1], ['turn_over', 2]])->get();
+            $turn_over = TurnOver::select('turn_over.id', 'lname', 'fname', 'mname', 'amount')->join('users', 'users.id', '=', 'collector_id')->where('confirmed', null)->paginate(5);
+            $status = Status::select(DB::raw('SUM(savings) as savings, SUM(patronage_refund) as patronage_refund, SUM(distribution) as distribution'))->first();
+
+            // dd($pending);
+            
+            return view('users.admin.dashboard')->with('status', $status)->with('turn_over', $turn_over)->with('trans', $trans)->with('transactions', $transactions)->with('active', 'dashboard')->with('memReq', $memberRequests)->with('pending', $pending);
         } else if ( Auth::user()->user_type == 1 ) {
-            $transactions = Transaction::join('users', 'users.id', '=', 'member_id' )->select('transactions.created_at', 'lname', 'fname', 'mname', 'trans_type', 'amount')->where([['collector_id', Auth::user()->id], ['confirmed', 1]])->orderBy('transactions.created_at', 'DESC')->paginate(10);
+            $transactions = Transaction::join('users', 'users.id', '=', 'member_id' )->select('transactions.id', 'transactions.created_at', 'lname', 'fname', 'mname', 'trans_type', 'amount')->where([['collector_id', Auth::user()->id], ['confirmed', 1]])->orderBy('transactions.created_at', 'DESC')->paginate(10);
             return view('users.collector.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
         } else {
-            $transactions = Transaction::join('users', 'users.id', '=', 'collector_id')->select('amount', 'lname', 'fname', 'mname', 'trans_type', 'transactions.created_at')->where('member_id', Auth::user()->id)->whereNotNull('confirmed')->orderBy('transactions.created_at')->paginate(5);
+            $transactions = Transaction::join('users', 'users.id', '=', 'collector_id')->select('transactions.id', 'amount', 'lname', 'fname', 'mname', 'trans_type', 'transactions.created_at')->where('member_id', Auth::user()->id)->whereNotNull('confirmed')->orderBy('transactions.created_at')->paginate(5);
             return view('users.member.transactions')->with('transactions', $transactions)->with('active', 'transactions');
         }
         // $transactions = DB::table('transactions')
@@ -74,7 +91,7 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        $members = User::where('user_type', '=', '0')->select('id','lname','fname','mname')->orderBy('id', 'desc')->get();
+        $members = User::where([['user_type', '=', '0'], ['setup', 1]])->select('id','lname','fname','mname')->orderBy('id', 'desc')->get();
         
         /* This for finding duplicate token in table */
         $token = Str::random(10);
@@ -86,9 +103,74 @@ class TransactionController extends Controller
         }
         // ================================================
 
+        return view('users.collector.collect1')->with('active','collect')->with('members', $members)->with('token', $token)->with('found_id', null)->with('success', 'Member Found!');
+    }
 
-        // return dd($members);
-        return view('users.collector.collect')->with('active','collect')->with('members', $members)->with('token', $token);
+    // After the collector searched the member it shows collect2.blade.php
+    public function partial_store(){
+        
+        /* This for finding duplicate token in table */
+        $token = Str::random(10);
+        $check_token = Transaction::select('token')->get();
+        for ($x = 0; $x < count($check_token); $x++){
+            if($check_token[$x]->token == $token){
+                $token = Str::random(10);
+            }
+        }
+        // ================================================
+
+        $memID = Input::get('memID');
+        $request = new Request([
+            'memID' => $memID,
+        ]);
+        
+        $this->validate($request, [
+            'memID' => 'required',
+        ]);
+
+        $member = User::where([['id', $memID], ['user_type',0], ['setup', 1]])->first();
+        $loan_request = Loan_Request::where([['user_id', $member->id], ['confirmed', 1], ['paid', null], ['paid_using_savings', null], ['received', 1]])->first();
+        $check_for_pending = Transaction::where([['member_id', $member->id], ['collector_id', Auth::user()->id], ['confirmed', null]])->get();
+        
+        // testing 
+        //  1546333748 january
+        // 1571418025 october
+        //Check if per_month_date is beyond 1 month
+        // dd($date = strtotime("+".$loan_request->days_payable." months", $loan_request->date_approved), $loan_request->date_approved, date("F d, Y", $date));
+        if($loan_request ? !$loan_request->paid ? !$loan_request->paid_using_savings : '' : ''){
+            if( strtotime(NOW()) > strtotime("+".$loan_request->days_payable." months", $loan_request->date_approved)){
+                $status = Status::where('user_id', $memID)->first();
+                $status->savings = $status->savings - $loan_request->balance; 
+                $status->save();
+
+                $loan_request->paid_using_savings = 1;
+                $loan_request->paid = 1;
+                $loan_request->balance = 0;
+                $loan_request->per_month_amount = 0;
+                $loan_request->save();
+
+            }else if($loan_request ? !$loan_request->paid ? !$loan_request->paid_using_savings ? strtotime(NOW()) > $loan_request->per_month_to : '' : '' : ''){
+
+                // compute the monthly loan
+                if($loan_request->per_month_amount <= 0){
+                    $temp = ($loan_request->loan_amount * 0.06 * $loan_request->days_payable + $loan_request->loan_amount) / $loan_request->days_payable;
+                    // subtract the negative value 
+                    $loan_request->per_month_amount = $loan_request->per_month_amount + $temp;
+                }else{
+                    $temp = ($loan_request->loan_amount * 0.06 * $loan_request->days_payable + $loan_request->loan_amount) / $loan_request->days_payable;
+                    $loan_request->per_month_amount = $temp + $loan_request->per_month_amount;
+                }
+
+                $loan_request->per_month_from = $loan_request->per_month_to;
+                $loan_request->per_month_to = strtotime("+1 months", $loan_request->per_month_to);
+                $loan_request->save();
+                // dd($loan_request->per_month_amount, $loan_request->balance);
+                // dd(strtotime(NOW()) > $loan_request->per_month_to ? $loan_request->per_month_amount == $loan_request->balance : 'hello');
+                // dd(strtotime(NOW()) , $loan_request->per_month_to, strtotime(NOW()) > $loan_request->per_month_to, date('F d, Y', strtotime(NOW())),  date('F d, Y', $loan_request->per_month_to));
+            }
+        }
+
+        return view('users.collector.collect2')->with('active', 'collect')->with('check_for_pending', $check_for_pending)->with('token', $token)->with('member', $member)->with('loan_request', $loan_request);
     }
 
     /**
@@ -98,30 +180,37 @@ class TransactionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-            
         // This check if the token is duplicate or not after the form is saved , This trick the collector think he submitted one form
         if(Transaction::where('token', $request->token)->first()){
             return redirect()->back()->with('success', 'Waiting to confirm from member');
         }
-
-        // // This check if the requested id is a member or not 
-        // if(!User::where([['id', $request->id], ['user_type', 0]])->first()){
-        //     return redirect()->back()->withInput()->with('error', 'Member Not Found');
-        // }
-
+        
         $messages = [
             'required' => 'This field is required',
             'numeric' => 'This field is Numbers',
         ];
+        // dd ($request->memID);
         $this->validate($request, [
             'amount' => ['required', 'numeric'],
             'type' => ['required','numeric'],
             'memID' => ['required', 'numeric'],
         ], $messages);
+        
+        $user = User::where([['id', $request->memID], ['user_type', 0]])->first();
+        // This check if the requested id is a member or not 
+        if(!$user){
+            return redirect()->back()->withInput()->with('error', 'Member Not Found');
+        }
 
     // ***************************      Start           ***************************
          if ($request->type == 1) { 
             // If the transaction is a DEPOSIT
+
+            // This check for pending confirmation from the member: use for collector->collection
+            $check_for_pending = Transaction::where([['member_id', $request->memID], ['collector_id', Auth::user()->id], ['confirmed', null]])->first();
+            if($check_for_pending){
+                return redirect()->back()->withInput()->with('check_for_pending', $check_for_pending)->with('error', 'Pending confirmation from the member');
+            }
 
             $transact = New Transaction;
             $transact->member_id = $request->memID;
@@ -142,11 +231,19 @@ class TransactionController extends Controller
             // Get the sched_id
             $transact->sched_id = $sched->id;
             $transact->save();
-            
+            // return redirect()->back('transaction-c')->with('success', 'watint');
             return redirect()->back()->with('success', 'Waiting to confirm from the Member');
             
         } else if ($request->type == 3) {
             // If the transaction is a Loan Payment [ $trans_type = 3 ]
+
+            // check if member has current loan, loan is confirmed by the admin and money received by the member
+            if(Loan_Request::where([['user_id', $request->memID], ['confirmed', null], ['received', null]])->first()){
+                return redirect()->back()->with('error', 'Loan Payment Not Available');
+            }
+
+
+
             $transact = New Transaction;    
             $transact->member_id = $request->memID;
             $transact->trans_type = $request->type;
@@ -166,6 +263,8 @@ class TransactionController extends Controller
                 // If $loan_request is NULL redirect and return error message
                 if(!$loan_request){
                     return redirect()->back()->withInput()->with('error', 'Not Found');
+                }else if($loan_request->balance < $request->amount){
+                    return redirect()->back()->withInput()->with('error', 'Loan Payment is beyond the Loan Balance');
                 }
 
                 // Need to confirm from the member to deduct the balance 
@@ -175,8 +274,14 @@ class TransactionController extends Controller
                 $loan_request->get = 1;
                 $loan_request->save();
             } else {
-                // return $transact->member_id;
-                // Member is continuing to pay his/her loan
+                // Member is continuing to pay his/her loan               
+
+                // This check for pending confirmation from the member: use for collector->collection
+                $check_for_pending = Transaction::where([['member_id', $request->memID], ['collector_id', Auth::user()->id], ['confirmed', null]])->first();
+                if($check_for_pending){
+                    return redirect()->back()->withInput()->with('check_for_pending', $check_for_pending)->with('error', 'Pending confirmation from the member');
+                }
+
                 $loan_request = Loan_Request::where([
                     ['user_id', '=', $request->memID],
                     ['confirmed', '=', 1],
@@ -190,10 +295,10 @@ class TransactionController extends Controller
 
                 if (is_null($loan_request)) {
                     // There are no more loan payments by the user
-                    return redirect()->route('transaction-collect')->with('error', "User doesn't have any payments");
-                } else if (($loan_request->balance - $request->amount) < 0) {
+                    return redirect()->back()->with('error', "User doesn't have any payments");
+                } else if (round($loan_request->balance - $request->amount) < 0) {
                     // Prevents the collector to input the amount that is larger than the balance
-                    return redirect()->route('transaction-collect')->with('error', 'Amount entered is beyond the balance')->withInput();
+                    return redirect()->back()->with('error', 'Amount entered is beyond the balance')->withInput();
                 } else if (($loan_request->balance - $request->amount) == 0) {
                     // $loan_request->balance is moved in accept ()
                     // $loan_request->balance = $loan_request->balance - $request->amount;
@@ -227,7 +332,7 @@ class TransactionController extends Controller
             $transact->sched_id = $sched->id;
             $transact->save();
 
-            return redirect()->route('transaction-collect')->with('success', 'Waiting to confirm from the member');
+            return redirect()->back()->with('success', 'Waiting to confirm from the member');
             
         } else {
             return redirect()->back()->with('error', 'Pick a valid Transaction Type');
@@ -280,12 +385,16 @@ class TransactionController extends Controller
     }
 
     // This function use to update confirmed column in transactions table 
-    public function accept ($id){
-        $transact = Transaction::where([['id','=', $id], ['confirmed','=', NULL]])->first();
+    public function accept ($id, $token){
+        if (!$transact = Transaction::where([['id','=', $id], ['confirmed','=', NULL]])->first()){
+            return redirect()->back()->with('success', 'Confirmed Successfully');
+        }
         $loan_request = Loan_Request::where('id', $transact->request_id)->first();
         $status = Status::where('user_id', Auth::user()->id)->first();
         $transact->confirmed = 1;
+        $loan_request->token = $token;
         $loan_request->balance = $loan_request->balance - $transact->amount;
+        $loan_request->per_month_amount = $loan_request->per_month_amount - $transact->amount;
         
         // if $loan_request->balance has no value change paid status to 1
         if(!$loan_request->balance){
@@ -318,6 +427,10 @@ class TransactionController extends Controller
     // For deposit confirmation
     public function deposit_accept($id){
         $transact = Transaction::where([['id', $id], ['confirmed', NULL]])->first();
+        if(!$transact){
+            return redirect()->back()->with('success', 'Confirmed Successsfully');
+        }
+
         $transact->confirmed = 1;
 
         // If member/user_id exist execute this code and update the status
@@ -337,7 +450,13 @@ class TransactionController extends Controller
         return redirect()->back()->with('success', 'Confirmed Successsfully');
     }
 
-    public function generatepdf($m, $m_name, $c_name){
+    public function generatepdf($id){
+        // decrypt the encrtypted id
+        $decrypt = Crypt::decrypt($id);
+
+        $trans = Transaction::where('id', $decrypt)->first();
+        $mem = User::where('id', $trans->member_id)->first();
+        $col = User::where('id', $trans->collector_id)->first();
 
         $pdf = new FPDF('L','mm',array(100,150));		// can set the layout of the PDF 
 		$pdf->AddPage();			//can add another page
@@ -355,48 +474,46 @@ class TransactionController extends Controller
 		//Partial Details
 		$text = 'Member ID:';
         $pdf->Text($margin, 35, $text);
-        $text = $m->member_id;
+        $text = $trans->member_id;
 		$pdf->Text($margin + 40, 35, $text);
 
-		$text = 'Date: ';
+		$text = 'Date';
         $pdf->Text($x*0.65, 35, $text);
-        $text = date('M d, Y', strtotime($m->created_at));
+        $text = date('F d, Y', strtotime($trans->created_at));
         $pdf->Text($x*0.75, 35, $text);
 
         $text = 'Time: ';
         $pdf->Text($x*0.65, 40, $text);
-        $text = date('h:i:s A', strtotime($m->created_at));
+        $text = date('h:i A', strtotime($trans->created_at));
 		$pdf->Text($x*0.75, 40, $text);
 
 		//Full Details
 		$text = 'Complete Name:';
         $pdf->Text($margin, 50, $text);
-        $text = $m_name->lname. ', '. $m_name->fname;
+        $text = $mem->lname. ', '. $mem->fname.' '.$mem->mname;
 		$pdf->Text($margin + 40, 50, $text);
 
 		$text = 'Type:';
         $pdf->Text($margin, 60, $text);
-        if($m->trans_type == 0){
-            $text = 'Loan Widthdraw';
-        }else if ($m->trans_type == 1){
+        if ($trans->trans_type == 3){
             $text = 'Loan Payment';
-        }else{
+        }else if($trans->trans_type == 1){
             $text = 'Deposit';
         }
-		$pdf->Text($margin + 40, 60, $text);
+        $pdf->Text($margin + 40, 60, $text);
 
 		$text = 'Amount:';
         $pdf->Text($margin, 70, $text);
-        $text = 'Php '.$m->amount;
+        $text = 'Php '.$trans->amount;
         $pdf->Text($margin + 40, 70, $text);
 
         $text = 'Receive By: ';
         $pdf->Text($margin, 80, $text);
-        $text = $c_name->lname.', '.$c_name->fname;
+        $text = $col->id.' '.$col->lname.', '.$col->fname.' '.$col->mname;
         $pdf->Text($margin + 40, 80, $text);
         
-        $filename = "receipt/Receipt.pdf";
-        $pdf->Output('F', $filename, True);		//to close document
+        $filename = $mem->lname."'s Receipt.pdf";
+        $pdf->Output('D', $filename, True);		//to close document
                 
     }
 }

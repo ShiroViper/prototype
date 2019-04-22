@@ -15,8 +15,17 @@
         @if($account_status->confirmed == NULL)
         <h2 class="display-5 header">Requires Confirmation from the administration</h2>
         <p>If you dont request this cancellation of account click <a href="/member/cancel/destroy"> Revoke Cancellation Request </a> . </p>
+        <div class="row">
+            <div class="col">
+                <div class="py-3">
+                    <a class="btn btn-light border" role="button" href="/member/profile"><i class="fas fa-arrow-left"></i>  Back </a>
+                </div>
+            </div>
+        </div>
         @elseif($account_status->confirmed == 1)
             <h2>Account has been canceled by the administration</h2>
+            <div class="row">
+            </div>
         @endif
     </div>
 @else
@@ -28,6 +37,7 @@
                 <p>Once your account is approved for cancellation, you can become a member once again after the current year ends.</p>
                 <p><b class="h5">Patronage refund</b> can be claimed if your <b class="h5">savings</b> has reached the minimun ₱1825.</p>
                 <p><b class="h5">Savings</b> can be claim without deduction.</p>
+                <p><b class="h5">Owner's Disribution</b> cannot be claim.</p>
                 <p>Cancellation of account is available when their are no current loan.</p>
                 <p>This request is subject to change</p>
             </div>           

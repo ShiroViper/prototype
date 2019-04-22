@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Input;
 use Auth;
 use Hash;
 use App\User;
+use App\Status;
 use App\Comment;
 
 
@@ -115,7 +116,7 @@ class MemberController extends Controller
         // $update_archive->inactive = 1;
         // $update_archive->save();
 
-        return redirect()->route('member-cancel')->with('success', 'Requires confirmation from the administration');
+        return redirect()->back()->with('success', 'Requires confirmation from the administration');
 
     }
 
@@ -136,7 +137,7 @@ class MemberController extends Controller
 
         $destroy->delete();
 
-        return redirect()->route('member-cancel')->with('success', 'Successfully Revoked cancellation of account requests');
+        return redirect()->back()->with('success', 'Successfully Revoked cancellation of account requests');
     }
 
     public function cancel(){
@@ -165,9 +166,19 @@ class MemberController extends Controller
     public function accept($id){
         $confirm = Comment::where('id', $id)->first();
         $user = User::where('id', $confirm->user_id)->first();
+        $status = Status::where('user_id', $confirm->user_id)->first();
 
         $confirm->confirmed = 1;
         $user->inactive = 1;
+        
+        if($status->savings >= 1825){
+            $status->savings = 0;
+            $status->patronage_refund = 0;
+        }else{
+            $status->savings = 0;
+        }
+
+        $status->save();
         $user->save();
         $confirm->save();
         

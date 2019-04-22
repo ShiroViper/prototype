@@ -25,6 +25,7 @@ class CreateLoanRequestTable extends Migration
             $table->integer('received')->nullable();
             $table->decimal('balance', 10, 2);
             $table->timestamps();
+            $table->string('token')->nullable();
 
             $table->foreign('sched_id')
                 ->references('id')

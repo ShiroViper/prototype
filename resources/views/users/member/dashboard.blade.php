@@ -31,30 +31,42 @@
         <div class="card-deck pb-5">
             <div class="card shadow-sm">
                 <div class="card-body d-flex justify-content-center align-items-center flex-column">
-                    <div class="border rounded-circle p-2 bg-light"><i class="text-primary fas fa-piggy-bank fa-lg"></i></div>
+                    <div class="border rounded-circle p-2 bg-light" ><i class="text-primary fas fa-piggy-bank fa-lg"></i></div>
                     <h5 class="pt-2 header display-5 font-weight-bold text-center">
-                        {{ $savings && $savings->savings != null ? '₱ '.$savings->savings : '₱ 0.00' }}
+                        {{ $savings && $savings->savings != null ? $savings->savings >= 0 ? '₱ '.$savings->savings : '₱ '.number_format($savings->savings, 2) : '₱ 0.00' }}
                     </h5>
-                    <small>Savings</small>
+                    @if($savings->savings >= 0)                        
+                        <small>Savings</small>
+                    @else
+                        <h1 class="text-danger ">Debt</h1>
+                    @endif
                 </div>
             </div>
             <div class="card shadow-sm">
                 <div class="card-body d-flex justify-content-center align-items-center flex-column">
-                    <div class="border rounded-circle p-2 bg-light"><i class="text-success fas fa-wallet fa-lg"></i></div>
+                    <div class="border rounded-circle p-2 bg-light"><i class="text-success fas fa-hand-holding-usd fa-lg"></i></div>
                     <h5 class="pt-2 header display-5 font-weight-bold text-center">
-                        {{ $patronage && $patronage->patronage_refund != null ? '₱ '.$patronage->patronage_refund : '₱ 0.00' }}
+                        {{ $patronage && $patronage->patronage_refund != null ? '₱ '.round($patronage->patronage_refund).'.00' : '₱ 0.00' }}
                     </h5>
                     <small>Patronage Refund</small>
                 </div>
             </div>
-            <div class="card shadow-sm">
+            @if($loan)
+                <div class="card shadow-sm" data-toggle="modal" data-target="#statModal" >
+            @else
+                <div class="card shadow-sm">
+            @endif
                 <div class="card-body d-flex justify-content-center align-items-center flex-column">
                     <div class="border rounded-circle p-2 bg-light"><i class="text-warning fas fa-coins fa-lg"></i></div>
                     <h5 class="pt-2 header display-5 font-weight-bold text-center">
-                        {{ $loan ? '₱'.$loan->balance : '₱ 0.00' }}
+                        {{ $loan ? ($loan->per_month_amount <= 0 ? '₱'.abs($loan->per_month_amount) : '₱'.$loan->per_month_amount ) : '₱ 0.00' }}
                     </h5>
-                    <small>Current Loan Balance</small>
-                </div>
+                    {{-- <small >Current Loan Balance For This Month</small> --}}
+                    <small> {{$loan ? ($loan->per_month_amount <=0 ? 'Over Paid' : 'Current Loan Balance ' ) : 'Current Loan Balance'}} </small>
+                    {!! $loan ? '<a class="text-primary clickable"><small>View Details</small></a>' : '' !!}
+                    {{-- <a class="text-primary clickable"><small>View Details</small></a> --}}
+                    {{-- <small> From {{ $loan ? (  $loan->per_month_from ? date('F d, Y', $loan->per_month_from) : '' ) : ''}} <br> To {{$loan ? (  $loan->per_month_to ? date('F d, Y', $loan->per_month_to) : '' ) : ''}}  --}}
+                    </small>
             </div>
         </div>
         <div class="row mt-2">
@@ -120,6 +132,77 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="statModal" tabindex="-1" role="dialog" aria-labelledby="statModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="statModalLabel">Loan Status</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col col-md col-lg-4">
+                                            <span>Months Payable</span>
+                                        </div>
+                                        <div class="col col-md col-lg">
+                                            <h6>{{$loan ? ($loan->days_payable ? $loan->days_payable. ' Months' : 'No Current Loan') : 'No Current Loan' }} </h6>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col col-md col-lg-4">
+                                            <span>Amount Loaned</span>
+                                        </div>
+                                        <div class="col col-md col-lg">
+                                            <h6>{{$loan ? ($loan->loan_amount ? '₱ '.number_format($loan->loan_amount, 2) : 'No Current Loan') : 'No Current Loan' }} </h6>
+                                        </div>
+                                    </div>
+                                </li>  
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col col-md col-lg-4">
+                                            <span>Monthly Payment</span>
+                                        </div>
+                                        <div class="col col-md col-lg">
+                                            {{-- This trick the member's loan balance stop from paying --}}
+                                            {{-- <h6>{{$loan ? ($loan->loan_amount ? ($loan->loan_amount * 0.06 * $loan->days_payable + $loan->loan_amount) / $loan->payable ) : '' }} </h6> --}}
+                                            @php
+                                                if($loan){
+                                                    if($loan->loan_amount){
+                                                        $per_month_amount =  ($loan->loan_amount * 0.06 * $loan->days_payable + $loan->loan_amount) / $loan->days_payable ;
+                                                        echo '<h6>₱ '.number_format($per_month_amount, 2). '</h6>';
+                                                    }
+                                                }
+                                            @endphp
+                                        </div>
+                                    </div>
+                                </li>  
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col col-md col-lg-4">
+                                            <span>Total Loan Balance</span>
+                                        </div>
+                                        <div class="col col-md col-lg">
+                                            {{-- This trick the member's loan balance stop from paying --}}
+                                            <h6>{{$loan ? ($loan->loan_amount >= 0 ? '₱ '.($loan->balance) : '₱ '.($loan->balance - $loan->per_month_amount).'.00' ) : 'No Current Loan' }} </h6>
+                                        </div>
+                                    </div>
+                                </li>                      
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         @prepend('scripts')
             <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.js"></script>

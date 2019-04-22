@@ -156,7 +156,7 @@
 	<link rel="stylesheet" href="{{ asset('css/app.css')}}">
 </head>
 <body>
-    <div class="main-login">
+    <div class="main-login bg-gradient-gray">
         <div class="main-login-container mx-auto">
             <div class="container">
                 <div class="d-flex flex-column align-items-center">
@@ -205,6 +205,11 @@
                                     </div>
                                 </div>
                             </div> --}}
+                            @if (Route::has('password.request'))
+                                {{-- <a href="{{ route('password.request') }}">
+                                    <small>Having problems logging in?</small>
+                                </a> --}}
+                            @endif
                             <div class="pt-3 cleafix">
                                 {{-- <small><a href="#">Having problems logging in?</a></small> --}}
                                 <button type="submit" class="btn btn-primary btn-block px-4">Login</button>

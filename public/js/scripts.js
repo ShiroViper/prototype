@@ -1,4 +1,18 @@
 /**
+ * Accordion Selector
+ */
+$(".list-header").click(function () {
+  if ($(this).parent().hasClass("opened")) {
+    $(this).parent().removeClass("opened border border-selected rounded");
+    $(".list-chevron").toggleClass("rotate");
+  } else {
+    $(".list-chevron").toggleClass("rotate"); 
+    $(".list-group").children().removeClass("opened border border-selected rounded");
+    $(this).parent().addClass("opened border border-selected rounded");
+  }
+});
+
+/**
  * The alternative of this:
  * onclick="document.location = '/admin/{{ $user->id }}';"
  */
@@ -23,7 +37,7 @@ $('#reason').change(function () {
   var selected = $('#reason').val();
   // console.log(selected);
   if (selected == '3') {
-    $("#other").show();
+    $("#other").show().prop("required", true);
   } else {
     $("#other").hide();
   }
@@ -129,4 +143,10 @@ $(function () {
   // $('#reqModal').on('hide.bs.modal', function (e) {
   //   window.history.back();
   // });
+});
+
+
+// for tooltip
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
 });

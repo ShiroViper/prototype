@@ -5,6 +5,9 @@
 @endsection
 
 @section('content')
+@push('scripts')
+    <script src="{{ asset('js/scripts.js') }}"></script>
+@endpush
 <div class="row pt-5">
         <div class="col">
             <div class="card">

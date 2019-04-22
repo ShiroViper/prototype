@@ -8,17 +8,21 @@
 @push('scripts')
     <script src="{{ asset('js/scripts.js') }}"></script>
 @endpush
-@if(!$unpaid)
+@if(!$paid ? $status->savings > 0 : '')
     <h3 class="header mt-2">Request Loan</h3>
+    {{-- <div class="bg-teal p-3 text-white">
+        The minimum loan amount is ₱200.
+    </div> --}}
     <div class="row">
-        <div class="col-sm-10 col-md-7 col-lg-5 my-3 order-2 order-md-1">  
+        <div class="col-sm-10 col-md-7 col-lg-5 order-2 order-md-1 my-3">  
             {!! Form::open(['action' => 'LoanRequestsController@store', 'method' => 'POST']) !!}
             @csrf
             {{Form::hidden('token', $token) }}
 
             {{ Form::label('amount', 'Loan Amount', ['class' => 'h6']) }}
             <div class="form-group">
-                    {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'placeholder' => 'Enter amount', 'min'=>'5', 'step' => '.01', 'required']) }}
+                    {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'placeholder' => 'Enter amount', 'min'=>'200', 'step' => '.01', 'required']) }}
+                    <small class="text-muted">The minimum loan amount is ₱200.</small>
                 @if ($errors->has('amount'))
                     <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
                 @endif
@@ -34,18 +38,18 @@
 
             {{ Form::label('reason', 'Reason', ['class' => 'h6']) }}
             <div class="form-group">
-                <select name="reason" id="reason" class="form-control" required>
+                <select name="reason" id="reason" class="form-control {{$errors->has('reason') ? ' is-invalid s' : '' }} " required>
                     <option selected hidden>-- Select Reason --</option>
                     <option value="For Personal Use">For Personal Use</option>
                     <option value="For Emergency Use">For Emergency Use</option>
                     <option value="3">Other</option>
                 </select>
                 <textarea name="other" id="other" rows="1" class="form-control mt-2" placeholder="Other (please specify)"></textarea>
-            </div>
-            {{-- {{ Form::textarea('reason', '', ['class' => $errors->has('reason') ? 'form-control is-invalid' : 'form-control', 'rows' => 1, 'required', 'placeholder' => 'Other, please specify']) }}
+            </div>            
             @if ($errors->has('reason'))
-                <div class="invalid-feedback">{{ $errors->first('reason') }}</div>
-            @endif --}}
+                {{-- <div class="invalid-feedback">Please Select</div> --}}
+                Please select <br> 
+            @endif
             
             <label for="pass"> Password</label>
             <div class="form-group">
@@ -63,7 +67,7 @@
             {{-- <button class="btn btn-primary" role="button" data-toggle="modal" data-target="#termsModal">Continue</button> --}}
             {!! Form::close() !!}
         </div>
-        <div class="col-sm col-md offset-lg-1 col-lg-4 my-3 order-1 order-md-2">  
+        <div class="col-sm col-md offset-lg-1 col-lg-4 order-1 order-md-2 my-3 pt-3">  
             <div class="card shadow">
                 <div class="card-body note-box border-warning border-left d-flex flex-column rounded">
                     <div class="h4">
@@ -73,9 +77,17 @@
                     <div>Current Savings</div>
                 </div>
             </div>
+            {{-- Note: <br>
+            200 minimum loan amount. <br>
+            personal and other reason is equal to savings while emergency reason is acceptable to loan above the savings but it's the admin decision wheter to accept or decline the loan request. <br> --}}
         </div>
     </div>
-@else
+@elseif($status->savings <= 0)
+    <div class="failed-loan d-flex justify-content-center align-items-center">
+        <h6 class="display-5 header text-center">Cannot Loan: No Savings or In Debt </h6>
+    </div>
+    
+@else 
     {{-- <h3 class="header mt-3 text-center">Request Loan Not Available</h3>
     <h3 class="header mt-3 text-center">Please Settle your loan</h3> --}}
     <div class="failed-loan d-flex justify-content-center align-items-center">

@@ -8,6 +8,7 @@ use App\Loan_Request;
 use App\Transaction;
 use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Support\Str;
 use DB;
 
 class ProcessController extends Controller
@@ -25,12 +26,23 @@ class ProcessController extends Controller
      */
     public function index()
     {
+        /* This for finding duplicate token in table */
+        $token = Str::random(10);
+        $check_token = Process::select('token')->get();
+        for ($x = 0; $x < count($check_token); $x++){
+            if($check_token[$x]->token == $token){
+                $token = Str::random(10);
+            }
+        }
+        // ================================================
+        
         $pending_col = Process::join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'admin_id')->select('processes.id', 'transfer', 'request_id', 'admin_id', 'collector_id', 'processes.updated_at','lname', 'fname', 'loan_amount', 'days_payable')->where([['collector_id', Auth::user()->id],['transfer',1]])->paginate(5);
-        $received_col = Process::join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'admin_id')->select('processes.id', 'transfer', 'request_id', 'admin_id', 'collector_id', 'processes.updated_at', 'lname', 'fname', 'mname', 'loan_amount', 'days_payable')->where([['collector_id', Auth::user()->id], ['transfer', 2]])->paginate(5);
+        $received_col = Process::join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'user_id')->select('processes.id', 'transfer', 'request_id', 'admin_id', 'collector_id', 'processes.updated_at', 'lname', 'fname', 'mname', 'loan_amount', 'days_payable')->where([['collector_id', Auth::user()->id], ['transfer', 2]])->paginate(5);
         $transferred_mem = Process::join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'user_id')->select('processes.id', 'transfer', 'request_id', 'user_id', 'collector_id', 'processes.updated_at','lname', 'fname', 'mname', 'loan_amount', 'days_payable')->where([['collector_id', Auth::user()->id],['transfer',4]])->paginate(5);
         $confirmed = Transaction::join('users', 'users.id', '=', 'member_id')->select('transactions.id', 'amount', 'lname', 'fname','mname')->where('confirmed', null)->paginate(5);
-        
-        return view('users.collector.requests')->with('confirmed', $confirmed)->with('transferred_mem', $transferred_mem)->with('received_col', $received_col)->with('pending_col', $pending_col)->with('active', 'request');
+        $pending_to_mem = Process::join('loan_request', 'loan_request.id', '=', 'request_id')->join('users', 'users.id', '=', 'user_id')->select('processes.id', 'transfer', 'request_id', 'admin_id', 'collector_id', 'processes.updated_at', 'lname', 'fname', 'mname', 'loan_amount', 'days_payable')->where([['collector_id', Auth::user()->id], ['transfer', 3]])->paginate(5);
+        // dd($pending_to_mem);
+        return view('users.collector.requests')->with('token', $token)->with('pending_to_mem', $pending_to_mem)->with('confirmed', $confirmed)->with('transferred_mem', $transferred_mem)->with('received_col', $received_col)->with('pending_col', $pending_col)->with('active', 'request');
     }
 
     /**
@@ -40,6 +52,7 @@ class ProcessController extends Controller
      */
     public function create()
     {
+
         return view('users.admin.process')->with('active', 'process');
     }
 
@@ -51,6 +64,11 @@ class ProcessController extends Controller
      */
     public function store(Request $request)
     {
+        // This check if the token is duplicate or not after the form is saved, tricks the user that he/she store only one form. (several clicks in the button  )
+        if(Process::where('token', $request->token)->first()){
+            return redirect()->action('Loan_RequestController@index');
+        }
+
         $messages = [
             'required' => 'This field is required',
             // 'id' => 'Must be a valid ID Number'
@@ -61,6 +79,8 @@ class ProcessController extends Controller
             'colID' => ['required']
         ], $messages);
 
+
+
         // this check if the inputted collector id is found or not else redirect and throw an error;
         $check = User::where([['id', $request->colID], ['user_type', 1]])->first();
         if ($check){
@@ -70,8 +90,9 @@ class ProcessController extends Controller
             $process->request_id = $request->request_id;
             $process->admin_id = Auth::user()->id;
             $process->collector_id = $check->id;
+            $process->token = $request->token;
             $process->save();
-            return redirect()->route('admin-requests')->with('success', 'Wating to Accept Collector: '.$check->lname. ' '.$check->fname);
+            return redirect()->back()->with('success', 'Wating to Accept Collector: '.$check->lname. ' '.$check->fname);
         }else{
             return redirect()->back()->withInput()->with('error', 'Collector: Not found');
         }
@@ -112,8 +133,18 @@ class ProcessController extends Controller
         $collectors = User::where('user_type', '=', 1)->select('id','lname','fname','mname')->orderBy('id', 'desc')->get();
 
         // return dd($user);
+        
+        /* This for finding duplicate token in table */
+        $token = Str::random(10);
+        $check_token = Process::select('token')->get();
+        for ($x = 0; $x < count($check_token); $x++){
+            if($check_token[$x]->token == $token){
+                $token = Str::random(10);
+            }
+        }
+        // ================================================
 
-        return view ('users.admin.process')->with('user', $user)->with('trans',$trans)->with('active', 'requests')->with('process',$process)->with('collectors', $collectors);
+        return view ('users.admin.process')->with('token', $token)->with('user', $user)->with('trans',$trans)->with('active', 'requests')->with('process',$process)->with('collectors', $collectors);
 
     }
 
@@ -140,27 +171,38 @@ class ProcessController extends Controller
         //
     }
 
-    public function accept($id) {
+    public function accept($id, $token) {
         $process = Process::where('request_id', '=', $id)->first();
-        // dd($process);
-
-        if($process->transfer ==1 ){
+        if($check = Process::where('token', $token)->first()){
+            if($check->transfer == 1){
+                return redirect()->back()->with('success', 'Money Accepted');
+            }else if($check->transfer == 2){
+                return redirect()->back()->with('success', 'Waiting to Accept Member');
+            }else if($check->transfer == 3){
+                return redirect()->back()->with('success', 'Money Accepted');
+            }
+        }else if($process->transfer ==1 ){
             $process->transfer = 2;
+            $process->token = $token;
             $process->save();
             return redirect()->route('collector-requests')->with('success', 'Money Accepted');
-        }
+
         // This will check first if transfer == 2 otherwise skip this and create new Process 
         // execute this function if the money is being transfer from collector to member
-        if($process->transfer == 2){
+        }else if($process->transfer == 2){
             $process->transfer = 3;
+            $process->token = $token;
             $process->save();
             return redirect()->route('collector-requests')->with('success', 'Waiting to Accept Member');
-        }
-
-        if ($process->transfer == 3){
+        }else if ($process->transfer == 3){
             $received = Loan_Request::where('id', $id)->first();
             $received->received = 1;
+            $received->per_month_from = strtotime(NOW());
+            $received->per_month_to = strtotime(NOW().'+ 1 months');
+            $received->date_approved = strtotime(NOW());
+            // dd(date('F d, Y', $received->per_month_updated_at), $received->per_month_updated_at);
             $process->transfer = 4;
+            $process->token = $token;
             $received->save();
             $process->save();
             return redirect()->route('member-requests')->with('success', 'Money Accepted');

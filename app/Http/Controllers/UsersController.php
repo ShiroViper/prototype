@@ -251,6 +251,11 @@ class UsersController extends Controller
         $user->cell_num = $request->input('cell_num');
         $user->address = $request->input('address');
         
+        // Create new status data 
+        $status = new Status;
+        $status->user_id = Auth::user()->id;
+        $status->save();
+
         // Account already setup'ed
         $user->setup = true;
         $user->save();

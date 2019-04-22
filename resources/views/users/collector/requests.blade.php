@@ -7,12 +7,48 @@
 @section('content')
 
 <h3 class="header mt-2">Requests</h3>
+<input type="hidden" value="{{$token}} ">
+
+@if(count($pending_to_mem) > 0)
+    <div class="row pt-3">
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">Waiting confirmation From the Member</h6>
+                <div class="container">
+                    <div class="table-responsive">
+                        <table class="table table-hover mt-3">
+                            <thead>
+                                <tr>
+                                    <th>Sending Date&Time</th>
+                                    <th>Name</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($pending_to_mem as $item)
+                                        <tr>
+                                        <td>{{date('h:i A F, d Y', strtotime($item->updated_at)) }} </td>
+                                        <td>{{ $item->lname.', '. $item->fname. ' '.$item->mname }}</td>
+                                        <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        {{ $pending_to_mem->links() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 
 @if(count($pending_col) > 0)
     <div class="row pt-3">
         <div class="col">
             <div class="card">
-                <h6 class="card-header">Pending Money</h6>
+                <h6 class="card-header">Pending Money From Admin</h6>
                 <div class="container">
                     <div class="table-responsive">
                         <table class="table table-hover mt-3">
@@ -30,7 +66,7 @@
                                             <tr >
                                                 <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
                                                 <td class="d-flex flex-row">
-                                                    <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/collector/receive/{{ $item->request_id }}/accept">Accept</a>
+                                                    <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/collector/receive/{{ $item->request_id }}/{{$token}}/accept">Accept</a>
                                                 </td>
                                             </tr>
                                         @endif
@@ -64,6 +100,7 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
+                                    <th>Type</th>
                                     <th>Amount</th>
                                 </tr>
                             </thead>
@@ -72,6 +109,7 @@
                                     @foreach ($confirmed as $item)
                                         <tr>
                                             <td>{{ $item->lname.', '. $item->fname. ' '. $item->mname }}</td>
+                                            <td>{{$item->trans_type == 1 ? 'Deposit' : 'Loan Payment'}} </td>
                                             <td>₱ {{ number_format($item->amount, 2) }}</td>
                                         </tr>
                                     @endforeach
@@ -96,7 +134,7 @@
 <div class="row pt-3">
     <div class="col">
         <div class="card">
-            <h6 class="card-header">Money Received</h6>
+            <h6 class="card-header">Transfer Loan Money to Member</h6>
             <div class="container">
                 <div class="table-responsive">
                     <table class="table table-hover mt-3">
@@ -112,10 +150,10 @@
                             @if (count($received_col) > 0)
                                 @foreach ($received_col as $item)
                                      <tr>
-                                        <td>{{date('h:i A F, d Y', strtotime($item->updated_at)) }} </td>
+                                        <td>{{date('h:i A F d, Y', strtotime($item->updated_at)) }} </td>
                                         <td>{{ $item->lname.', '. $item->fname. ' '.$item->mname }}</td>
                                         <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
-                                        <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/collector/receive/{{ $item->request_id }}/accept">Transfer</a></td>
+                                        <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/collector/receive/{{ $item->request_id }}/{{$token}}/accept">Transfer</a></td>
                                     </tr>
                                 @endforeach
                             @else
@@ -133,6 +171,7 @@
         </div>
     </div>
 </div>
+
 @push('scripts')
     <script src="{{ asset('js/scripts.js') }}"></script>
 @endpush

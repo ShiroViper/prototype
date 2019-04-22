@@ -89,6 +89,7 @@ class SchedulesController extends Controller
                                 $lr = Loan_Request::where('user_id', '=', $schedule->user_id)->has('user')->first();
                                 $interval = new DateInterval('P1M');
                                 $period = new DatePeriod(new Carbon($schedule->start_date), $interval, new Carbon($schedule->end_date));
+                                // dd($lr);
                                 foreach ($period as $date) {
                                     $sched_list[] = Calendar::event(
                                         '_',
@@ -108,7 +109,10 @@ class SchedulesController extends Controller
                                                 <div class="col">Start date: '.Carbon::parse($schedule->start_date)->format("F j, Y").'</div>
                                             </div>
                                             <div class="row text-left">
-                                                <div class="col"><b>₱'.round($lr->balance/$lr->days_payable, 2).'</b> per month</div>
+                                                <div class="col">
+                                                    <b>₱'.
+                                                        round($per_month = ($lr->loan_amount * 0.06 * $lr->days_payable + $lr->loan_amount) / $lr->days_payable, 2)
+                                                    .'</b> per month</div>
                                                 <div class="col"> End Date: '.Carbon::parse($schedule->end_date)->format("F j, Y").'</div>
                                             </div>' : 
                                             '<div class="font-italic alert alert-success border h6">Loan request paid</div>
@@ -144,6 +148,7 @@ class SchedulesController extends Controller
                             break;
                         }
                     }
+                    // dd($collector->lname ? 'naa ko dinhi' : 'wala lagi  ');
                 //     $('html, body').animate({
                 //     scrollTop: $("#div1").offset().top
                 // }, 2000);
@@ -439,6 +444,7 @@ class SchedulesController extends Controller
                 ])->first()) {
                 return view('users.member.dashboard')->with('user', $user)->with('active', 'dashboard');
             } else {
+
                 // return view('users.member.status')->with('loan', $loan)->with('savings', $savings)->with('patronage', $patronage)->with('active', 'status');
                 return view('users.member.dashboard')->with(compact('calendar_details'))->with('active', 'dashboard')->with('user', null)->with('loan', $loan)->with('savings', $savings)->with('patronage', $patronage);
             }

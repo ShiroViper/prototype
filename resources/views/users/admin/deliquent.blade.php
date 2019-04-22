@@ -16,7 +16,7 @@
                             <th>Due Date & Time</th>
                             <th>Member Name</th>
                             {{-- <th>Collector Name</th> --}}
-                            <th>Remaining Balance</th>
+                            <th>Loan Balance</th>   
                         </tr>
                     </thead>
                     <tbody>
