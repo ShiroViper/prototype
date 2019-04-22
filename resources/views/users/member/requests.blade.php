@@ -17,7 +17,7 @@
         @endif
     </div>
 </div>
-ang action ani butanga nya.
+{{-- {{dd($distribution)}} --}}
 {{-- Show list of pending distribution confirmation --}}
 @if ($distribution)
     <div class="row pt-3 mb-5">
@@ -37,7 +37,7 @@ ang action ani butanga nya.
                                 <tr>
                                     <td>₱ {{number_format($distribution->amount, 2)}} </td>
                                     <td class="d-flex flex-row">
-                                        {{-- <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/sent/{{ $item->id }}/d_accept">Confirm</a> --}}
+                                        <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/distribution/{{ $distribution->id }}/accept">Confirm</a>
                                     </td>
                                 </tr>
                             </tbody>

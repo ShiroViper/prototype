@@ -8,15 +8,15 @@
 
 
 <h3 class="header mt-2">Status as of {{date('F d, Y', strtotime(NOW()))}}</h3>
-ang pag distribute sa kwarta ig end year
 <div class="row">
     <div class="col">
         <div class="py-3">
             @php
                 $title = date('n', strtotime(NOW())) > 11 ? 'Distribute Money' : 'This Function can be use during December'; 
-                $path = date('n', strtotime(NOW())) > 3 ? '/admin/distribute' : '#'; 
+                $path = date('n', strtotime(NOW())) > 3 ? '/admin/distribute' : '#';
+                $dis = $distribution || $status->distribution == 0 ? 'hidden' : '';
             @endphp
-            <a href="{{$path}} "><button class="btn btn-light border" data-toggle="tooltip" data-placement="top" title = "{{$title}} " >Distribute</button></a>
+            <a href="{{$path}} "><button {{$dis}} class="btn btn-light border" data-toggle="tooltip" data-placement="top" title = "{{$title}} " >Distribute</button></a>
         </div>
     </div>
 </div>

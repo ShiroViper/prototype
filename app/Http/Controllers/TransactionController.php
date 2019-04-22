@@ -16,6 +16,7 @@ use App\Schedule;
 use App\Transaction;
 use App\Member_Request;
 use App\TurnOver;
+use App\Distribution;
 use DateTime;
 use Illuminate\Support\Facades\Crypt;
 
@@ -57,8 +58,9 @@ class TransactionController extends Controller
             $trans = Transaction::where([['confirmed', 1], ['turn_over', 2]])->get();
             $turn_over = TurnOver::select('turn_over.id', 'lname', 'fname', 'mname', 'amount')->join('users', 'users.id', '=', 'collector_id')->where('confirmed', null)->paginate(5);
             $status = Status::select(DB::raw('SUM(savings) as savings, SUM(patronage_refund) as patronage_refund, SUM(distribution) as distribution'))->first();
+            $distribution = Distribution::where('confirmed', null)->first();
             
-            return view('users.admin.dashboard')->with('status', $status)->with('turn_over', $turn_over)->with('trans', $trans)->with('transactions', $transactions)->with('active', 'dashboard')->with('memReq', $memberRequests);
+            return view('users.admin.dashboard')->with('distribution', $distribution)->with('status', $status)->with('turn_over', $turn_over)->with('trans', $trans)->with('transactions', $transactions)->with('active', 'dashboard')->with('memReq', $memberRequests);
         } else if ( Auth::user()->user_type == 1 ) {
             $transactions = Transaction::join('users', 'users.id', '=', 'member_id' )->select('transactions.id', 'transactions.created_at', 'lname', 'fname', 'mname', 'trans_type', 'amount')->where([['collector_id', Auth::user()->id], ['confirmed', 1]])->orderBy('transactions.created_at', 'DESC')->paginate(10);
             return view('users.collector.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
@@ -135,7 +137,6 @@ class TransactionController extends Controller
                 $status->savings = $status->savings - $loan_request->balance; 
                 $status->save();
 
-                $loan_request->paid_using_savings = 1;
                 $loan_request->paid = 1;
                 $loan_request->balance = 0;
                 $loan_request->per_month_amount = 0;
@@ -255,7 +256,7 @@ class TransactionController extends Controller
                 // If $loan_request is NULL redirect and return error message
                 if(!$loan_request){
                     return redirect()->back()->withInput()->with('error', 'Not Found');
-                }else if($loan_request->balance < $request->amount){
+                }else if(ceil($loan_request->balance) < $request->amount){
                     return redirect()->back()->withInput()->with('error', 'Loan Payment is beyond the Loan Balance');
                 }
 
@@ -288,7 +289,7 @@ class TransactionController extends Controller
                 if (is_null($loan_request)) {
                     // There are no more loan payments by the user
                     return redirect()->back()->with('error', "User doesn't have any payments");
-                } else if (round($loan_request->balance - $request->amount) < 0) {
+                } else if (ceil($loan_request->balance - $request->amount) < 0) {
                     // Prevents the collector to input the amount that is larger than the balance
                     return redirect()->back()->with('error', 'Amount entered is beyond the balance')->withInput();
                 } else if (($loan_request->balance - $request->amount) == 0) {
@@ -389,8 +390,9 @@ class TransactionController extends Controller
         $loan_request->per_month_amount = $loan_request->per_month_amount - $transact->amount;
         
         // if $loan_request->balance has no value change paid status to 1
-        if(!$loan_request->balance){
+        if($loan_request->balance <= 0){
             $loan_request->paid = 1;
+            $loan_request->paid_using_savings = 1;
             
             // this code update the distribution amount in id 1, the constant/default row 
             $update_dis = Status::where('user_id', 1)->first();
@@ -411,6 +413,7 @@ class TransactionController extends Controller
                 $update_pat->save();
             }
         }
+
         $loan_request->save();
         $transact->save();
         return redirect()->back()->with('success', 'Confirmed Successfully');

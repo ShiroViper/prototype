@@ -19,6 +19,7 @@ class CreateDistributionTable extends Migration
             $table->integer('confirmed')->nullable();
             $table->decimal('amount', 10, 2);
             $table->timestamps();
+            $table->string('token')->nullable();
         });
     }
 
