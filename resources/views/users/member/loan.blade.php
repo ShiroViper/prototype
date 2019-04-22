@@ -8,7 +8,7 @@
 @push('scripts')
     <script src="{{ asset('js/scripts.js') }}"></script>
 @endpush
-@if($paid ? $status->savings > 0 : '')
+@if(!$paid ? $status->savings > 0 : '')
     <h3 class="header mt-2">Request Loan</h3>
     {{-- <div class="bg-teal p-3 text-white">
         The minimum loan amount is ₱200.
