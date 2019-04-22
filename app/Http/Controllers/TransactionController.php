@@ -52,7 +52,7 @@ class TransactionController extends Controller
     {
         if ( Auth::user()->user_type == 2 ) {
             // Pending Loan Requests
-            $pending = Loan_Request::join('comments', 'request_id', '=', 'loan_request.id')->join('users', 'users.id', '=', 'loan_request.user_id')->select( 'lname', 'mname', 'fname', 'loan_request.created_at', 'loan_amount', 'days_payable', 'comments')->orderBy('loan_request.created_at', 'desc')->whereNull('loan_request.confirmed')->paginate(5);
+            $pending = Loan_Request::join('comments', 'request_id', '=', 'loan_request.id')->join('users', 'users.id', '=', 'loan_request.user_id')->select( 'request_id', 'lname', 'mname', 'fname', 'loan_request.created_at', 'loan_amount', 'days_payable', 'comments')->orderBy('loan_request.created_at', 'desc')->whereNull('loan_request.confirmed')->paginate(5);
 
             // Member Requests
             $memberRequests = Member_Request::where('approved', null)->paginate(5);
@@ -63,6 +63,8 @@ class TransactionController extends Controller
             $trans = Transaction::where([['confirmed', 1], ['turn_over', 2]])->get();
             $turn_over = TurnOver::select('turn_over.id', 'lname', 'fname', 'mname', 'amount')->join('users', 'users.id', '=', 'collector_id')->where('confirmed', null)->paginate(5);
             $status = Status::select(DB::raw('SUM(savings) as savings, SUM(patronage_refund) as patronage_refund, SUM(distribution) as distribution'))->first();
+
+            // dd($pending);
             
             return view('users.admin.dashboard')->with('status', $status)->with('turn_over', $turn_over)->with('trans', $trans)->with('transactions', $transactions)->with('active', 'dashboard')->with('memReq', $memberRequests)->with('pending', $pending);
         } else if ( Auth::user()->user_type == 1 ) {
