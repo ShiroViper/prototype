@@ -113,7 +113,7 @@ class SchedulesController extends Controller
                                                     <b>₱'.
                                                         round($per_month = ($lr->loan_amount * 0.06 * $lr->days_payable + $lr->loan_amount) / $lr->days_payable, 2)
                                                     .'</b> per month</div>
-                                                <div class="col"> End Date: '.Carbon::parse($schedule->end_date)->format("F j, Y").'</div>
+                                                <div class="col"> End Date: '.Carbon::parse($schedule->end_date)->subMonths(1)->format("F j, Y").'</div>
                                             </div>' : 
                                             '<div class="font-italic alert alert-success border h6">Loan request paid</div>
                                             <div></div>

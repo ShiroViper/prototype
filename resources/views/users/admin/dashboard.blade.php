@@ -46,9 +46,10 @@
                     @php
                         // $title = date('n', strtotime(NOW())) > 11 ? 'Distribute Money' : 'This Function can be use during December'; 
                         $path = date('n', strtotime(NOW())) > 3 ? '/admin/distribute' : '#'; 
+                        $dis = $distribution || $status->distribution == 0 ? 'hidden' : '';
                     @endphp
                     <a href="{{$path}}">
-                        <button class="btn btn-success mt-3" data-toggle="tooltip" data-placement="top" {{ date('n', strtotime(NOW())) > 11 ?  : 'hidden' }}>Distribute Money</button>
+                        <button class="btn btn-success mt-3" data-toggle="tooltip" data-placement="top" {{ date('n', strtotime(NOW())) > 3 ?  : 'hidden' }} {{$dis = $distribution || $status->distribution == 0 ? 'hidden' : ''}}>Distribute Money</button>
                     </a>
                 </div>
             </div>
@@ -109,7 +110,7 @@
                                                 </div>
                                             </div>
                                             <div id="collapse{{ $key }}" class="collapse" aria-labelledby="heading{{ $key }}" data-parent="#dashboard-admin-lr-accordion">
-                                                <div class="list-content border">
+                                                <div class="list-content border">   
                                                     <div class="row">
                                                         <div class="col-sm mb-3">
                                                             <div class="h5 mb-0">{{ $item->lname.', '. $item->fname.' '. $item->mname }}</div>

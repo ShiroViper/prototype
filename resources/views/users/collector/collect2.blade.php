@@ -52,7 +52,7 @@
 
             <div class="form-group">
                 {{ Form::label('amount', 'Amount Received', ['class' => 'h6']) }}
-                {{ Form::number('amount', old('amount'), ['class'=> 'form-control', 'step' => '0.01', 'min' => 5, 'required']) }}
+                {{ Form::number('amount', old('amount'), ['class'=> 'form-control', 'step' => '0.01', 'required']) }}
                 @if ($errors->has('amount'))
                     <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
                 @endif
@@ -92,7 +92,7 @@
                                     Remaining Loan Balance
                                 </div>
                                 <div class="col col-md col-lg">
-                                    <h6>₱ {{ $loan_request->balance }}</h6>
+                                    <h6>₱ {{ number_format(ceil($loan_request->balance), 2) }}</h6>
                                 </div>
                             </div>
                         </li>
@@ -110,7 +110,7 @@
                                     <small class="text-muted">Over Payment</small>
                                 </div>
                                 <div class="col col-md col-lg">
-                                    <small class="text-muted"><h6>₱ {{ abs($loan_request->per_month_amount) }} </h6></small>
+                                    <small class="text-muted"><h6>₱ {{ number_format(round(abs($loan_request->per_month_amount)), 2) }} </h6></small>
                                 </div>
                             </div>
                         </li>

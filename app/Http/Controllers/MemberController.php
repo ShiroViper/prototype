@@ -10,6 +10,7 @@ use Hash;
 use App\User;
 use App\Status;
 use App\Comment;
+use App\Loan_Request;
 
 
 class MemberController extends Controller
@@ -154,12 +155,12 @@ class MemberController extends Controller
 
         // 
         $account_status = Comment::where('user_id', Auth::user()->id)->first();
-        // dd($account_status);
+        $paid_null = Loan_Request::where([['user_id', Auth::user()->id], ['paid', null]])->first();
         
         if (Auth::user()->user_type == 1) {
             return view('users.collector.cancel')->with('account_status', $account_status)->with('token',$token)->with('active', 'cancel');    
         } else {
-            return view('users.member.cancel')->with('account_status', $account_status)->with('token',$token)->with('active', 'cancel');
+            return view('users.member.cancel')->with('paid_null', $paid_null)->with('account_status', $account_status)->with('token',$token)->with('active', 'cancel');
         }
     }
 

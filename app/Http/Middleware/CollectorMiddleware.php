@@ -21,7 +21,7 @@ class CollectorMiddleware
          * not an a Collector
          */
         if ($request->user()->user_type != 1) {
-            return redirect()->back()->with('error', 'Unauthorized Access!');
+            return redirect()->back()->with('error', 'Unathorized Access!');
         }
 
         /**
