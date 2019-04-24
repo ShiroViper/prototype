@@ -122,7 +122,7 @@
                                 @else
                                 <tr class="table-secondary font-weight-bold clickable" data-toggle="modal" data-target="#histReqModal" data-id="{{ $request->id }}" data-cdate="{{ date('F d, Y H:i:s A', strtotime($request->created_at)) }}" data-mem="{{ $request->user->lname.', '.$request->user->fname.' '.$request->user->mname }}" data-memid="{{ $request->user->id }}" data-udate="{{ date('F d, Y H:i:s A', strtotime($request->updated_at)) }}" data-amount="{{ $request->loan_amount }}" data-dp="{{ $request->days_payable }}" data-conf="{{ $request->confirmed == 1 ? 'Approved' : 'Declined' }}" data-desc="{{ $request->description }}" data-paid="{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}">
                                 @endif --}}
-                                <tr >
+                                <tr class="clickable-row" data-href="/admin/process/{{ $request->id }}/edit">
                                     <td>{{ date("h:i A  F d, Y", strtotime($request->updated_at)) }}</td>
                                     <td>{{$request->user->lname}}, {{$request->user->fname}} {{$request->user->mname}} </td>
                                     <td>₱ {{ number_format($request->loan_amount,2 ) }}</td>
@@ -133,7 +133,7 @@
                                     {{-- if status is declined skip this function otherwise execur --}}
                                     @if($request->received != 1 && $request->confirmed != 0)
                                         <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/process/{{ $request->id }}/edit">Transfer</a></td>
-                                    @elseif($request->status == 0)
+                                    @elseif($request->confirmed == 0)
                                         <td></td>
                                     @else
                                         <td><span class="badge badge-success"><small>Money Transferred</small></span></td>

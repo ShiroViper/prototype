@@ -17,14 +17,14 @@ class UsersTableSeeder extends Seeder
         // changed dummy information
         $users = [
             [
-                'lname' => 'Admin',
-                'fname' => 'Admin',
-                'mname' => 'Admin',
-                'email' => 'admin@alkansya.com',
-                'cell_num' => '09'.mt_rand(100000000, 999999999),
-                'password' => bcrypt(123456),
+                'lname' => 'Cordero',
+                'fname' => 'Brenda',
+                'mname' => 'P.',
+                'email' => 'brendacordero@gmail.com',
+                'cell_num' => '09365265437',
+                'password' => bcrypt('brendacordero@gmail.com'),
                 'user_type' => 2,
-                'address' => 'Admin',
+                'address' => 'Barangay Poblacion Compostela Cebu City',
                 'remember_token'=> Str::random(10),
             ],
             // [

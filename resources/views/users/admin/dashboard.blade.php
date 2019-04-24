@@ -19,7 +19,7 @@
     <div class="card-deck pb-5 mt-3">
         <div class="card shadow-sm">
             <div class="card-body d-flex justify-content-center align-items-center flex-column">
-                <div class="border rounded-circle p-2 bg-light"><i class="text-indigo fas fa-money-bill-alt fa-lg"></i></div>
+                <div class="border rounded-circle p-2 bg-light"><i class="text-indigo fas fa-wallet fa-lg"></i></div>
                 <h5 class="pt-2 header display-5 font-weight-bold text-center">
                     {{ '₱'.number_format(round($status->savings), 2) }}
                 </h5>
@@ -28,7 +28,7 @@
         </div>
         <div class="card shadow-sm">
             <div class="card-body d-flex justify-content-center align-items-center flex-column">
-                <div class="border rounded-circle p-2 bg-light"><i class="text-success fas fa-chart-line fa-lg"></i></div>
+                <div class="border rounded-circle p-2 bg-light"><i class="text-success fas fa-hand-holding-heart fa-lg"></i></div>
                 <h5 class="pt-2 header display-5 font-weight-bold text-center">
                     {{ '₱'.number_format(round($status->patronage_refund), 2) }}
                 </h5>
@@ -37,7 +37,7 @@
         </div>
         <div class="card shadow-sm">
             <div class="card-body d-flex justify-content-center align-items-center flex-column">
-                <div class="border rounded-circle p-2 bg-light"><i class="text-orange fas fa-wallet fa-lg"></i></div>
+                <div class="border rounded-circle p-2 bg-light"><i class="text-orange fas fa-money-bill-alt fa-lg"></i></div>
                 <h5 class="pt-2 header display-5 font-weight-bold text-center">
                     {{ '₱'.number_format(round($status->distribution), 2) }}
                 </h5>
@@ -45,11 +45,11 @@
                 <div>
                     @php
                         // $title = date('n', strtotime(NOW())) > 11 ? 'Distribute Money' : 'This Function can be use during December'; 
-                        $path = date('n', strtotime(NOW())) > 3 ? '/admin/distribute' : '#'; 
+                        $path = date('n', strtotime(NOW())) > 11 ? '/admin/distribute' : '#'; 
                         $dis = $distribution || $status->distribution == 0 ? 'hidden' : '';
                     @endphp
                     <a href="{{$path}}">
-                        <button class="btn btn-success mt-3" data-toggle="tooltip" data-placement="top" {{ date('n', strtotime(NOW())) > 3 ?  : 'hidden' }} {{$dis = $distribution || $status->distribution == 0 ? 'hidden' : ''}}>Distribute Money</button>
+                        <button class="btn btn-success mt-3" data-toggle="tooltip" data-placement="top" {{ date('n', strtotime(NOW())) > 11 ?  : 'hidden' }} {{$dis = $distribution || $status->distribution == 0 ? 'hidden' : ''}}>Distribute Money</button>
                     </a>
                 </div>
             </div>
@@ -190,7 +190,7 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Amount</th>
+                                            <th colspan="2">Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -198,7 +198,7 @@
                                                 <tr>
                                                 <td>{{ $item->lname.', '. $item->fname. ' '.$item->mname }}</td>
                                                 <td>₱ {{ number_format($item->amount, 2) }}</td>
-                                                <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/receive/{{ $item->id }}/accept">Confirm</a></td>
+                                                <td><a class="btn btn-primary btn-sm no-modal" role="button" href="/admin/receive/{{ $item->id }}/accept">Confirm</a></td>
                                             </tr>
                                         @endforeach
                                     </tbody>

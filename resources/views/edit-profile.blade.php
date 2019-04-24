@@ -85,8 +85,13 @@
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col">Email</div>
-                        <div class="col font-weight-bold">{{ $user->email }}</div>
-                        {{ Form::email('email', $user->email, ['class' =>  $errors->has('email') ? 'form-control is-invalid' : 'form-control', 'hidden']) }}
+                        <div class="col font-weight-bold">
+                            @if(Auth::user()->user_type != 2)
+                                <div class="col font-weight-bold">{{ $user->email }}</div>
+                            @else
+                                {{ Form::email('email', $user->email, ['class' =>  $errors->has('email') ? 'form-control is-invalid' : 'form-control' ]) }}
+                            @endif
+                        </div>
                     </div>
                 </li>
                 <li class="list-group-item">

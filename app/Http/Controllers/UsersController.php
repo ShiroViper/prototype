@@ -99,7 +99,7 @@ class UsersController extends Controller
         $this->validate($request, [
             'lname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
-            'mname' => ['nullable', 'string', 'regex:/^[\pL\s\-]+$/u'],
+            'mname' => ['nullable', 'string'],
             'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
             'email' => ['required', 'string', 'unique:users', 'email'],
             'address' => ['required', 'string'],
@@ -111,7 +111,7 @@ class UsersController extends Controller
         $user->lname = $request->input('lname');
         $user->fname = $request->input('fname');
         $user->mname = $request->input('mname');
-        $user->password = Hash::make(123456);
+        $user->password = Hash::make($request->input('email'));
         $user->email = $request->input('email');
         $user->cell_num = $request->input('cell_num');
         $user->address = $request->input('address');
@@ -177,7 +177,7 @@ class UsersController extends Controller
         $validator = Validator::make($request->all(), [
             'lname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
-            'mname' => ['nullable', 'string', 'regex:/^[\pL\s\-]+$/u'],
+            'mname' => ['nullable', 'string'],
             'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
             'email' => ['required', 'email', Rule::unique('users')->ignore($id)],
             'address' => ['required', 'string'],
@@ -192,7 +192,7 @@ class UsersController extends Controller
         }
 
         $user = User::find($id);
-        $user->user_type = $request->input('user_type');
+        // $user->user_type = $request->input('user_type');
         $user->lname = $request->input('lname');
         $user->fname = $request->input('fname');
         $user->mname = $request->input('mname');
@@ -235,7 +235,7 @@ class UsersController extends Controller
         $this->validate($request, [
             'lname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
-            'mname' => ['nullable', 'string', 'regex:/^[\pL\s\-]+$/u'],
+            'mname' => ['nullable', 'string'],
             'password' => ['required', 'string', 'alpha_num'],
             'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
             'email' => ['required', 'email', Rule::unique('users')->ignore(Auth::user()->id)],

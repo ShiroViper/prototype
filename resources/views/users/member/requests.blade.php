@@ -29,13 +29,19 @@
                         <table class="table table-hover" >
                             <thead>
                                 <tr>
+                                    <th>Savings</th>
                                     <th>Distribution Amount</th>
+                                    <th>Patronage Refund</th>
+                                    <th>Total</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td>₱ {{number_format($distribution->savings,2)}} </td>
+                                    <td>₱ {{number_format($distribution->patronage_refund,2)}} </td>
                                     <td>₱ {{number_format($distribution->amount, 2)}} </td>
+                                    <td>₱ {{number_format($distribution->savings + $distribution->patronage_refund + $distribution->amount, 2)}} </td>
                                     <td class="d-flex flex-row">
                                         <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/member/distribution/{{ $distribution->id }}/accept">Confirm</a>
                                     </td>

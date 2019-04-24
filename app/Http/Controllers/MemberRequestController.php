@@ -73,7 +73,7 @@ class MemberRequestController extends Controller
 
         $new = new User;
         $new->id = intval($result);
-        $new->password = Hash::make(123456);
+        $new->password = Hash::make($req->email);
         $new->user_type = 0;
         $new->lname = $req->lname;
         $new->fname = $req->fname;

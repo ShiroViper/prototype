@@ -70,11 +70,12 @@ class AdminController extends Controller
         // $user = User::where([['user_type', 0], ['setup', 1], ['inactive', '!=', 1]])->get();
         $user = User::join('status', 'status.user_id', '=', 'users.id')->select('users.*')->where([['user_type', 0], ['setup', 1], ['inactive', '!=', 1],['savings', '>=', 1825]])->get();
         $user_count = count($user);
-
-        if($status->distribution <= 0 && date('n', strtotime(NOW())) > 3){
+        
+        if(!$user_count){
+            return redirect()->back()->with('error', 'No User to Distribute');
+        }else if($status->distribution <= 0 && date('n', strtotime(NOW())) > 11){
             return redirect()->back()->with('error', 'Action Invalid! Distribution is done');
-        }else if($status->distribution > 0 && date('n', strtotime(NOW())) > 3){
-            
+        }else if($status->distribution > 0 && date('n', strtotime(NOW())) > 11){
             $distribute = $status->distribution / $user_count;
             foreach($user as $u){
                 // dd(! $temp = Distribution::where([['user_id', $u->id], ['confirmed', null]])->first(), $temp);
