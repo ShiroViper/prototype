@@ -6,11 +6,17 @@
 
 @section('content')
 
+@push('scripts')
+    <script src="{{ asset('js/jquery-ui.js') }}"></script>
+    <script src="{{ asset('js/scripts.js') }}"></script>
+@endpush
+
 <style>
     html {
          scroll-behavior: smooth;
     }
-    .justify {
+
+    /* .justify {
         text-align: justify;
         text-justify: inter-word;
     }
@@ -29,15 +35,15 @@
       cursor: pointer;
       padding: 15px;
       border-radius: 4px;
-      -webkit-transition-duration: 0.4s; /* Safari */
+      -webkit-transition-duration: 0.4s;
      transition-duration: 0.4s;
     }
     
     #myBtn:hover {
       background-color: gray;
       color: white;
-    }
-    </style>
+    } */
+</style>
 
 <h2 class="welcome-title mt-3 display-5">Terms and Conditions</h2>
 <div class="justify lead">
@@ -62,7 +68,7 @@
             </div>
         </div>
     </div>
-    <div class="row my-5">
+    <div class="row my-5" id="moreInfo">
         <div class="col">
             <div class="terms-title h4 pb-2">Our Services</div>
             <div class="terms-content">

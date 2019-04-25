@@ -10,6 +10,7 @@
     @endpush
     @if (is_null($user))
         <p class="header display-5 mt-3">My Account</p>
+        <p><small><a href="/terms#moreInfo" target='_blank'>Test link for Terms and Conditions</a></small></p>
         {{-- <div class="row">
             <div class="col-sm p-2">
                 <div class="card shadow-sm" style="max-width: 18rem">

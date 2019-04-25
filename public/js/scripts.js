@@ -134,6 +134,14 @@ $(function () {
    */
   $("#cpassword").keyup(passwordChecker);
 
+  /**
+   * Highlighter
+   */
+  if (window.location.hash == "#moreInfo") {
+    // alert(window.location.hash);
+    $('#moreInfo').effect("highlight", {}, 3500);
+  }
+
   // $('#reqModal').on('show.bs.modal', function (e) {
   //   // var url = window.location.href;
   //   // $('.modal-text').html(url);
@@ -143,6 +151,8 @@ $(function () {
   // $('#reqModal').on('hide.bs.modal', function (e) {
   //   window.history.back();
   // });
+
+
 });
 
 
