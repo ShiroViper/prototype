@@ -12,6 +12,10 @@
 
 <a class="btn btn-light border" role="button" href="/collector/transaction/create"><i class="fas fa-arrow-left"></i>  Back to list</a>
 <h3 class="header mt-2">Collect Payment</h3>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary mb-5" data-toggle="modal" data-target="#cameraModal">
+    Launch demo modal
+</button>
 
 <div class="row">
     <div class="col-md-6">  
@@ -183,4 +187,82 @@
         </div>
     </div>
 </div>
+
+<div class="row mt-3">
+    <div class="col">
+        <canvas id="canvas" width="640" height="480"></canvas>
+        <button onclick="download_image()" id="download">Download</a>
+    </div>
+</div>
+  
+<!-- Modal -->
+<div class="modal fade" id="cameraModal" tabindex="-1" role="dialog" aria-labelledby="cameraModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="cameraModalTitle">Take a Picture</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col text-center">
+                    <video id="video" width="640" height="480" autoplay></video>
+                </div>
+                <div class="col-12 text-center">
+                    <button id="snap">Snap Photo</button>
+                </div>
+            </div>
+                
+        </div>
+        <div class="modal-footer">
+            {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button> --}}
+        </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Elements for taking the snapshot
+var canvas = document.getElementById('canvas');
+var context = canvas.getContext('2d');
+var video = document.getElementById('video');
+// Hide download button first
+$("#download").hide();
+
+// Get access to the camera!
+if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    // Not adding `{ audio: true }` since we only want video now
+    navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+        //video.src = window.URL.createObjectURL(stream);
+        video.srcObject = stream;
+        video.play();
+    });
+}
+
+// Filename 
+var date = new Date();
+var output = date.getMonth()+1+'-'+date.getDate()+'-'+date.getFullYear()+'-'+date.getHours()+date.getMinutes()+date.getSeconds();
+// console.log(date, output);
+
+// Download Image
+function download_image(){
+    var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    var link = document.createElement('a');
+    link.download = output;
+    link.href = canvas.toDataURL("image/png;base64");
+    link.click();
+}
+
+// Trigger photo take
+$("#snap").on("click", function() {
+    context.drawImage(video, 0, 0, 640, 480);
+    $('#cameraModal').modal('toggle');
+    $('#download').show();
+});
+
+</script>
+
 @endsection
