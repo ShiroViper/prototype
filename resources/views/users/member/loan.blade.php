@@ -22,25 +22,35 @@
 
             {{ Form::label('amount', 'Loan Amount', ['class' => 'h6']) }}
             <div class="form-group">
-                    {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'placeholder' => 'Enter amount', 'min'=>'200', 'step' => '.01', 'required']) }}
+                    {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'placeholder' => 'Enter amount', 'min'=>'200', 'max'=> $status->savings, 'step' => '.01', 'required']) }}
                     <small class="text-muted">The minimum loan amount is ₱200.</small>
                 @if ($errors->has('amount'))
                     <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
                 @endif
             </div>
 
-            {{ Form::label('months', 'Months Payable', ['class' => 'h6']) }}
+            {{ Form::label('months', 'Due Month', ['class' => 'h6']) }}
             <div class="form-group">
-            {{ Form::number('months', '', ['class' => $errors->has('months') ? 'form-control is-invalid' : 'form-control', 'min'=>'1', 'max'=>'12', 'required']) }}
+            {{-- {{ Form::number('months', '', ['class' => $errors->has('months') ? 'form-control is-invalid' : 'form-control', 'min'=>'1', 'max'=> $count_end_month, 'step'=> 1, 'required']) }}
                 @if ($errors->has('months'))
                     <div class="invalid-feedback">{{ $errors->first('months') }}</div>
-                @endif
+                @endif --}}
+                <select name="months" id="months" class="form-control {{$errors->has('months') ? ' is-invalid' : '' }} " required>
+                    <option selected disabled hidden>-- Select Month --</option>
+                    @php
+                        $i = 1;
+                        foreach($get_end_name as $g){
+                            echo '<option value="'.$i.'">'.date('F', strtotime($g)). '</option>';
+                            $i++;
+                        }  
+                    @endphp
+                </select>
             </div>
 
             {{ Form::label('reason', 'Reason', ['class' => 'h6']) }}
             <div class="form-group">
                 <select name="reason" id="reason" class="form-control {{$errors->has('reason') ? ' is-invalid s' : '' }} " required>
-                    <option selected hidden>-- Select Reason --</option>
+                    <option selected disabled hidden>-- Select Reason --</option>
                     <option value="For Personal Use">For Personal Use</option>
                     <option value="For Emergency Use">For Emergency Use</option>
                     <option value="3">Other</option>

@@ -86,11 +86,21 @@ class LoanRequestsController extends Controller
         }
         // ================================================
 
+        // example 3 months
+        $m = 3;
+        //This check every end year
+        $months = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ,12);
+        $get_end_month = array_slice($months, date('n'));
+        $count_end_month = count($get_end_month) - 1;
+
+        $name = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November');
+        $get_end_name = array_slice($name, date('n'));
+
         $paid = Loan_Request::where([['user_id', Auth::user()->id], ['paid', null]])->orwhere([['user_id', Auth::user()->id], ['paid_using_savings', null]])->first();
 
         $status = Status::where('user_id', Auth::user()->id)->first();
         $current_savings = Status::where('user_id', Auth::user()->id)->first();
-        return view('users.member.loan')->with('token', $token)->with('status', $status)->with('paid', $paid)->with('active', 'loan')->with('savings', $current_savings);
+        return view('users.member.loan')->with('token', $token)->with('get_end_name', $get_end_name)->with('count_end_month', $count_end_month)->with('get_end_month', $get_end_month)->with('status', $status)->with('paid', $paid)->with('active', 'loan')->with('savings', $current_savings);
     }
 
     /**
