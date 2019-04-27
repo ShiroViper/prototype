@@ -19,7 +19,7 @@ class MemberRequestController extends Controller
             'email.unique' => 'That email was already registered',
             'numeric' => 'Please input a valid contact number'
         ];
-
+        
         $this->validate($request, [
             'lname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
@@ -29,6 +29,28 @@ class MemberRequestController extends Controller
             'address' => ['required', 'string']
         ], $messages);
 
+       
+
+        $this->validate($request,[
+            'face_photo' => 'image|nullable|max:1999' 
+        ]);
+        if($request->hasFile('face_photo')){
+            // Get filename with the extension
+            $filenameWithExt = $request->file('face_photo')->getClientOriginalName();
+            //Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('face_photo')->getClientOriginalExtension();
+            //Filename to store
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            //Upload Image
+            $path = $request->file('face_photo')->storeAs('public/cover_images',$fileNameToStore);            
+        } else {
+            $fileNameToStore = 'noimage.jpg';
+        }
+
+    
+
         $mem_req = new Member_Request;
         $mem_req->lname = $request->input('lname');
         $mem_req->fname = $request->input('fname');
@@ -36,8 +58,9 @@ class MemberRequestController extends Controller
         $mem_req->email = $request->input('email');
         $mem_req->contact = $request->input('cell_num');
         $mem_req->address = $request->input('address');
+        $mem_req->face_id = $fileNameToStore;
         $mem_req->save();
-        // return dd($mem_req);
+
         return redirect('/')->with('success', 'Request submitted successfully');
     }
 
