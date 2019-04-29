@@ -21,7 +21,7 @@ $(".clickable-row").on("click", function () {
 });
 
 /**
- * Fades away after a brief delay
+ * Fades away notifications after a brief delay
  */
 $('.pop-messages').fadeOut(4200, "linear");
 
@@ -33,6 +33,9 @@ $('tr .no-modal').on("click", function (e) {
   e.stopPropagation();
 });
 
+/**
+ * Reason for loan
+ */
 $('#reason').change(function () {
   var selected = $('#reason').val();
   // console.log(selected);
