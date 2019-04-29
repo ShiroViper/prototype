@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddInterestToLoanRequestTable extends Migration
+class AddDecrementDaysPayableToLoanRequestTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddInterestToLoanRequestTable extends Migration
     public function up()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            $table->decimal('interest')->after('balance');
+            $table->integer('decrement_days_payable')->after('balance');
         });
     }
 
@@ -26,7 +26,7 @@ class AddInterestToLoanRequestTable extends Migration
     public function down()
     {
         Schema::table('loan_request', function (Blueprint $table) {
-            //
+            $table->dropColumn('decrement_days_payable');
         });
     }
 }

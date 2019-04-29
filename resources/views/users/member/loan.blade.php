@@ -22,17 +22,14 @@
             @csrf
             {{Form::hidden('token', $token) }}
 
-            <div class="form-group">
-                <p class="h6">Loan Amount * 6% (Monthly Interest) + Loan Amount</p><hr>
+            {{-- <div class="form-group">
+                <p class="h6">Loan Interest = Loan Amount * 6% (Monthly Interest)</p><hr>
                 <div class="row">
                     <div class="col">
                         <p class="h6" id="interest"></p>
                     </div>
-                    <div class="col">
-                        <p class="h6" id="monthly"></p>                    
-                    </div>
                 </div>
-            </div>
+            </div> --}}
 
             {{ Form::label('amount', 'Loan Amount', ['class' => 'h6']) }}
             <div class="form-group">

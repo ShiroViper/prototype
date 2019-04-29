@@ -55,7 +55,7 @@
 
             <div class="form-group">
                 {{ Form::label('amount', 'Amount Received', ['class' => 'h6']) }}
-                {{ Form::number('amount', old('amount'), ['class'=> 'form-control', 'step' => '0.01', 'required']) }}
+                {{ Form::number('amount', old('amount'), ['class'=> 'form-control', 'step' => '1', 'required']) }}
                 @if ($errors->has('amount'))
                     <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
                 @endif

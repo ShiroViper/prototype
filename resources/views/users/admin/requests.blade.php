@@ -111,6 +111,7 @@
                             <th>Status</th>
                             <th>Money Received</th>
                             <th>Paid</th>
+                            <th>Due Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -130,6 +131,7 @@
                                     <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
                                     <td>{{ $request->received ? 'Yes' : ($request->confirmed ? 'No': '')}} </td>  
                                     <td>{{ $request->confirmed ? ($request->paid ? 'Yes' : 'Ongoing') : '' }}</td>
+                                    <td>{{ date("F d, Y", strtotime($request->updated_at.'+'.$request->days_payable.' months')) }}</td>
                                     {{-- if status is declined skip this function otherwise execur --}}
                                     @if($request->received != 1 && $request->confirmed != 0)
                                         <td><a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/admin/process/{{ $request->id }}/edit">Transfer</a></td>

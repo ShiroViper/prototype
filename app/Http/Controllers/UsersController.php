@@ -178,6 +178,7 @@ class UsersController extends Controller
             'lname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'mname' => ['nullable', 'string'],
+            'inactive' => ['required'],
             'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
             'email' => ['required', 'email', Rule::unique('users')->ignore($id)],
             'address' => ['required', 'string'],
@@ -199,6 +200,7 @@ class UsersController extends Controller
         $user->email = $request->input('email');
         $user->cell_num = $request->input('cell_num');
         $user->address = $request->input('address');
+        $user->inactive = $request->input('inactive');
         $user->save();
         
         // return redirect()->route('users-index')->with('success', 'User updated successfully');

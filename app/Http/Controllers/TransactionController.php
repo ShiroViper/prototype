@@ -72,7 +72,7 @@ class TransactionController extends Controller
             $transactions = Transaction::join('users', 'users.id', '=', 'member_id' )->select('transactions.id', 'transactions.created_at', 'lname', 'fname', 'mname', 'trans_type', 'amount')->where([['collector_id', Auth::user()->id], ['confirmed', 1]])->orderBy('transactions.created_at', 'DESC')->paginate(10);
             return view('users.collector.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
         } else {
-            $transactions = Transaction::join('users', 'users.id', '=', 'collector_id')->select('transactions.id', 'amount', 'lname', 'fname', 'mname', 'trans_type', 'transactions.created_at')->where('member_id', Auth::user()->id)->whereNotNull('confirmed')->orderBy('transactions.created_at')->paginate(5);
+            $transactions = Transaction::join('users', 'users.id', '=', 'collector_id')->select('transactions.id', 'amount', 'lname', 'fname', 'mname', 'trans_type', 'transactions.created_at')->where('member_id', Auth::user()->id)->whereNotNull('confirmed')->orderBy('transactions.created_at', 'desc')->paginate(5);
             return view('users.member.transactions')->with('transactions', $transactions)->with('active', 'transactions');
         }
         // $transactions = DB::table('transactions')
@@ -134,12 +134,15 @@ class TransactionController extends Controller
         $check_for_pending = Transaction::where([['member_id', $member->id], ['collector_id', Auth::user()->id], ['confirmed', null]])->get();
         
         // testing 
-        //  1546333748 january
-        // 1571418025 october
-        //Check if per_month_date is beyond 1 month
-        // dd($date = strtotime("+".$loan_request->days_payable." months", $loan_request->date_approved), $loan_request->date_approved, date("F d, Y", $date));
+        //  TESTINGGGGG THE VALUE
+        // dd(date(strtotime(now().'-1 months')), strtotime(now().'-30 days'));
+        // 1553860497
+        // 1553947046
+        // dd(strtotime(NOW()) > strtotime("+".$loan_request->days_payable." months") && $loan_request->date_approved);
+        // dd($loan_request ? !$loan_request->paid ? !$loan_request->paid_using_savings ? strtotime(NOW()) > $loan_request->per_month_to : '' : '' : '');
+        //Check if per_month_date is beyond 1 month  
         if($loan_request ? !$loan_request->paid ? !$loan_request->paid_using_savings : '' : ''){
-            if( strtotime(NOW()) > strtotime("+".$loan_request->days_payable." months", $loan_request->date_approved)){
+            if( strtotime(NOW()) > strtotime("+".$loan_request->days_payable." months") && $loan_request->date_approved){
                 $status = Status::where('user_id', $memID)->first();
                 $status->savings = $status->savings - $loan_request->balance; 
                 $status->save();
@@ -148,17 +151,19 @@ class TransactionController extends Controller
                 $loan_request->balance = 0;
                 $loan_request->per_month_amount = 0;
                 $loan_request->save();
-
+                
             }else if($loan_request ? !$loan_request->paid ? !$loan_request->paid_using_savings ? strtotime(NOW()) > $loan_request->per_month_to : '' : '' : ''){
-
                 // compute the monthly loan
                 if($loan_request->per_month_amount <= 0){
                     $temp = ($loan_request->loan_amount * 0.06 * $loan_request->days_payable + $loan_request->loan_amount) / $loan_request->days_payable;
                     // subtract the negative value 
                     $loan_request->per_month_amount = $loan_request->per_month_amount + $temp;
+                    // dd('not here');
                 }else{
-                    $temp = ($loan_request->loan_amount * 0.06 * $loan_request->days_payable + $loan_request->loan_amount) / $loan_request->days_payable;
-                    $loan_request->per_month_amount = $temp + $loan_request->per_month_amount;
+                    // dd(($loan_request->balance * 0.06 + $loan_request->balance ) / $loan_request->decrement_days_payable);
+                    // $temp = ($loan_request->loan_amount * 0.06 * $loan_request->days_payable + $loan_request->loan_amount) / $loan_request->days_payable;
+                    $loan_request->per_month_amount = ($loan_request->balance * 0.06 + $loan_request->balance) / $loan_request->decrement_days_payable ;
+                    $loan_request->decrement_days_payable--;
                 }
 
                 $loan_request->per_month_from = $loan_request->per_month_to;

@@ -128,6 +128,10 @@
                                                             <div class="h5 mb-0">{{ $item->days_payable }} Month/s</div>
                                                             <small class="text-muted">Payable</small>
                                                         </div>
+                                                        <div class="col-sm mb-3">
+                                                            <div class="h5 mb-0">{{date("F d, Y", strtotime($item->created_at.'+'.$item->days_payable.' months'))}} </div>
+                                                            <small class="text-muted">Due Date</small>
+                                                        </div>
                                                     </div>
                                                     <div class="row">
                                                         <div class="col">

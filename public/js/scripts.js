@@ -161,10 +161,10 @@ function loan() {
   var selectBox = document.getElementById("months");
   var month = selectBox.options[selectBox.selectedIndex].value;
  
-  var interest = +amount * +0.06 * +month + +amount;
+  var interest = +amount * +0.06;
   var monthly = +interest / +month;
-
-  document.getElementById("interest").innerHTML = '<p class="h6">Total Loan Interest</p>' + '₱ ' + Math.round(interest).toFixed(2);
+  
+  document.getElementById("interest").innerHTML = '<p class="h6">Loan Interest</p>' + '₱ ' + Math.round(interest).toFixed(2);
   document.getElementById("monthly").innerHTML = '<p class="h6">Monthly Payment</p>' + '₱ ' + Math.round(monthly).toFixed(2);
  }
 

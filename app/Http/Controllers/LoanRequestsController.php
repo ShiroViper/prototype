@@ -162,16 +162,16 @@ class LoanRequestsController extends Controller
 
         // Loan * .06 = monthly interest * months payable = interest to pay + loan amount = loan to pay 
         // example: 1500 * 0.06 = 90 * 4 = 360 + 1500 = 1860
-        $loan_to_pay = $request->amount * 0.06 * $request->months + $request->amount;
+        // $loan_to_pay = $request->amount * 0.06 * $request->months + $request->amount;
 
         $lr = new Loan_Request;
         $lr->loan_amount = $request->input('amount');
         $lr->days_payable = $request->input('months');
-        $lr->balance = $request->input('amount');
-        $lr->interest = $lr->loan_amount * 0.06;
+        $lr->balance = $lr->loan_amount * 0.06 + $lr->loan_amount;
+        $lr->per_month_amount = ($lr->loan_amount * 0.06 + $lr->loan_amount) / $lr->days_payable;
+        $lr->decrement_days_payable = $lr->days_payable - 1; 
         $lr->get = 0;
         $lr->user_id = Auth::user()->id;
-        $lr->per_month_amount = $loan_to_pay / $lr->days_payable;
 
         // sched_id is NULL for now since it still hasn't been approved
         $lr->sched_id = null;

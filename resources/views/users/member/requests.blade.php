@@ -119,6 +119,7 @@
                         <table class="table table-hover" >
                             <thead>
                                 <tr>
+                                    <th>Date Sent</th>
                                     <th>Name</th>
                                     <th>Money Received</th>
                                     <th>Action</th>
@@ -128,6 +129,7 @@
                                 @if (count($pending_mem_receive) > 0)
                                     @foreach ($pending_mem_receive as $item)
                                     <tr>
+                                        <td>{{date('h:i A F d, Y', strtotime($item->updated_at))}} </td>
                                         <td>{{$item->lname}}, {{$item->fname}} {{$item->mname}} </td>
                                         <td>₱ {{number_format($item->loan_amount, 2) }} </td>
                                         <td class="d-flex flex-row">
@@ -164,6 +166,7 @@
                                 <th>Date Requested</th>
                                 <th>Loan Requested</th>
                                 <th>Payables</th>
+                                <th>Due Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -175,6 +178,7 @@
                                         <td>{{ date("h:i A  F d, Y", strtotime($item->created_at)) }}</td>
                                         <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
                                         <td>{{ $item->days_payable }} Months</td>
+                                        <td>{{date("F d, Y", strtotime($item->created_at.'+'.$item->days_payable.' months'))}} </td>
                                         <td>
                                             {!! Form::open(['action' => ['LoanRequestsController@destroy', $item->id], 'method' => 'POST']) !!}
                                                 {{ Form::hidden('_method', 'DELETE') }}
@@ -214,6 +218,7 @@
                                     <th>Status</th>
                                     <th>Money Received</th>
                                     <th>Paid</th>
+                                    <th>Due Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -230,6 +235,7 @@
                                             <td>{{ $request->confirmed ? 'Approved' : 'Declined' }}</td>
                                             <td>{{ $request->received ? 'Yes' : 'No'}}</td>
                                             <td>{{ $request->paid ? ($request->confirmed ? 'Yes' : '') : 'Ongoing' }}</td>
+                                            <td>{{ date("F d, Y", strtotime($request->updated_at.'+'.$request->days_payable.' months')) }}</td>
                                         </tr>
                                     @endforeach
                                 @else

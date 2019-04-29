@@ -19,7 +19,7 @@
                         <table class="table table-hover mt-3">
                             <thead>
                                 <tr>
-                                    <th>Sending Date&Time</th>
+                                    <th>Date Sent</th>
                                     <th>Name</th>
                                     <th>Amount</th>
                                 </tr>
@@ -54,6 +54,7 @@
                         <table class="table table-hover mt-3">
                             <thead>
                                 <tr>
+                                    <th>Date Sent</th>
                                     <th>Money Received</th>
                                     <th>Action</th>
                                 </tr>
@@ -64,6 +65,7 @@
                                         @if($item->transfer == 1)
                                             {{-- <tr data-toggle="modal" data-target="#LoanModal"> --}}
                                             <tr >
+                                                <td>{{date('h:i A F d, Y', strtotime($item->updated_at))}}</td>
                                                 <td>₱ {{ number_format($item->loan_amount, 2) }}</td>
                                                 <td class="d-flex flex-row">
                                                     <a class="btn btn-outline-primary mx-2 no-modal" role="button" href="/collector/receive/{{ $item->request_id }}/{{$token}}/accept">Accept</a>
@@ -140,7 +142,7 @@
                     <table class="table table-hover mt-3">
                         <thead>
                             <tr>
-                                <th>Received Date&Time</th>
+                                <th>Received Date</th>
                                 <th>Name</th>
                                 <th>Amount</th>
                                 <th>Action</th>
