@@ -122,8 +122,8 @@
                         </div>
                        
                         <div class="form-group">
-                            {{Form::label('id_photo', 'Photo')}}
-                            {{Form::file('id_photo')  }}
+                            {{Form::label('face_photo', 'Photo')}}
+                            {{Form::file('face_photo')  }}
                         </div>
 
                         {{-- <div class="form-group">

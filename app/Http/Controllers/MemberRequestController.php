@@ -24,32 +24,29 @@ class MemberRequestController extends Controller
             'lname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'mname' => ['nullable', 'string', 'regex:/^[\pL\s\-]+$/u'],
-            'email' => ['required', 'string', 'unique:users', 'email'],
             'cell_num' => ['required', 'string', 'numeric', 'unique:member__requests,contact', 'unique:users', 'digits:11'],
-            'address' => ['required', 'string']
+            'email' => ['required', 'string', 'unique:member__requests,email', 'unique:users', 'email'],
+            'address' => ['required', 'string'],
+            'face_photo' => 'image|nullable|max:1999' 
         ], $messages);
 
-       
+        // dd($request->face_photo);
 
-        $this->validate($request,[
-            'face_photo' => 'image|nullable|max:1999' 
-        ]);
         if($request->hasFile('face_photo')){
             // Get filename with the extension
-            $filenameWithExt = $request->file('face_photo')->getClientOriginalName();
+            // $filenameWithExt = $request->input('email');
+            $filenameWithExt = date('YmdHis');
             //Get just filename
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
             // Get just ext
             $extension = $request->file('face_photo')->getClientOriginalExtension();
             //Filename to store
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = $filename.'.'.$extension;
             //Upload Image
-            $path = $request->file('face_photo')->storeAs('public/cover_images',$fileNameToStore);            
+            $path = $request->file('face_photo')->storeAs('public\cover_images',$fileNameToStore);            
         } else {
-            $fileNameToStore = 'noimage.jpg';
+            $fileNameToStore = NULL;
         }
-
-    
 
         $mem_req = new Member_Request;
         $mem_req->lname = $request->input('lname');
@@ -58,8 +55,10 @@ class MemberRequestController extends Controller
         $mem_req->email = $request->input('email');
         $mem_req->contact = $request->input('cell_num');
         $mem_req->address = $request->input('address');
-        $mem_req->face_id = $fileNameToStore;
+        $mem_req->face_photo = $fileNameToStore;
+        // dd($mem_req);
         $mem_req->save();
+
 
         return redirect('/')->with('success', 'Request submitted successfully');
     }
