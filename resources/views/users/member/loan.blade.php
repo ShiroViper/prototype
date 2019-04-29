@@ -5,6 +5,8 @@
 @endsection
 
 @section('content')
+{{-- {{dd(session()->get('loan.0.months') == 1 ? 'selected' : '', session()->all())}} --}}
+{{-- {{dd(Illuminate\Support\Facades\Input::all())}} --}}
 @push('scripts')
     <script src="{{ asset('js/scripts.js') }}"></script>
 @endpush
@@ -20,9 +22,22 @@
             @csrf
             {{Form::hidden('token', $token) }}
 
+            <div class="form-group">
+                <p class="h6">Loan Amount * 6% (Monthly Interest) + Loan Amount</p><hr>
+                <div class="row">
+                    <div class="col">
+                        <p class="h6" id="interest"></p>
+                    </div>
+                    <div class="col">
+                        <p class="h6" id="monthly"></p>                    
+                    </div>
+                </div>
+            </div>
+
             {{ Form::label('amount', 'Loan Amount', ['class' => 'h6']) }}
             <div class="form-group">
-                    {{ Form::number('amount', '', ['class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'placeholder' => 'Enter amount', 'min'=>'200', 'max'=> $status->savings, 'step' => '.01', 'required']) }}
+                    {{ Form::number('amount', '', ['onkeyup'=>'loan()', 'class' => $errors->has('amount') ? 'form-control is-invalid' : 'form-control', 'placeholder' => 'Enter amount', 'min'=>'200', 'max'=> $status->savings, 'step' => '1', 'required']) }}
+                    {{-- <input type="number" name="amount" value="{{session()->get('loan.0.amount')}} " class="form-control {{$errors->has('amount') ? 'is-invalid' : '' }} " placeholder="Enter Amount" min="200" max="{{$status->savings}} " step="1" required> --}}
                     <small class="text-muted">The minimum loan amount is ₱200.</small>
                 @if ($errors->has('amount'))
                     <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
@@ -35,36 +50,36 @@
                 @if ($errors->has('months'))
                     <div class="invalid-feedback">{{ $errors->first('months') }}</div>
                 @endif --}}
-                <select name="months" id="months" class="form-control {{$errors->has('months') ? ' is-invalid' : '' }} " required>
-                    <option selected disabled hidden>-- Select Month --</option>
-                    @php
-                        $i = 1;
-                        foreach($get_end_name as $g){
-                            echo '<option value="'.$i.'">'.date('F', strtotime($g)). '</option>';
-                            $i++;
-                        }  
-                    @endphp
+                <select name="months" id="months" onchange="loan()" class="form-control {{$errors->has('months') ? ' is-invalid' : '' }} " required>
+                    <option selected disabled hidden value="">-- Select Month --</option>
+                    @php $i = 1; @endphp
+                    @foreach($get_end_name as $g)
+                        <option value="{{$i}}" {{session()->get('loan.0.months') == $i ? 'selected' : '' }}> {{date('F', strtotime($g))}} {{date('d, Y', strtotime(NOW()))}} </option>
+                        @php $i++; @endphp
+                    @endforeach
                 </select>
-            </div>
+                </div>
 
             {{ Form::label('reason', 'Reason', ['class' => 'h6']) }}
             <div class="form-group">
                 <select name="reason" id="reason" class="form-control {{$errors->has('reason') ? ' is-invalid s' : '' }} " required>
-                    <option selected disabled hidden>-- Select Reason --</option>
-                    <option value="For Personal Use">For Personal Use</option>
-                    <option value="For Emergency Use">For Emergency Use</option>
-                    <option value="3">Other</option>
+                    <option selected disabled hidden value="">-- Select Reason --</option>
+                    <option value="For Personal Use" {{session()->get('loan.0.reason') == "For Personal Use" ? 'selected' : ''}} >For Personal Use</option>
+                    <option value="For Emergency Use" {{session()->get('loan.0.reason') == "For Emergency Use" ? 'selected' : ''}}>For Emergency Use</option>
+                    <option value="3" {{session()->get('loan.0.reason') == 3 ? 'selected' : ''}}>Other</option>
                 </select>
-                <textarea name="other" id="other" rows="1" class="form-control mt-2" placeholder="Other (please specify)"></textarea>
+                <textarea name="other" value="{{session()->get('loan.0.other')}}" id="other" rows="1" class="form-control mt-2" placeholder="Other (please specify)"></textarea>
             </div>            
             @if ($errors->has('reason'))
                 {{-- <div class="invalid-feedback">Please Select</div> --}}
                 Please select <br> 
             @endif
-            
+            <div>
+            </div>
+
             <label for="pass"> Password</label>
             <div class="form-group">
-                <input type="password" name="pass" class="form-control" required>
+                <input type="password" value="{{session()->get('loan.0.pass')}}" name="pass" class="form-control" required>
             </div>
 
             <div class="form-group">
@@ -128,5 +143,6 @@
         </div>
     </div>
 </div> --}}
-
+{{-- forget session loan --}}
+{{session()->forget('loan')}}
 @endsection

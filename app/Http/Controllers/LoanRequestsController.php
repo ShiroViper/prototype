@@ -13,6 +13,7 @@ use DB;
 use Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
+use Session;
 use Carbon\Carbon;
 use App\Schedule;
 use App\Status;
@@ -86,8 +87,6 @@ class LoanRequestsController extends Controller
         }
         // ================================================
 
-        // example 3 months
-        $m = 3;
         //This check every end year
         $months = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ,12);
         $get_end_month = array_slice($months, date('n'));
@@ -120,23 +119,28 @@ class LoanRequestsController extends Controller
         $months = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ,12);
         $get_end_month = array_slice($months, date('n'));
         $count_end_month = count($get_end_month) - 1;
-
+        
         $status = Status::where('user_id', Auth::user()->id)->first();
         // check if member savings is null or less than 200 
         if($status->savings == null || $status->savings < 200){
             // check if reason is not emergency loan
             if($request->reason != 'For Emergency Use'){
-                return redirect()->back()->with('error', 'Request loan available at least ₱ 200 savings ')->withInput(Input::except('pass'));
+                Session::push('loan', Input::all());
+                return redirect()->back()->with('error', 'Request loan available at least ₱ 200 savings ')->withInput();
             }
         // check if amount is greater than current savings and reason is not emergency loan
         }else if($request->amount > $status->savings && $request->reason != 'For Emergency Use'){
-            return redirect()->back()->with('error', 'Requested loan should be less than or equal to savings')->withInput(Input::except('pass'));
+            Session::push('loan', Input::all());
+            return redirect()->back()->with('error', 'Requested loan should be less than or equal to savings')->withInput();
         // check if months payable is greater than the current end year
         }else if($request->months > $count_end_month ){
-            return redirect()->back()->with('error', 'Months payable should not beyond the current end year')->withInput(Input::except('pass'));
+            Session::push('loan', Input::all());
+            return redirect()->back()->with('error', 'Months payable should not beyond the current end year')->withInput();
         // check if password is not match
         }else if(!Hash::check($request->pass, Auth::user()->password)){
-            return redirect()->back()->with('error', 'Wrong Password')->withInput(Input::except('pass'));
+            // session(['months'=>$request->months], ['reason'=>$request->reason], ['pass'=>$request->pass]);
+            Session::push('loan', Input::all());
+            return redirect()->back()->with('error', 'Wrong Password')->withInput();
         }
 
         // dd($request);
@@ -163,7 +167,8 @@ class LoanRequestsController extends Controller
         $lr = new Loan_Request;
         $lr->loan_amount = $request->input('amount');
         $lr->days_payable = $request->input('months');
-        $lr->balance = $loan_to_pay;
+        $lr->balance = $request->input('amount');
+        $lr->interest = $lr->loan_amount * 0.06;
         $lr->get = 0;
         $lr->user_id = Auth::user()->id;
         $lr->per_month_amount = $loan_to_pay / $lr->days_payable;

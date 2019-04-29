@@ -113,6 +113,10 @@
                                                 <div class="list-content border">   
                                                     <div class="row">
                                                         <div class="col-sm mb-3">
+                                                            <div class="h5 mb-0">{{date('h:i A F d, Y', strtotime($item->created_at))}} </div>
+                                                            <small class="text-muted">Date Requested</small>
+                                                        </div>
+                                                        <div class="col-sm mb-3">
                                                             <div class="h5 mb-0">{{ $item->lname.', '. $item->fname.' '. $item->mname }}</div>
                                                             <small class="text-muted">Member Name</small>
                                                         </div>
@@ -226,6 +230,7 @@
                                 <table class="table table-borderless">
                                     <thead>
                                         <tr>
+                                            <th>Date Requested</th>
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Contact</th>
@@ -236,7 +241,8 @@
                                     <tbody>
                                         @foreach ($memReq as $req)
                                             <tr class="">
-                                                <td>{{ $req->lname}}, {{ $req->fname }} {{ $req->mname }} </td>
+                                                <td>{{date('h:i A F d, Y', strtotime($req->created_at))}}</td>
+                                                <td>{{ $req->lname}}, {{ $req->fname }} {{ $req->mname }}</td>
                                                 <td>{{ $req->email }}</td>
                                                 <td>{{ $req->contact }}</td>
                                                 <td>{{ $req->address }}</td>

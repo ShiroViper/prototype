@@ -69,6 +69,7 @@
                         <table class="table table-hover" >
                             <thead>
                                 <tr>
+                                    <th>Date Transacted</th>
                                     <th>Name</th>
                                     <th>Transaction Type</th>
                                     <th>Amount Sent</th>
@@ -77,7 +78,8 @@
                             </thead>
                             <tbody>
                                 @foreach ($pending_mem_con as $item)
-                                    <tr>
+                                    <tr> 
+                                        <td>{{date('h:i A F d, Y', strtotime($item->updated_at))}} </td>
                                         <td>{{$item->lname. ', '.$item->fname.' '.$item->mname}}</td>
                                         @if($item->trans_type == 1)
                                             <td>Deposit</td>

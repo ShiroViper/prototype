@@ -36,7 +36,7 @@ $('tr .no-modal').on("click", function (e) {
 $('#reason').change(function () {
   var selected = $('#reason').val();
   // console.log(selected);
-  if (selected == '3') {
+  if (selected == '3') {    
     $("#other").show().prop("required", true);
   } else {
     $("#other").hide();
@@ -150,3 +150,18 @@ $(function () {
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 });
+
+
+// for request loan
+function loan() {
+  var amount = document.getElementById('amount').value;
+  var selectBox = document.getElementById("months");
+  var month = selectBox.options[selectBox.selectedIndex].value;
+ 
+  var interest = +amount * +0.06 * +month + +amount;
+  var monthly = +interest / +month;
+
+  document.getElementById("interest").innerHTML = '<p class="h6">Total Loan Interest</p>' + '₱ ' + Math.round(interest).toFixed(2);
+  document.getElementById("monthly").innerHTML = '<p class="h6">Monthly Payment</p>' + '₱ ' + Math.round(monthly).toFixed(2);
+ }
+
