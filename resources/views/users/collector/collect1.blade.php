@@ -61,7 +61,7 @@ console.log(members);
 // console.log(members);
 </script>
 @push('scripts')
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/autocomplete.js') }}"></script>
 @endpush

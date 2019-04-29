@@ -19,9 +19,10 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400|Roboto:400,500,900" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/app.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.css"/>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    {{-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> --}}
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
 
     <!-- App Scripts -->
     @include('inc.app-scripts')
