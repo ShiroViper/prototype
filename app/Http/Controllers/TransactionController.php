@@ -170,7 +170,9 @@ class TransactionController extends Controller
             }
         }
 
-        return view('users.collector.collect2')->with('active', 'collect')->with('check_for_pending', $check_for_pending)->with('token', $token)->with('member', $member)->with('loan_request', $loan_request);
+        $receiptID = strtoupper(substr(md5(uniqid(rand(), true)), 0, 8));
+
+        return view('users.collector.collect2')->with('active', 'collect')->with('check_for_pending', $check_for_pending)->with('token', $token)->with('member', $member)->with('loan_request', $loan_request)->with('rID', $receiptID);
     }
 
     /**
@@ -180,6 +182,33 @@ class TransactionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
+
+        $this->validate($request, [
+        'receiptImg' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        if($request->hasFile('receiptImg')){
+            // Get filename with the extension
+            $filenameWithExt = $request->file('receiptImg')->getClientOriginalName();
+            // $filenameWithExt = $request->input('email');
+            $filenameWithExt = date('YmdHis');
+            //Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('receiptImg')->getClientOriginalExtension();
+            //Filename to store
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = $filename.'.'.$extension;
+            //Upload Image
+            $path = $request->file('receiptImg')->storeAs('public/cover_images',$fileNameToStore);            
+            $path = $request->file('receiptImg')->storeAs('public\cover_images',$fileNameToStore);            
+        } else {
+            // $fileNameToStore = 'noimage.jpg';
+            $fileNameToStore = NULL;
+        }
+
+
+        dd($request);
         // This check if the token is duplicate or not after the form is saved , This trick the collector think he submitted one form
         if(Transaction::where('token', $request->token)->first()){
             return redirect()->back()->with('success', 'Waiting to confirm from member');

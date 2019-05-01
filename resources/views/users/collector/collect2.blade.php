@@ -18,12 +18,19 @@
 <div class="row">
     <div class="col-lg order-2 order-lg-1">  
         <div class="position-sticky fixed-top">
-            {!!Form::open(['action'=> 'TransactionController@store', 'method'=>'POST']) !!}
+            {!!Form::open(['action'=> 'TransactionController@store', 'method'=>'POST', 'enctype' => 'multipart/form-data']) !!}
             @csrf
             {{Form::hidden('token', $token)}}
-            <div class="form-group">
-                {{ Form::label('date', 'Date', ['class' => 'h6 mt-3']) }}
-                {{ Form::date('date',\Carbon\Carbon::now(), ['class' => 'form-control', 'readonly']) }}
+            {{-- date("Yhis", hexdec(substr(uniqid(rand(),true),0,9))) --}}
+            <div class="form-row">
+                <div class="col">
+                    <label for="receiptID" class="h6 mt-3">Receipt ID</label>
+                    <input type="text" class="form-control" name="receiptID" value="{{ $rID }}" readonly>
+                </div>
+                <div class="col">
+                    {{ Form::label('date', 'Date', ['class' => 'h6 mt-3']) }}
+                    {{ Form::date('date',\Carbon\Carbon::now(), ['class' => 'form-control', 'readonly']) }}
+                </div>
             </div>
             <div class="form-group">
                 {{-- {{ Form::label('memName', 'Member Name', ['class' => 'h6']) }}
@@ -62,28 +69,21 @@
             </div>
 
             <div class="form-group">
-                <!-- Button trigger modal -->
-                {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cameraModal">
-                    Launch demo modal
-                </button> --}}
                 {{ Form::label('', 'Receipt', ['class' => 'h6']) }}
                 <div class="img-container text-center mb-5">
-                    {{-- <div class="img-placeholder border clickable p-3" data-toggle="modal" data-target="#cameraModal">
-                        <span class="h5 text-muted"><i class="fas fa-camera-retro mr-1"></i> Use Camera</span>
-                    </div> --}}
-
                     <div class="row">
-                        <div class="col pr-0">
+                        {{-- <div class="col pr-0">
                             <div class="img-camera p-3 clickable h-100" data-toggle="modal" data-target="#cameraModal">
                                 <span class="h5 text-muted"><i class="fas fa-camera-retro mr-1"></i> Use Camera</span>
                             </div>
-                        </div>
-                        <div class="col pl-0 overflow-hidden">
+                        </div> --}}
+                        <div class="col overflow-hidden">
                             <div class="img-file p-3 clickable text-truncate h-100">
                                 <span class="h5 text-muted mb-0" id="upload-file-info" >
                                     <i class="far fa-file mr-1"></i> Choose file
                                 </span>
-                                <input type="file" class="clickable" id="inputFile" onchange="uploadFile(this)">
+                                {{-- <input type="file" name="receiptImg" class="clickable" id="inputFile" onchange="uploadFile(this)"> --}}
+                                {{Form::file('receiptImg', ['class' => 'clickable', 'id' => 'inputFile', 'onchange' => 'uploadFile(this);'])}}
                             </div>
                         </div>
                     </div>
@@ -216,7 +216,7 @@
                         <img id="file" class="img-fluid">
                         <div class="file-name text-truncate"></div>
                     </div>
-                    <canvas class="img-fluid" id="canvas" width="640" height="480"></canvas>
+                    {{-- <canvas class="img-fluid" id="canvas" width="640" height="480"></canvas> --}}
                 </div>
             </div>
             {{-- <button class="btn btn-primary my-2" onclick="download_image()" id="download">Download</button> --}}
@@ -232,7 +232,7 @@
   
 <!-- Modal -->
 <div class="modal fade" id="cameraModal" tabindex="-1" role="dialog" aria-labelledby="cameraModalTitle" aria-hidden="true">
-    <h3 class="text-center text-white header mt-2">Press Enter / Spacebar to capture</h3>
+    <h3 class="text-center text-white header mt-2 d-none d-md-block">Press Enter / Spacebar to capture</h3>
     <div class="modal-dialog mt-2" role="document">
         <div class="modal-content">
             <div class="modal-body d-flex flex-column">
@@ -244,7 +244,7 @@
                 <video class="img-fluid mt-3" id="video" muted autoplay></video>
                 <div class="text-center">
                     {{-- <button class="btn btn-light m-2 header" id="snap"><i class="fas fa-camera fa-2x mr-2"></i></button> --}}
-                    <span id="snap" class="fa-stack fa-2x mt-2 img-capture clickable" data-toggle="tooltip" data-placement="top" title="Take Photo">
+                    <span id="snap" class="fa-stack fa-2x mt-2 img-capture clickable flash" data-toggle="tooltip" data-placement="top" title="Take Photo">
                         <i class="fas fa-circle fa-stack-2x fa-inverse"></i>
                         <i class="fas fa-camera fa-stack-1x"></i>
                     </span>
@@ -254,105 +254,108 @@
     </div>
 </div>
 
-<script>
-// Elements for taking the snapshot
-var canvas = document.getElementById('canvas');
-var context = canvas.getContext('2d');
-var video = document.getElementById('video');
-var videoSelect = document.querySelector('select#videoSource');
+{{-- <script>
+    // Elements for taking the snapshot
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var video = document.getElementById('video');
+    var videoSelect = document.querySelector('select#videoSource');
 
-// Hide canvas/view buttons first
-$("#download, #canvas").hide();
+    // canvas.width = window.innerWidth;
+    // canvas.height = window.innerHeight;
 
-// Get access to the camera!
-// if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-//     // Not adding `{ audio: true }` since we only want video now
-//     navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-//         //video.src = window.URL.createObjectURL(stream);
-//         video.srcObject = stream;
-//         video.play();
-//     });
-// }
+    // Hide canvas/view buttons first
+    $("#download, #canvas").hide();
 
-// Call all functions
-navigator.mediaDevices.enumerateDevices()
-  .then(gotDevices).then(getStream).catch(handleError);
+    // Get access to the camera!
+    // if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    //     // Not adding `{ audio: true }` since we only want video now
+    //     navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+    //         //video.src = window.URL.createObjectURL(stream);
+    //         video.srcObject = stream;
+    //         video.play();
+    //     });
+    // }
 
-// Cycle camera and call getStream function
-videoSelect.onchange = getStream;
+    // Call all functions
+    navigator.mediaDevices.enumerateDevices()
+    .then(gotDevices).then(getStream).catch(handleError);
 
-// Get other camera devices through looping
-function gotDevices(deviceInfos) {
-    for (var i = 0; i !== deviceInfos.length; ++i) {
-        var deviceInfo = deviceInfos[i];
-        var option = document.createElement('option');
-        option.value = deviceInfo.deviceId;
+    // Cycle camera and call getStream function
+    videoSelect.onchange = getStream;
 
-        if (deviceInfo.kind === 'videoinput') {
-            option.text = deviceInfo.label || 'camera ' + (videoSelect.length + 1);
-            // option.text = 'Camera ' + (videoSelect.length + 1);
-            videoSelect.appendChild(option);
-        } else {
-            console.log('Found one other kind of source/device: ', deviceInfo);
+    // Get other camera devices through looping
+    function gotDevices(deviceInfos) {
+        for (var i = 0; i !== deviceInfos.length; ++i) {
+            var deviceInfo = deviceInfos[i];
+            var option = document.createElement('option');
+            option.value = deviceInfo.deviceId;
+
+            if (deviceInfo.kind === 'videoinput') {
+                option.text = deviceInfo.label ? deviceInfo.label : 'camera ' + (videoSelect.length + 1);
+                // option.text = 'Camera ' + (videoSelect.length + 1);
+                videoSelect.appendChild(option);
+            } else {
+                console.log('Found one other kind of source/device: ', deviceInfo);
+            }
         }
     }
-}
 
 
-function getStream() {
-    if(window.stream) {
-        window.stream.getTracks().forEach(function(track) {
-            track.stop();
-        });
+    function getStream() {
+        if(window.stream) {
+            window.stream.getTracks().forEach(function(track) {
+                track.stop();
+            });
+        }
+
+        var constraints = {
+            video: {
+                deviceId: {exact: videoSelect.value}
+            }
+        };
+
+        navigator.mediaDevices.getUserMedia(constraints).then(gotStream).catch(handleError);
     }
 
-    var constraints = {
-        video: {
-            deviceId: {exact: videoSelect.value}
-        }
-    };
+    function gotStream(stream) {
+        window.stream = stream;
+        video.srcObject = stream;
+    }
 
-    navigator.mediaDevices.getUserMedia(constraints).then(gotStream).catch(handleError);
-}
+    function handleError(error) {
+    console.log('Error: ', error);
+    }
 
-function gotStream(stream) {
-    window.stream = stream;
-    video.srcObject = stream;
-}
+    // Trigger photo take
+    $("#snap").on("click", function() {
+        context.drawImage(video, 0, 0, 640, 480);
+        $('#cameraModal').modal('toggle');
+        $('#download, #canvas, .img-view').show();
+        $('.img-camera').html("<span class='h5 text-muted'><i class='far fa-image mr-1'></i> Take another picture </span>");
 
-function handleError(error) {
-  console.log('Error: ', error);
-}
+        $('.img-file-container').hide();
+        $('#canvas').show();
 
-// Trigger photo take
-$("#snap").on("click", function() {
-    context.drawImage(video, 0, 0, 640, 480);
-    $('#cameraModal').modal('toggle');
-    $('#download, #canvas, .img-view').show();
-    $('.img-camera').html("<span class='h5 text-muted'><i class='far fa-image mr-1'></i> Take another picture </span>");
+        $(".img-camera, .img-file").removeClass("unselected-option selected-option");
+        $(".img-camera").toggleClass("selected-option");
+        $(".img-file").toggleClass("unselected-option");
+    });
 
-    $('.img-file-container').hide();
-    $('#canvas').show();
+    // Filename 
+    var date = new Date();
+    var filename = date.getMonth()+1+'-'+date.getDate()+'-'+date.getFullYear()+'-'+date.getHours()+date.getMinutes()+date.getSeconds();
+    // console.log(date, filename);
 
-    $(".img-camera, .img-file").removeClass("unselected-option selected-option");
-    $(".img-camera").toggleClass("selected-option");
-    $(".img-file").toggleClass("unselected-option");
-});
+    // Download Image
+    function download_image(){
+        var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        var link = document.createElement('a');
+        link.download = filename;
+        link.href = canvas.toDataURL("image/png;base64");
+        link.click();
+    }
 
-// Filename 
-var date = new Date();
-var filename = date.getMonth()+1+'-'+date.getDate()+'-'+date.getFullYear()+'-'+date.getHours()+date.getMinutes()+date.getSeconds();
-// console.log(date, filename);
-
-// Download Image
-function download_image(){
-    var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-    var link = document.createElement('a');
-    link.download = filename;
-    link.href = canvas.toDataURL("image/png;base64");
-    link.click();
-}
-
-</script>
+</script> --}}
 
 @endsection

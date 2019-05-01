@@ -14,7 +14,7 @@ function uploadFile(input) {
     reader.onload = function (e) {
       $('.img-file-container').show();
       $('#file').attr('src', e.target.result);
-      $('#canvas').hide();
+      // $('#canvas').hide();
     };
     reader.readAsDataURL(input.files[0]);
 
@@ -33,8 +33,8 @@ function uploadFile(input) {
       $('.file-name').removeClass("file-label").hide();
     });
 
-    $(".img-camera, .img-file").removeClass("unselected-option selected-option");
-    $(".img-file").toggleClass("selected-option");
-    $(".img-camera").toggleClass("unselected-option");
+    // $(".img-camera, .img-file").removeClass("unselected-option selected-option");
+    // $(".img-file").toggleClass("selected-option");
+    // $(".img-camera").toggleClass("unselected-option");
   }
 }
