@@ -33,7 +33,7 @@
                 <div class="card-body d-flex justify-content-center align-items-center flex-column">
                     <div class="border rounded-circle p-2 bg-light" ><i class="text-primary fas fa-piggy-bank fa-lg"></i></div>
                     <h5 class="pt-2 header display-5 font-weight-bold text-center">
-                        {{ $savings && $savings->savings != null ? $savings->savings >= 0 ? '₱ '.$savings->savings : '₱ '.number_format($savings->savings, 2) : '₱ 0.00' }}
+                        {{ $savings && $savings->savings != null ? $savings->savings >= 0 ? '₱ '.number_format(floor($savings->savings), 2) : '₱ '.number_format(floor($savings->savings), 2) : '₱ 0.00' }}
                     </h5>
                     @if($savings->savings >= 0)                        
                         <small>Savings</small>
@@ -52,21 +52,21 @@
                 </div>
             </div>
             @if($loan)
-                <div class="card shadow-sm" data-toggle="modal" data-target="#statModal" >
+                <div class="card shadow-sm">
+                {{-- <div class="card shadow-sm" data-toggle="modal" data-target="#statModal" > --}}
             @else
                 <div class="card shadow-sm">
             @endif
                 <div class="card-body d-flex justify-content-center align-items-center flex-column">
                     <div class="border rounded-circle p-2 bg-light"><i class="text-warning fas fa-coins fa-lg"></i></div>
                     <h5 class="pt-2 header display-5 font-weight-bold text-center">
-                        {{ $loan ? ($loan->per_month_amount <= 0 ? '₱'.abs($loan->per_month_amount) : '₱'.$loan->per_month_amount ) : '₱ 0.00' }}
+                        {{ $loan ? ($loan->per_month_amount > 0 ? '₱'.number_format(ceil(abs($loan->per_month_amount)), 2) : '₱'. number_format(ceil($loan->balance), 2)) : '₱ 0.00' }}
                     </h5>
-                    {{-- <small >Current Loan Balance For This Month</small> --}}
-                    <small> {{$loan ? ($loan->per_month_amount <=0 ? 'Over Paid' : 'Current Loan Balance ' ) : 'Current Loan Balance'}} </small>
-                    {!! $loan ? '<a class="text-primary clickable"><small>View Details</small></a>' : '' !!}
+                    <h6> {{$loan ? ($loan->per_month_amount > 0 ? 'Current Loan Balance' : 'Remaining Loan Balance ' ) : 'Current Loan Balance'}} </h6>
+                    <h6>{{$loan ? $loan->per_month_amount <= 0 ? 'Next Payment '. date('F d, Y', $loan->per_month_to) : '' : ''}} </h6>
+                    <small class="text-muted"> {{$loan ? $loan->per_month_amount < 0 ? 'Over Paid ₱ '.number_format(abs($loan->per_month_amount), 2) : '' : '' }}</small>
+                    {{-- {!! $loan ? '<a class="text-primary clickable"><small>View Details</small></a>' : '' !!} --}}
                     {{-- <a class="text-primary clickable"><small>View Details</small></a> --}}
-                    {{-- <small> From {{ $loan ? (  $loan->per_month_from ? date('F d, Y', $loan->per_month_from) : '' ) : ''}} <br> To {{$loan ? (  $loan->per_month_to ? date('F d, Y', $loan->per_month_to) : '' ) : ''}}  --}}
-                    </small>
             </div>
         </div>
         <div class="row mt-2">
@@ -144,6 +144,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <p class="h6 container">Interest = Amount Loaned * 6% (Monthly Interest)</p>
                         <div class="card">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
@@ -169,33 +170,32 @@
                                 <li class="list-group-item">
                                     <div class="row">
                                         <div class="col col-md col-lg-4">
-                                            <span>Monthly Payment</span>
+                                            <span>Interest</span>
                                         </div>
                                         <div class="col col-md col-lg">
+                                            <h6>{{$loan ? ($loan->balance ? '₱ '.number_format(round($loan->loan_amount * 0.06), 2) : 'No Current Loan') : 'No Current Loan' }} </h6>
+                                        </div>
+                                    </div>
+                                </li>   
+                                {{-- <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col col-md col-lg-4">
+                                            <span>Monthly Payment</span>
+                                        </div>
+                                        <div class="col col-md col-lg"> --}}
                                             {{-- This trick the member's loan balance stop from paying --}}
                                             {{-- <h6>{{$loan ? ($loan->loan_amount ? ($loan->loan_amount * 0.06 * $loan->days_payable + $loan->loan_amount) / $loan->payable ) : '' }} </h6> --}}
-                                            @php
+                                            {{-- @php
                                                 if($loan){
                                                     if($loan->loan_amount){
                                                         $per_month_amount =  ($loan->loan_amount * 0.06 * $loan->days_payable + $loan->loan_amount) / $loan->days_payable ;
-                                                        echo '<h6>₱ '.number_format($per_month_amount, 2). '</h6>';
+                                                        echo '<h6>₱ '.number_format(round($per_month_amount), 2). '</h6>';
                                                     }
                                                 }
                                             @endphp
                                         </div>
                                     </div>
-                                </li>  
-                                <li class="list-group-item">
-                                    <div class="row">
-                                        <div class="col col-md col-lg-4">
-                                            <span>Total Loan Balance</span>
-                                        </div>
-                                        <div class="col col-md col-lg">
-                                            {{-- This trick the member's loan balance stop from paying --}}
-                                            <h6>{{$loan ? ($loan->loan_amount >= 0 ? '₱ '.($loan->balance) : '₱ '.($loan->balance - $loan->per_month_amount).'.00' ) : 'No Current Loan' }} </h6>
-                                        </div>
-                                    </div>
-                                </li>                      
+                                </li>                      --}}
                             </ul>
                         </div>
                     </div>

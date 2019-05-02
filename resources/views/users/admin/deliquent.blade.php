@@ -1,11 +1,12 @@
 @extends('layouts.app')
 
 @section('title')
-    <title>Deliquent Account</title>
+    <title>Dormant Accounts</title>
 @endsection
 
 @section('content')
-<h3 class="header mt-2">Delinquent Accounts</h3>
+<h3 class="header mt-2">Inactive Accounts</h3>
+<small class="text-muted"> 30 Days After Last Transaction</small>
 <div class="row mt-3">
         <div class="col">
                 {{-- <h6 class="card-header">Deliquent Accounts</h6> --}}
@@ -13,7 +14,7 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Due Date & Time</th>
+                            <th>Last Transaction</th>
                             <th>Member Name</th>
                             {{-- <th>Collector Name</th> --}}
                             <th>Loan Balance</th>   

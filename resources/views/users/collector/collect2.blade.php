@@ -14,16 +14,24 @@
 <a class="btn btn-light border" role="button" href="/collector/transaction/create"><i class="fas fa-arrow-left mr-2"></i>Go Back</a>
 
 <h3 class="header mt-2 mb-3">Make Transaction</h3>
-
 <div class="row">
     <div class="col-lg order-2 order-lg-1">  
         <div class="position-sticky fixed-top">
-            {!!Form::open(['action'=> 'TransactionController@store', 'method'=>'POST']) !!}
+            {!!Form::open(['action'=> 'TransactionController@store', 'method'=>'POST', 'enctype' => 'multipart/form-data']) !!}
             @csrf
             {{Form::hidden('token', $token)}}
-            <div class="form-group">
-                {{ Form::label('date', 'Date', ['class' => 'h6 mt-3']) }}
-                {{ Form::date('date',\Carbon\Carbon::now(), ['class' => 'form-control', 'readonly']) }}
+            {{-- date("Yhis", hexdec(substr(uniqid(rand(),true),0,9))) --}}
+            <div class="form-row">
+                <div class="col-sm">
+                    {{-- <label for="receiptID" class="h6 mt-3">Receipt ID</label>
+                    <input type="text" class="form-control" name="receiptID" readonly> --}}
+                    {{ Form::label('receiptID', 'Receipt ID', ['class' => 'h6 mt-3']) }}
+                    {{ Form::number('receiptID', $rID, ['class' => 'form-control', 'readonly']) }}
+                </div>
+                <div class="col-sm">
+                    {{ Form::label('date', 'Date', ['class' => 'h6 mt-3']) }}
+                    {{ Form::date('date',\Carbon\Carbon::now(), ['class' => 'form-control', 'readonly']) }}
+                </div>
             </div>
             <div class="form-group">
                 {{-- {{ Form::label('memName', 'Member Name', ['class' => 'h6']) }}
@@ -44,46 +52,44 @@
                 {{ Form::label('type', 'Type', ['class' => 'h6']) }}
                 {{-- {{ Form::select('type', [1 => 'Deposit', 3 => 'Loan Payment'], NULL, ['class' => 'form-control', 'required']) }} --}}
                 <select name="type" id="type" class="{{$errors->has('type') ? 'form-control is-invalid' : 'form-control'}} " required>
-                    <option selected="selected" value="null" hidden>-- Select Type --</option>
-                    <option value="1">Deposit</option>
-                    <option value="3">Loan Payment</option>
+                    <option selected="selected" value="" disabled hidden>-- Select Type --</option>
+                    <option value="1" {{session()->get('loan_type') == 1 ? 'selected' : ''}} >Deposit</option>
+                    @if($loan_request)
+                        <option value="3" {{session()->get('loan_type') == 3 ? 'selected' : ''}} >Manual Loan Payment</option>
+                        <option value="4" {{session()->get('loan_type') == 4 ? 'selected' : ''}} >Full Payment For This Month Loan Balance</option>
+                        <option value="5" {{session()->get('loan_type') == 5 ? 'selected' : ''}} >Full Payment The Remaining Loan Balance</option>
+                    @endif
                 </select>
             </div>
             @if ($errors->has('type'))
                 <div class="invalid-feedback">Please Select</div>
             @endif
-
             <div class="form-group">
-                {{ Form::label('amount', 'Amount Received', ['class' => 'h6']) }}
-                {{ Form::number('amount', old('amount'), ['class'=> 'form-control', 'step' => '0.01', 'required']) }}
+                <input type="number" id="full_payment" value="{{$loan_request ? ceil($loan_request->per_month_amount) : ''}}" hidden> 
+                <input type="number" id="full_remaining_balance" value="{{$loan_request ? ceil($loan_request->balance) : ''}}" hidden>
+                {{ Form::label('amount', 'Amount Received', ['class' => 'h6', 'id'=>'amount_label']) }}
+                {{ Form::number('amount', '', ['class'=> 'form-control',  'step' => '1', 'required']) }}
                 @if ($errors->has('amount'))
                     <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
                 @endif
             </div>
 
             <div class="form-group">
-                <!-- Button trigger modal -->
-                {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cameraModal">
-                    Launch demo modal
-                </button> --}}
                 {{ Form::label('', 'Receipt', ['class' => 'h6']) }}
                 <div class="img-container text-center mb-5">
-                    {{-- <div class="img-placeholder border clickable p-3" data-toggle="modal" data-target="#cameraModal">
-                        <span class="h5 text-muted"><i class="fas fa-camera-retro mr-1"></i> Use Camera</span>
-                    </div> --}}
-
                     <div class="row">
-                        <div class="col pr-0">
+                        {{-- <div class="col pr-0">
                             <div class="img-camera p-3 clickable h-100" data-toggle="modal" data-target="#cameraModal">
                                 <span class="h5 text-muted"><i class="fas fa-camera-retro mr-1"></i> Use Camera</span>
                             </div>
-                        </div>
-                        <div class="col pl-0 overflow-hidden">
+                        </div> --}}
+                        <div class="col overflow-hidden">
                             <div class="img-file p-3 clickable text-truncate h-100">
                                 <span class="h5 text-muted mb-0" id="upload-file-info" >
                                     <i class="far fa-file mr-1"></i> Choose file
                                 </span>
-                                <input type="file" class="clickable" id="inputFile" onchange="uploadFile(this)">
+                                {{-- <input type="file" name="receiptImg" class="clickable" id="inputFile" onchange="uploadFile(this)"> --}}
+                                {{Form::file('receiptImg', ['class' => 'clickable', 'id' => 'inputFile', 'onchange' => 'uploadFile(this);', 'required', 'accept' =>"image/*"])}}
                             </div>
                         </div>
                     </div>
@@ -124,32 +130,34 @@
                                 </div>
                             </div>
                         </li>
+                        @if(ceil($loan_request->per_month_amount) < 0)
+                            <li class="list-group-item">
+                                {{-- <div class="row">
+                                    <div class="col col-md col-lg">
+                                        Loan payment this month
+                                    </div>
+                                    <div class="col col-md col-lg">
+                                        <h6>₱ {{ round(($loan_request->loan_amount * 0.06  * $loan_request->days_payable + $loan_request->loan_amount) / $loan_request->days_payable, 2) - abs($loan_request->per_month_amount) }} </h6>
+                                    </div>
+                                </div> --}}
+                                <div class="row">
+                                    <div class="col col-md col-lg">
+                                        <small class="text-muted">Over Payment</small>
+                                    </div>
+                                    <div class="col col-md col-lg">
+                                        <small class="text-muted"><h6>₱ {{ number_format(round(abs($loan_request->per_month_amount)), 2) }} </h6></small>
+                                    </div>
+                                </div>
+                            </li>
+                        @endif
                         <li class="list-group-item">
-                            {{-- <div class="row">
-                                <div class="col col-md col-lg">
-                                    Loan payment this month
-                                </div>
-                                <div class="col col-md col-lg">
-                                    <h6>₱ {{ round(($loan_request->loan_amount * 0.06  * $loan_request->days_payable + $loan_request->loan_amount) / $loan_request->days_payable, 2) - abs($loan_request->per_month_amount) }} </h6>
-                                </div>
-                            </div> --}}
                             <div class="row">
                                 <div class="col col-md col-lg">
-                                    <small class="text-muted">Over Payment</small>
-                                </div>
-                                <div class="col col-md col-lg">
-                                    <small class="text-muted"><h6>₱ {{ number_format(round(abs($loan_request->per_month_amount)), 2) }} </h6></small>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col col-md col-lg">
-                                    Duration
+                                    Next Payment
                                 </div>
                                 <div class="col col-md col-lg">
                                     <h6>
-                                        {{ $loan_request ? (  $loan_request->per_month_amount ? date('F d, Y', $loan_request->per_month_from) : '' ) : ''}}  to {{$loan_request ? (  $loan_request->per_month_to ? date('F d, Y', $loan_request->per_month_to) : '' ) : ''}}
+                                        {{$loan_request ? (  $loan_request->per_month_to ? date('F d, Y', $loan_request->per_month_to) : '' ) : ''}}
                                     </h6>
                                 </div>
                             </div>
@@ -161,7 +169,7 @@
                                     Loan payment this month
                                 </div>
                                 <div class="col col-md col-lg">
-                                    <h6> {{ $loan_request ? ($loan_request->per_month_amount >= 0 ? '₱ '. $loan_request->per_month_amount  : '₱ 0.00') : '₱ 0.00' }}</h6>
+                                    <h6> {{ $loan_request ? ($loan_request->per_month_amount >= 0 ? '₱ '. number_format(ceil($loan_request->per_month_amount), 2)  : '₱ 0.00') : '₱ 0.00' }}</h6>
                                 </div>
                             </div>
                         </li>
@@ -209,18 +217,20 @@
                 </li>
             </ul>
         </div>
-        <div class="img-preview my-3 mt-4">
+        <div class="img-preview my-3 d-flex flex-column">
             <div class="row">
-                <div class="col">
-                    <div class="img-file-container position-relative d-flex justify-content-center">
-                        <img id="file" class="img-fluid">
-                        <div class="file-name text-truncate"></div>
+                <div class="col-sm">
+                    <div class="img-file-container">
+                        <img id="file" class="img-thumbnail h-100" alt="No image selected">
                     </div>
-                    <canvas class="img-fluid" id="canvas" width="640" height="480"></canvas>
+                    <div class="text-truncate" style="max-width: 420px;">
+                        <small class="file-name text-muted"></small>
+                    </div>
+                    {{-- <canvas class="img-fluid" id="canvas" width="640" height="480"></canvas> --}}
                 </div>
             </div>
-            {{-- <button class="btn btn-primary my-2" onclick="download_image()" id="download">Download</button> --}}
-            {{-- <i class="fas fa-compress fa-2x img-view clickable" data-toggle="tooltip" data-placement="left" title="View Image"></i> --}}
+            {{-- <button class="btn btn-primary my-2" onclick="download_image()" id="download">Download</button>
+            <i class="fas fa-compress fa-2x img-view clickable" data-toggle="tooltip" data-placement="left" title="View Image"></i> --}}
         </div>
     </div>
 </div>
@@ -232,7 +242,7 @@
   
 <!-- Modal -->
 <div class="modal fade" id="cameraModal" tabindex="-1" role="dialog" aria-labelledby="cameraModalTitle" aria-hidden="true">
-    <h3 class="text-center text-white header mt-2">Press Enter / Spacebar to capture</h3>
+    <h3 class="text-center text-white header mt-2 d-none d-md-block">Press Enter / Spacebar to capture</h3>
     <div class="modal-dialog mt-2" role="document">
         <div class="modal-content">
             <div class="modal-body d-flex flex-column">
@@ -244,7 +254,7 @@
                 <video class="img-fluid mt-3" id="video" muted autoplay></video>
                 <div class="text-center">
                     {{-- <button class="btn btn-light m-2 header" id="snap"><i class="fas fa-camera fa-2x mr-2"></i></button> --}}
-                    <span id="snap" class="fa-stack fa-2x mt-2 img-capture clickable" data-toggle="tooltip" data-placement="top" title="Take Photo">
+                    <span id="snap" class="fa-stack fa-2x mt-2 img-capture clickable flash" data-toggle="tooltip" data-placement="top" title="Take Photo">
                         <i class="fas fa-circle fa-stack-2x fa-inverse"></i>
                         <i class="fas fa-camera fa-stack-1x"></i>
                     </span>
@@ -254,105 +264,108 @@
     </div>
 </div>
 
-<script>
-// Elements for taking the snapshot
-var canvas = document.getElementById('canvas');
-var context = canvas.getContext('2d');
-var video = document.getElementById('video');
-var videoSelect = document.querySelector('select#videoSource');
+{{-- <script>
+    // Elements for taking the snapshot
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var video = document.getElementById('video');
+    var videoSelect = document.querySelector('select#videoSource');
 
-// Hide canvas/view buttons first
-$("#download, #canvas").hide();
+    // canvas.width = window.innerWidth;
+    // canvas.height = window.innerHeight;
 
-// Get access to the camera!
-// if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-//     // Not adding `{ audio: true }` since we only want video now
-//     navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-//         //video.src = window.URL.createObjectURL(stream);
-//         video.srcObject = stream;
-//         video.play();
-//     });
-// }
+    // Hide canvas/view buttons first
+    $("#download, #canvas").hide();
 
-// Call all functions
-navigator.mediaDevices.enumerateDevices()
-  .then(gotDevices).then(getStream).catch(handleError);
+    // Get access to the camera!
+    // if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    //     // Not adding `{ audio: true }` since we only want video now
+    //     navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+    //         //video.src = window.URL.createObjectURL(stream);
+    //         video.srcObject = stream;
+    //         video.play();
+    //     });
+    // }
 
-// Cycle camera and call getStream function
-videoSelect.onchange = getStream;
+    // Call all functions
+    navigator.mediaDevices.enumerateDevices()
+    .then(gotDevices).then(getStream).catch(handleError);
 
-// Get other camera devices through looping
-function gotDevices(deviceInfos) {
-    for (var i = 0; i !== deviceInfos.length; ++i) {
-        var deviceInfo = deviceInfos[i];
-        var option = document.createElement('option');
-        option.value = deviceInfo.deviceId;
+    // Cycle camera and call getStream function
+    videoSelect.onchange = getStream;
 
-        if (deviceInfo.kind === 'videoinput') {
-            option.text = deviceInfo.label || 'camera ' + (videoSelect.length + 1);
-            // option.text = 'Camera ' + (videoSelect.length + 1);
-            videoSelect.appendChild(option);
-        } else {
-            console.log('Found one other kind of source/device: ', deviceInfo);
+    // Get other camera devices through looping
+    function gotDevices(deviceInfos) {
+        for (var i = 0; i !== deviceInfos.length; ++i) {
+            var deviceInfo = deviceInfos[i];
+            var option = document.createElement('option');
+            option.value = deviceInfo.deviceId;
+
+            if (deviceInfo.kind === 'videoinput') {
+                option.text = deviceInfo.label ? deviceInfo.label : 'camera ' + (videoSelect.length + 1);
+                // option.text = 'Camera ' + (videoSelect.length + 1);
+                videoSelect.appendChild(option);
+            } else {
+                console.log('Found one other kind of source/device: ', deviceInfo);
+            }
         }
     }
-}
 
 
-function getStream() {
-    if(window.stream) {
-        window.stream.getTracks().forEach(function(track) {
-            track.stop();
-        });
+    function getStream() {
+        if(window.stream) {
+            window.stream.getTracks().forEach(function(track) {
+                track.stop();
+            });
+        }
+
+        var constraints = {
+            video: {
+                deviceId: {exact: videoSelect.value}
+            }
+        };
+
+        navigator.mediaDevices.getUserMedia(constraints).then(gotStream).catch(handleError);
     }
 
-    var constraints = {
-        video: {
-            deviceId: {exact: videoSelect.value}
-        }
-    };
+    function gotStream(stream) {
+        window.stream = stream;
+        video.srcObject = stream;
+    }
 
-    navigator.mediaDevices.getUserMedia(constraints).then(gotStream).catch(handleError);
-}
+    function handleError(error) {
+    console.log('Error: ', error);
+    }
 
-function gotStream(stream) {
-    window.stream = stream;
-    video.srcObject = stream;
-}
+    // Trigger photo take
+    $("#snap").on("click", function() {
+        context.drawImage(video, 0, 0, 640, 480);
+        $('#cameraModal').modal('toggle');
+        $('#download, #canvas, .img-view').show();
+        $('.img-camera').html("<span class='h5 text-muted'><i class='far fa-image mr-1'></i> Take another picture </span>");
 
-function handleError(error) {
-  console.log('Error: ', error);
-}
+        $('.img-file-container').hide();
+        $('#canvas').show();
 
-// Trigger photo take
-$("#snap").on("click", function() {
-    context.drawImage(video, 0, 0, 640, 480);
-    $('#cameraModal').modal('toggle');
-    $('#download, #canvas, .img-view').show();
-    $('.img-camera').html("<span class='h5 text-muted'><i class='far fa-image mr-1'></i> Take another picture </span>");
+        $(".img-camera, .img-file").removeClass("unselected-option selected-option");
+        $(".img-camera").toggleClass("selected-option");
+        $(".img-file").toggleClass("unselected-option");
+    });
 
-    $('.img-file-container').hide();
-    $('#canvas').show();
+    // Filename 
+    var date = new Date();
+    var filename = date.getMonth()+1+'-'+date.getDate()+'-'+date.getFullYear()+'-'+date.getHours()+date.getMinutes()+date.getSeconds();
+    // console.log(date, filename);
 
-    $(".img-camera, .img-file").removeClass("unselected-option selected-option");
-    $(".img-camera").toggleClass("selected-option");
-    $(".img-file").toggleClass("unselected-option");
-});
+    // Download Image
+    function download_image(){
+        var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        var link = document.createElement('a');
+        link.download = filename;
+        link.href = canvas.toDataURL("image/png;base64");
+        link.click();
+    }
 
-// Filename 
-var date = new Date();
-var filename = date.getMonth()+1+'-'+date.getDate()+'-'+date.getFullYear()+'-'+date.getHours()+date.getMinutes()+date.getSeconds();
-// console.log(date, filename);
-
-// Download Image
-function download_image(){
-    var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-    var link = document.createElement('a');
-    link.download = filename;
-    link.href = canvas.toDataURL("image/png;base64");
-    link.click();
-}
-
-</script>
+</script> --}}
 
 @endsection

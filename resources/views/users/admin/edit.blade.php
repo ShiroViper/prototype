@@ -108,6 +108,20 @@
                                 </div>
                             </div>
                         </li>
+                        @if($user->inactive == 1)
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col">Status</div>
+                                    <div class="col">
+                                        {{-- {{ Form::select('inactive', ['null' => 'Deactivated', 0 => 'Re-Activate'], $user->user_type, [ 'class' => 'form-control', 'selected']) }} --}}
+                                        <select name="inactive" id="" class='form-control'>
+                                            <option value="1" selected>Deactivated</option>
+                                            <option value="0">Re-Activate</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </li>
+                        @endif
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col">Street Number</div>
