@@ -16482,6 +16482,34 @@ readers do not read off random characters that represent icons */
   right: 0;
 }
 
+@-webkit-keyframes flash {
+  from, 10%, to {
+    opacity: 1;
+  }
+
+  4%, 15% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+}
+
+@keyframes flash {
+  from, 10%, to {
+    opacity: 1;
+  }
+
+  4%, 15% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+}
+
 @-webkit-keyframes rubberBand {
   from {
     -webkit-transform: scale3d(1, 1, 1);
@@ -16630,6 +16658,13 @@ readers do not read off random characters that represent icons */
           animation-duration: 2.5s;
   -webkit-animation-iteration-count: infinite;
           animation-iteration-count: infinite;
+}
+
+.flash {
+  -webkit-animation: 5s infinite;
+          animation: 5s infinite;
+  -webkit-animation-name: flash;
+          animation-name: flash;
 }
 
 .progress-bar-vertical {
@@ -16805,8 +16840,14 @@ readers do not read off random characters that represent icons */
   height: 100%;
 }
 
-.img-preview {
-  position: relative;
+#file {
+  max-height: 480px !important;
+}
+
+@media screen and (min-width: 768px) {
+  #file {
+    height: auto;
+  }
 }
 
 .img-view {

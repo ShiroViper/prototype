@@ -193,7 +193,16 @@ class TransactionController extends Controller
             }
         }
 
-        return view('users.collector.collect2')->with('active', 'collect')->with('check_for_pending', $check_for_pending)->with('token', $token)->with('member', $member)->with('loan_request', $loan_request);
+        // Generate a random receipt number
+        $receiptID = substr(hexdec(uniqid(rand(), true)), 2, 10);
+        $checkReceipt = Transaction::select('receipt_id')->get();
+
+        // If this number is already in the database, generate another one
+        if (Transaction::where('receipt_id', '=', $receiptID)->exists()) {
+            $receiptID = substr(hexdec(uniqid(rand(), true)), 2, 10);
+        }
+
+        return view('users.collector.collect2')->with('active', 'collect')->with('check_for_pending', $check_for_pending)->with('token', $token)->with('member', $member)->with('loan_request', $loan_request)->with('rID', $receiptID);
     }
 
     /**
@@ -203,6 +212,7 @@ class TransactionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
+
         // This check if the token is duplicate or not after the form is saved , This trick the collector think he submitted one form
         if(Transaction::where('token', $request->token)->first()){
             return redirect()->back()->with('success', 'Waiting to confirm from member');
@@ -212,12 +222,14 @@ class TransactionController extends Controller
         $messages = [
             'required' => 'This field is required',
             'numeric' => 'This field is Numbers',
+            'max' => 'Image size must be less than 2 MB'
         ];
         Session(['loan_type'=> $request->type]);
         $this->validate($request, [
             'amount' => ['required', 'numeric'],
             'type' => ['required','numeric'],
             'memID' => ['required', 'numeric'],
+            'receiptImg' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ], $messages);
         
         $user = User::where([['id', $request->memID], ['user_type', 0]])->first();
@@ -243,6 +255,28 @@ class TransactionController extends Controller
             $transact->amount = $request->amount;
             $transact->get = 0;
             $transact->token = $request->token;
+            $transact->receipt_id = $request->receiptID;
+            
+            if($request->hasFile('receiptImg')){
+                // Get filename with the extension
+                // $filenameWithExt = $request->file('receiptImg')->getClientOriginalName();
+    
+                //Get just filename
+                // $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+    
+                // Get just ext
+                $extension = $request->file('receiptImg')->getClientOriginalExtension();
+    
+                //Filename to store
+                $fileNameToStore = date('YmdHis').'_'.$request->receiptID.'.'.$extension;
+    
+                //Upload Image
+                $path = $request->file('receiptImg')->storeAs('public/physical_receipts',$fileNameToStore);
+            } else {
+                // $fileNameToStore = 'noimage.jpg';
+                $fileNameToStore = NULL;
+            }
+    
 
             // Create a paid date
             $sched = new Schedule;

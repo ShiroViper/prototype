@@ -1,3 +1,33 @@
+// @keyframes flash {
+//   from,
+//   50%,
+//   to {
+//     opacity: 1;
+//   }
+
+//   25%,
+//   75% {
+//     opacity: 0;
+//   }
+// }
+
+@keyframes flash {
+  from,
+  10%,
+  to {
+    opacity: 1;
+  }
+
+  4%,
+  15% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+}
+
 @-webkit-keyframes rubberBand {
   from {
     -webkit-transform: scale3d(1, 1, 1);
@@ -155,4 +185,10 @@
   animation-name: rubberBand;
   animation-duration: 2.5s;
   animation-iteration-count: infinite;
+}
+
+.flash {
+  animation: 5s infinite;
+  animation-name: flash;
+  // -webkit-animation-name: flash;
 }
