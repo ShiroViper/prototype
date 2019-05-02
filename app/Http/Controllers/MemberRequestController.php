@@ -18,6 +18,7 @@ class MemberRequestController extends Controller
             'cell_num.unique' => 'That contact number was already registered',
             'email.unique' => 'That email was already registered',
             'numeric' => 'Please input a valid contact number'
+        
         ];
         
         $this->validate($request, [
@@ -26,11 +27,17 @@ class MemberRequestController extends Controller
             'mname' => ['nullable', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'cell_num' => ['required', 'string', 'numeric', 'unique:member__requests,contact', 'unique:users', 'digits:11'],
             'email' => ['required', 'string', 'unique:member__requests,email', 'unique:users', 'email'],
-            'address' => ['required', 'string'],
-            'face_photo' => 'image|nullable|max:1999' 
+            'street_number' => ['required', 'string'],
+            'barangay' => ['required', 'string'],
+            'city_town' => ['required', 'string'],
+            'province' => ['required', 'string'],
+            'face_photo' => 'image|required|max:1999',
+            'front_id_photo' => 'image|required|max:1999',
+            'back_id_photo' => 'image|required|max:1999',
+            'id_type' => ['required', 'string'],
         ], $messages);
 
-        // dd($request->face_photo);
+        // dd($request->id_type);
 
         if($request->hasFile('face_photo')){
             // Get filename with the extension
@@ -41,12 +48,38 @@ class MemberRequestController extends Controller
             // Get just ext
             $extension = $request->file('face_photo')->getClientOriginalExtension();
             //Filename to store
-            $fileNameToStore = $filename.'.'.$extension;
+            $face_photo = $filename.'.'.$extension;
             //Upload Image
-            $path = $request->file('face_photo')->storeAs('public\cover_images',$fileNameToStore);            
-        } else {
-            $fileNameToStore = NULL;
-        }
+            $path = $request->file('face_photo')->storeAs('public\face_images',$face_photo);            
+        } 
+
+        if($request->hasFile('front_id_photo')){
+            // Get filename with the extension
+            // $filenameWithExt = $request->input('email');
+            $filenameWithExt2 = date('YmdHis');
+            //Get just filename
+            $filename2 = pathinfo($filenameWithExt2, PATHINFO_FILENAME);
+            // Get just ext
+            $extension2 = $request->file('front_id_photo')->getClientOriginalExtension();
+            //Filename to store
+            $front_id_photo = $filename2.'.'.$extension2;
+            //Upload Image
+            $path2 = $request->file('front_id_photo')->storeAs('public\id_images',$front_id_photo);            
+        } 
+
+        if($request->hasFile('back_id_photo')){
+            // Get filename with the extension
+            // $filenameWithExt = $request->input('email');
+            $filenameWithExt3 = date('YmdHis');
+            //Get just filename
+            $filename3 = pathinfo($filenameWithExt3, PATHINFO_FILENAME);
+            // Get just ext
+            $extension3 = $request->file('back_id_photo')->getClientOriginalExtension();
+            //Filename to store
+            $back_id_photo = $filename3.'.'.$extension3;
+            //Upload Image
+            $path3 = $request->file('back_id_photo')->storeAs('public\id_images',$back_id_photo);            
+        } 
 
         $mem_req = new Member_Request;
         $mem_req->lname = $request->input('lname');
@@ -54,9 +87,14 @@ class MemberRequestController extends Controller
         $mem_req->mname = $request->input('mname');
         $mem_req->email = $request->input('email');
         $mem_req->contact = $request->input('cell_num');
-        $mem_req->address = $request->input('address');
-        $mem_req->face_photo = $fileNameToStore;
-        // dd($mem_req);
+        $mem_req->street_number = $request->input('street_number');
+        $mem_req->barangay = $request->input('barangay');
+        $mem_req->city_town = $request->input('city_town');
+        $mem_req->province = $request->input('province');
+        $mem_req->face_photo = $face_photo;
+        $mem_req->front_id_photo = $front_id_photo;
+        $mem_req->back_id_photo = $back_id_photo;
+        $mem_req->id_type = $request->input('id_type');
         $mem_req->save();
 
 
@@ -102,7 +140,11 @@ class MemberRequestController extends Controller
         $new->mname = $req->mname;
         $new->cell_num = $req->contact;
         $new->email = $req->email;
-        $new->address = $req->address;
+        $new->street_number = $req->street_number;
+        $new->barangay = $req->barangaye;
+        $new->city_town = $req->city_town;
+        $new->province = $req->province;
+        
         $new->save();
 
         $req->approved = true;

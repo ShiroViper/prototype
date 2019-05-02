@@ -24,7 +24,10 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('user_type');
             $table->boolean('setup')->nullable();
             $table->string('cell_num');
-            $table->text('address');
+            $table->text('street_number');
+            $table->text('barangay');
+            $table->text('city_town');
+            $table->text('province');
             $table->boolean('inactive')->default(0);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

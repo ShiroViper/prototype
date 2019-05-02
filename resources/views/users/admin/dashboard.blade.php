@@ -337,6 +337,7 @@
                                             <th>Date & Time</th>
                                             <th>Member</th>
                                             <th colspan="2">Amount</th>
+                                            <th>Photo</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -347,6 +348,7 @@
                                             @else
                                                 <td>Loan Payment</td>
                                             @endif
+                                             {{-- <td><img class="img-square" style="width:60px;height:60px" src="/storage/cover_images/{{$m->id_photo}}"></td> --}}
                                             <td>{{date("h:i A M d, Y", strtotime($trans->created_at))}}</td>
                                             <td>{{$trans->lname}}, {{$trans->fname}} {{$trans->mname}} </td>
                                             <td class="border-right-0">₱ {{number_format($trans->amount, 2)}}</td>

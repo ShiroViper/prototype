@@ -115,7 +115,7 @@
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col">Address</div>
-                        <div class="col font-weight-bold">{{ $user->address }}</div>
+                        <div class="col font-weight-bold">{{ $user->street_number}},{{$user->barangay}} , {{$user->city_town}}, {{$user->province }}</div>
                     </div>
                     {{-- <div class="row">
                     </div> --}}

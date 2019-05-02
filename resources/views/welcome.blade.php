@@ -109,41 +109,81 @@
                         </div>
 
               
-
-                        
                         <div class="form-group">
-                            {{ Form::label('address', 'Complete Address', ['class' => 'mb-0']) }}
-                            <div class="mb-2"><small class="text-muted">Street number, Barangay, City/Town, Province, Philippines, Zip Code</small></div>
-                            {{ Form::textarea('address', '', ['class' => $errors->has('address') ? 'form-control is-invalid' : 'form-control', 'rows' => 2]) }}
-                            @if ($errors->has('address'))
-                                <div class="invalid-feedback">{{ $errors->first('address') }}</div>
+                            {{ Form::label('street_number', 'Street Number') }}
+                            {{ Form::text('street_number', '', ['class' => $errors->has('street_number') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('street_number'))
+                                <div class="invalid-feedback">{{ $errors->first('street_number') }}</div>
                             @endif
-                            {{-- <small class="text-muted">Default Password: 123456</small> --}}
                         </div>
-                       
+
+                        <div class="form-group">
+                            {{ Form::label('barangay', 'Barangay') }}
+                            {{ Form::text('barangay', '', ['class' => $errors->has('barangay') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('barangay'))
+                                <div class="invalid-feedback">{{ $errors->first('barangay') }}</div>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            {{ Form::label('city_town', 'City/Town') }}
+                            {{ Form::text('city_town', '', ['class' => $errors->has('city_town') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('city_town'))
+                                <div class="invalid-feedback">{{ $errors->first('city_town') }}</div>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            {{ Form::label('province', 'Province') }}
+                            {{ Form::text('province', '', ['class' => $errors->has('province') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('province'))
+                                <div class="invalid-feedback">{{ $errors->first('province') }}</div>
+                            @endif
+                        </div>
+                    
+                        <div>
+                        {{Form::label('id_type', 'ID Type')}}
+                        {{Form::select('id_type', [
+                        'Passport' => 'Passport', 
+                        'Driver\'s License' => 'Driver\'s License', 
+                        'SSS Card' => 'SSS Card', 
+                        'Professional Regulation Commission (PRC ID)' => 'Professional Regulation Commission (PRC ID)', 
+                        'GSIS e-Card Plus2' => 'GSIS e-Card Plus2', 
+                        'Postal ID' => 'Postal ID', 
+                        'Unified Multi-Purpose ID' => 'Unified Multi-Purpose ID', 
+                        'NBI Clearance' => 'NBI Clearance', 
+                        'Alien Certificate of Registration' => 'Alien Certificate of Registration',
+                        'AFP ID' => 'AFP ID', 
+                        'NCWDP Certificate' => 'NCWDP Certificate', 
+                        'IBP ID' => 'IBP ID', 
+                        'OWWA ID' => 'OWWA ID', 
+                        'Seaman\'s Book' => 'Seaman\'s Book', 
+                        'Bureau of Fire Protection ID' => 'Bureau of Fire Protection ID', 
+                        'Integrated Bar of the Philippines ID' => 'Integrated Bar of the Philippines ID', 
+                        'Philippine National Police ID' => 'Philippine National Police ID', 
+                        'Police Clearance Card' => 'Police Clearance Card', 
+                        'Police Clearance Certificate' => 'Police Clearance Certificate'],                         
+                        "",
+                        ['class' => 'form-control']
+                        )}}
+                        </div>
+
+
                         <div class="form-group">
                             {{Form::label('face_photo', 'Photo')}}
-                            {{Form::file('face_photo')  }}
-                        </div>
-
-                        {{-- <div class="form-group">
-                                {{Form::label('face_photo', 'Photo')}}
-                                {{Form::file('face_photo', '', ['class' => $errors->has('face_photo') ? 'form-control is-invalid' : 'form-control'])  }}
-                                @if ($errors->has('face_photo'))
-                                <div class="invalid-feedback">{{ $errors->first('face_photo') }}</div>
-                            @endif
-                        </div> --}}
-
-                        {{-- <div class="form-group">
-                            {{Form::label('front_id_photo', 'Front ID Photo')}}
-                            {{Form::file('front_id_photo')  }}
+                            {{Form::file('face_photo'), ['required', 'accept' => 'image/*']  }}
+                           
                         </div>
 
                         <div class="form-group">
-                        {{Form::label('back_id_photo', 'Back ID Photo')}}
-                        {{Form::file('back_id_photo')  }}
-                        </div> --}}
-                          
+                            {{Form::label('front_id_photo', 'Front ID Photo')}}
+                            {{Form::file('front_id_photo'), ['required', 'accept' => 'image/*']  }}
+                           
+                        </div>
+                        
+                        <div class="form-group">
+                            {{Form::label('back_id_photo', 'Back ID Photo')}}
+                            {{Form::file('back_id_photo', ['required', 'accept' => 'image/*'])}}
+                        </div>
 
 	
                         <small class="text-muted"><b>Note</b>: Please wait for our administrator to verify your request.</small>
@@ -151,7 +191,6 @@
                         {{ Form::submit('Submit', ['class' => 'btn btn-primary btn-block mb-3']) }}
                         </div>    
                         
-
 <script type="text/javascript">
     @if (count($errors) > 0)
         $('#member').modal('show');

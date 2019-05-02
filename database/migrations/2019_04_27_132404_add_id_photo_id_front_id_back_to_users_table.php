@@ -17,6 +17,7 @@ class AddIdPhotoIdFrontIdBackToUsersTable extends Migration
             $table->string('face_photo')->nullable();
             $table->string('front_id_photo')->nullable();
             $table->string('back_id_photo')->nullable();
+            $table->string('id_type')->nullable();
         });
     }
 
