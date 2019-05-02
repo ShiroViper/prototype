@@ -24,8 +24,10 @@
             {{-- date("Yhis", hexdec(substr(uniqid(rand(),true),0,9))) --}}
             <div class="form-row">
                 <div class="col-sm">
-                    <label for="receiptID" class="h6 mt-3">Receipt ID</label>
-                    <input type="text" class="form-control" name="receiptID" value="{{ $rID }}" readonly>
+                    {{-- <label for="receiptID" class="h6 mt-3">Receipt ID</label>
+                    <input type="text" class="form-control" name="receiptID" readonly> --}}
+                    {{ Form::label('receiptID', 'Receipt ID', ['class' => 'h6 mt-3']) }}
+                    {{ Form::number('receiptID', $rID, ['class' => 'form-control', 'readonly']) }}
                 </div>
                 <div class="col-sm">
                     {{ Form::label('date', 'Date', ['class' => 'h6 mt-3']) }}
@@ -83,7 +85,7 @@
                                     <i class="far fa-file mr-1"></i> Choose file
                                 </span>
                                 {{-- <input type="file" name="receiptImg" class="clickable" id="inputFile" onchange="uploadFile(this)"> --}}
-                                {{Form::file('receiptImg', ['class' => 'clickable', 'id' => 'inputFile', 'onchange' => 'uploadFile(this);', 'required'])}}
+                                {{Form::file('receiptImg', ['class' => 'clickable', 'id' => 'inputFile', 'onchange' => 'uploadFile(this);', 'required', 'accept' =>"image/*"])}}
                             </div>
                         </div>
                     </div>
