@@ -23,11 +23,11 @@
             {{Form::hidden('token', $token)}}
             {{-- date("Yhis", hexdec(substr(uniqid(rand(),true),0,9))) --}}
             <div class="form-row">
-                <div class="col">
+                <div class="col-sm">
                     <label for="receiptID" class="h6 mt-3">Receipt ID</label>
                     <input type="text" class="form-control" name="receiptID" value="{{ $rID }}" readonly>
                 </div>
-                <div class="col">
+                <div class="col-sm">
                     {{ Form::label('date', 'Date', ['class' => 'h6 mt-3']) }}
                     {{ Form::date('date',\Carbon\Carbon::now(), ['class' => 'form-control', 'readonly']) }}
                 </div>
@@ -83,7 +83,7 @@
                                     <i class="far fa-file mr-1"></i> Choose file
                                 </span>
                                 {{-- <input type="file" name="receiptImg" class="clickable" id="inputFile" onchange="uploadFile(this)"> --}}
-                                {{Form::file('receiptImg', ['class' => 'clickable', 'id' => 'inputFile', 'onchange' => 'uploadFile(this);'])}}
+                                {{Form::file('receiptImg', ['class' => 'clickable', 'id' => 'inputFile', 'onchange' => 'uploadFile(this);', 'required'])}}
                             </div>
                         </div>
                     </div>
@@ -209,18 +209,20 @@
                 </li>
             </ul>
         </div>
-        <div class="img-preview my-3 mt-4">
+        <div class="img-preview my-3 d-flex flex-column">
             <div class="row">
-                <div class="col">
-                    <div class="img-file-container position-relative d-flex justify-content-center">
-                        <img id="file" class="img-fluid">
-                        <div class="file-name text-truncate"></div>
+                <div class="col-sm">
+                    <div class="img-file-container">
+                        <img id="file" class="img-thumbnail h-100" alt="No image selected">
+                    </div>
+                    <div class="text-truncate" style="max-width: 420px;">
+                        <small class="file-name text-muted"></small>
                     </div>
                     {{-- <canvas class="img-fluid" id="canvas" width="640" height="480"></canvas> --}}
                 </div>
             </div>
-            {{-- <button class="btn btn-primary my-2" onclick="download_image()" id="download">Download</button> --}}
-            {{-- <i class="fas fa-compress fa-2x img-view clickable" data-toggle="tooltip" data-placement="left" title="View Image"></i> --}}
+            {{-- <button class="btn btn-primary my-2" onclick="download_image()" id="download">Download</button>
+            <i class="fas fa-compress fa-2x img-view clickable" data-toggle="tooltip" data-placement="left" title="View Image"></i> --}}
         </div>
     </div>
 </div>

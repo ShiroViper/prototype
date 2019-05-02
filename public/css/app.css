@@ -16840,8 +16840,14 @@ readers do not read off random characters that represent icons */
   height: 100%;
 }
 
-.img-preview {
-  position: relative;
+#file {
+  max-height: 480px !important;
+}
+
+@media screen and (min-width: 768px) {
+  #file {
+    height: auto;
+  }
 }
 
 .img-view {
