@@ -21,7 +21,7 @@ $(".clickable-row").on("click", function () {
 });
 
 /**
- * Fades away after a brief delay
+ * Fades away notifications after a brief delay
  */
 $('.pop-messages').fadeOut(4200, "linear");
 
@@ -33,10 +33,13 @@ $('tr .no-modal').on("click", function (e) {
   e.stopPropagation();
 });
 
+/**
+ * Reason for loan
+ */
 $('#reason').change(function () {
   var selected = $('#reason').val();
   // console.log(selected);
-  if (selected == '3') {
+  if (selected == '3') {    
     $("#other").show().prop("required", true);
   } else {
     $("#other").hide();
@@ -149,4 +152,37 @@ $(function () {
 // for tooltip
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
+});
+
+
+// for request loan
+function loan() {
+  var amount = document.getElementById('amount').value;
+  var selectBox = document.getElementById("months");
+  var month = selectBox.options[selectBox.selectedIndex].value;
+ 
+  var interest = +amount * +0.06;
+  var monthly = +interest / +month;
+  
+  document.getElementById("interest").innerHTML = '<p class="h6">Loan Interest</p>' + '₱ ' + Math.round(interest).toFixed(2);
+  document.getElementById("monthly").innerHTML = '<p class="h6">Monthly Payment</p>' + '₱ ' + Math.round(monthly).toFixed(2);
+ }
+
+ $('#type').change(function () {
+  var selected = $('#type').val();
+  // console.log(selected);
+  if (selected == '4') {    
+    var full_payment = document.getElementById("full_payment").value;
+    $("#amount").hide().prop("required", false);
+    document.getElementById("amount").value = full_payment;
+    $('#amount_label').hide();
+  }else if (selected == '5') {    
+      var full_payment = document.getElementById("full_remaining_balance").value;
+      $("#amount").hide().prop("required", false);
+      document.getElementById("amount").value = full_payment;
+      $('#amount_label').hide();
+  } else {
+    $("#amount").show();
+    $('#amount_label').show().prop("required", true);;
+  }
 });
