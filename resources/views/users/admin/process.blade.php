@@ -136,7 +136,7 @@
                             <span>Amount to Loan</span>
                         </div>
                         <div class="col col-md col-lg">
-                            <h6>{{ $process->loan_amount }}</h6>
+                            <h6>₱ {{ $process->loan_amount }}</h6>
                         </div>
                     </div>
                 </li>
@@ -146,7 +146,27 @@
                             <span>Months Payable</span>
                         </div>
                         <div class="col col-md col-lg">
-                            <h6>{{ $process->days_payable }}</h6>
+                            <h6>{{ $process->days_payable }} Month/s</h6>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col col-md col-lg-4">
+                            <span>Date Requested</span>
+                        </div>
+                        <div class="col col-md col-lg">
+                            <h6>{{date('h:i A F d, Y', strtotime($process->created_at))}}</h6>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col col-md col-lg-4">
+                            <span>Due Date</span>
+                        </div>
+                        <div class="col col-md col-lg">
+                            <h6>{{date('F d, Y', strtotime($process->updated_at.'+'.$process->days_payable.' Months'))}} </h6>
                         </div>
                     </div>
                 </li>

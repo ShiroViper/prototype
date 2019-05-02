@@ -89,6 +89,7 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::get('/dashboard', 'SchedulesController@index')->name('member-dashboard');
         // When the user has not yet setup his account [The calendar wont show]
         Route::post('/dashboard/setup', 'UsersController@setup')->name('member-setup');
+        Route::post('/partial/loan', 'LoanRequestsController@partial_loan')->name('member-partial-loan');
         Route::resource('/requests', 'LoanRequestsController', [
             'names' => [
                 'index' => 'member-requests',

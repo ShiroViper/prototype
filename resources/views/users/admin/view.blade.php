@@ -75,6 +75,16 @@
                         </div>
                     </div>
                 </li>
+                @if($user->inactive == 1)
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col col-sm">Status</div>
+                            <div class="col font-weight-bold">
+                                Deactivated
+                            </div>
+                        </div>
+                    </li>
+                @endif
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col col-sm">Address</div>

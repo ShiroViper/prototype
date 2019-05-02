@@ -10,8 +10,8 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Account</th>
-                <th>Date & Time</th>
+                <th>Type</th>
+                <th>Date</th>
                 <th>Collector</th>
                 <th colspan="2">Amount</th>
                 {{-- <th>PDF</th> --}}
@@ -22,9 +22,9 @@
             @foreach ($transactions as $trans)
             <tr>
                 @if( $trans->trans_type == 1 )
-                    <td>Savings: Deposit</td>
+                    <td>Deposit</td>
                 @else
-                    <td>My Loan: Loan Payment</td>
+                    <td>Loan Payment</td>
                 @endif
                 <td>{{ date("h:i A  F d, Y", strtotime($trans->created_at)) }}</td>
                 <td>{{$trans->fname}}, {{$trans->fname}} {{$trans->mname}} </td>

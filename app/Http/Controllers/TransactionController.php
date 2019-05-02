@@ -72,7 +72,7 @@ class TransactionController extends Controller
             $transactions = Transaction::join('users', 'users.id', '=', 'member_id' )->select('transactions.id', 'transactions.created_at', 'lname', 'fname', 'mname', 'trans_type', 'amount')->where([['collector_id', Auth::user()->id], ['confirmed', 1]])->orderBy('transactions.created_at', 'DESC')->paginate(10);
             return view('users.collector.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
         } else {
-            $transactions = Transaction::join('users', 'users.id', '=', 'collector_id')->select('transactions.id', 'amount', 'lname', 'fname', 'mname', 'trans_type', 'transactions.created_at')->where('member_id', Auth::user()->id)->whereNotNull('confirmed')->orderBy('transactions.created_at')->paginate(5);
+            $transactions = Transaction::join('users', 'users.id', '=', 'collector_id')->select('transactions.id', 'amount', 'lname', 'fname', 'mname', 'trans_type', 'transactions.created_at')->where('member_id', Auth::user()->id)->whereNotNull('confirmed')->orderBy('transactions.created_at', 'desc')->paginate(5);
             return view('users.member.transactions')->with('transactions', $transactions)->with('active', 'transactions');
         }
         // $transactions = DB::table('transactions')
@@ -134,31 +134,54 @@ class TransactionController extends Controller
         $check_for_pending = Transaction::where([['member_id', $member->id], ['collector_id', Auth::user()->id], ['confirmed', null]])->get();
         
         // testing 
-        //  1546333748 january
-        // 1571418025 october
-        //Check if per_month_date is beyond 1 month
-        // dd($date = strtotime("+".$loan_request->days_payable." months", $loan_request->date_approved), $loan_request->date_approved, date("F d, Y", $date));
+        //  TESTINGGGGG THE VALUE
+        // dd(date(strtotime(now().'-1 months')), strtotime(now().'-29 days'));
+        // 1554250194
+        // 1553947046
+        // dd(strtotime("+1 months", $loan_request->per_month_to));
+        // dd(strtotime(NOW()) > strtotime("+".$loan_request->days_payable." months") && $loan_request->date_approved);
+        // dd($loan_request ? !$loan_request->paid ? !$loan_request->paid_using_savings ? strtotime(NOW()) > $loan_request->per_month_to : '' : '' : '');
+        //Check if per_month_date is beyond 1 month  
         if($loan_request ? !$loan_request->paid ? !$loan_request->paid_using_savings : '' : ''){
-            if( strtotime(NOW()) > strtotime("+".$loan_request->days_payable." months", $loan_request->date_approved)){
-                $status = Status::where('user_id', $memID)->first();
-                $status->savings = $status->savings - $loan_request->balance; 
-                $status->save();
+            if( strtotime(NOW()) > strtotime("+".$loan_request->days_payable." months") && $loan_request->date_approved){
+                // $status = Status::where('user_id', $memID)->first();
+                // $status->savings = $status->savings - $loan_request->balance; 
+                // $status->save();
 
-                $loan_request->paid = 1;
-                $loan_request->balance = 0;
-                $loan_request->per_month_amount = 0;
-                $loan_request->save();
-
+                // $loan_request->paid = 1;
+                // $loan_request->balance = 0;
+                // $loan_request->per_month_amount = 0;
+                // $loan_request->save();
+                
             }else if($loan_request ? !$loan_request->paid ? !$loan_request->paid_using_savings ? strtotime(NOW()) > $loan_request->per_month_to : '' : '' : ''){
-
                 // compute the monthly loan
-                if($loan_request->per_month_amount <= 0){
-                    $temp = ($loan_request->loan_amount * 0.06 * $loan_request->days_payable + $loan_request->loan_amount) / $loan_request->days_payable;
-                    // subtract the negative value 
-                    $loan_request->per_month_amount = $loan_request->per_month_amount + $temp;
+                // over payment
+                if ($loan_request ? !$loan_request->paid ? !$loan_request->paid_using_savings ? strtotime(NOW()) > $loan_request->per_month_to && $loan_request->decrement_days_payable == 0 : '' : '' : '') {
+                    $status = Status::where('user_id', $loan_request->user_id)->first();
+                    $status->savings = $status->savings - $loan_request->balance;
+                    $status->patronage_refund = $status->patronage_refund + ($loan_request->balance * 0.06) * 0.4;
+                    $status->save();
+
+                    $status = Status::where('user_id', 1)->first();
+                    $status->distribution =  $status->distribution + ($loan_request->balance * 0.06) * 0.6;
+                    $status->save();
+
+                    $loan_request->paid_using_savings = 1;
+                    $loan_request->paid = 1;
+                    $loan_request->balance = 0;
+                    $loan_request->per_month_amount = 0;
                 }else{
-                    $temp = ($loan_request->loan_amount * 0.06 * $loan_request->days_payable + $loan_request->loan_amount) / $loan_request->days_payable;
-                    $loan_request->per_month_amount = $temp + $loan_request->per_month_amount;
+                    $status = Status::where('user_id', 1)->first();
+                    $status->distribution =  $status->distribution + ($loan_request->balance * 0.06) * 0.6;
+                    $status->save();
+
+                    $status = Status::where('user_id', $loan_request->user_id)->first();
+                    $status->patronage_refund = $status->patronage_refund + ($loan_request->balance * 0.06) * 0.4;
+                    $status->save();
+
+                    $loan_request->per_month_amount = ($loan_request->balance * 0.06 + $loan_request->balance) / $loan_request->decrement_days_payable ;
+                    $loan_request->balance = $loan_request->balance * 0.06 + $loan_request->balance;
+                    $loan_request->decrement_days_payable--;
                 }
 
                 $loan_request->per_month_from = $loan_request->per_month_to;
@@ -194,13 +217,14 @@ class TransactionController extends Controller
         if(Transaction::where('token', $request->token)->first()){
             return redirect()->back()->with('success', 'Waiting to confirm from member');
         }
+        // dd($request->input());
         
         $messages = [
             'required' => 'This field is required',
             'numeric' => 'This field is Numbers',
             'max' => 'Image size must be less than 2 MB'
         ];
-
+        Session(['loan_type'=> $request->type]);
         $this->validate($request, [
             'amount' => ['required', 'numeric'],
             'type' => ['required','numeric'],
@@ -266,9 +290,11 @@ class TransactionController extends Controller
             $transact->sched_id = $sched->id;
             $transact->save();
             // return redirect()->back('transaction-c')->with('success', 'watint');
+            session()->forget('loan_type');
             return redirect()->back()->with('success', 'Waiting to confirm from the Member');
             
-        } else if ($request->type == 3) {
+        } else if ($request->type == 3 || $request->type == 4 || $request->type == 5) {
+            $request->type = 3;
             // If the transaction is a Loan Payment [ $trans_type = 3 ]
 
             // check if member has current loan, loan is confirmed by the admin and money received by the member
@@ -365,6 +391,7 @@ class TransactionController extends Controller
             // Get the sched_id
             $transact->sched_id = $sched->id;
             $transact->save();
+            session()->forget('loan_type');
 
             return redirect()->back()->with('success', 'Waiting to confirm from the member');
             
@@ -437,21 +464,21 @@ class TransactionController extends Controller
             
             // this code update the distribution amount in id 1, the constant/default row 
             $update_dis = Status::where('user_id', 1)->first();
-            $update_dis->distribution = $update_dis->distribution + $loan_request->loan_amount * 0.06 * $loan_request->days_payable * 0.6;
+            $update_dis->distribution = $update_dis->distribution + $loan_request->loan_amount * 0.06 * 0.6;
             $update_dis->save();
 
             // this check if member status is already in DB
             if($status){
                 // this code update the patronage amounr of the users
                 $update_pat = Status::where('user_id', Auth::user()->id)->first();
-                $update_pat->patronage_refund = $update_pat->patronage_refund + $loan_request->loan_amount * 0.06 * $loan_request->days_payable * 0.4;
+                $update_pat->patronage_refund = $update_pat->patronage_refund + $loan_request->loan_amount * 0.06 * 0.4;
                 $update_pat->save();
             }else{
-                // else new status row
-                $update_pat = new Status;
-                $update_pat->user_id = Auth::user()->id;
-                $update_pat->patronage_refund = $update_pat->patronage_refund + $loan_request->loan_amount * 0.06 * $loan_request->days_payable * 0.4;
-                $update_pat->save();
+                // // else new status row
+                // $update_pat = new Status;
+                // $update_pat->user_id = Auth::user()->id;
+                // $update_pat->patronage_refund = $update_pat->patronage_refund + $loan_request->loan_amount * 0.06 * $loan_request->days_payable * 0.4;
+                // $update_pat->save();
             }
         }
 

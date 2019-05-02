@@ -101,7 +101,7 @@
                             <a class="nav-link{{ $active == 'sched' ? ' active callout' : '' }}" href="/admin/calendar">Calendar</a>
                         </li>
                         <li class="nav-item px-3 h6">
-                            <a class="nav-link {{$active == 'deliquent' ? 'active callout' : ''}} " href="/admin/deliquent">Deliquent</a>
+                            <a class="nav-link {{$active == 'deliquent' ? 'active callout' : ''}} " href="/admin/deliquent">Inactive</a>
                         </li>
                         {{-- <li class="nav-item px-3 h6">
                             <a class="nav-link{{ $active == 'status' ? ' active callout' : '' }}" href="/admin/status">Status</a>
@@ -116,7 +116,7 @@
                             <a class="nav-link{{ $active == 'collect' ? ' active callout' : '' }}" href="/collector/transaction/create">Transact</a>
                         </li>
                         <li class="nav-item px-3 h6">
-                            <a class="nav-link{{ $active == 'deliquent' ? ' active callout' : '' }}" href="/collector/deliquent">Deliquent</a>
+                            <a class="nav-link{{ $active == 'deliquent' ? ' active callout' : '' }}" href="/collector/deliquent">Inactive</a>
                         </li>
                         <li class="nav-item px-3 h6">
                             <a class="nav-link{{ $active == 'request' ? ' active callout' : '' }}" href="/collector/process">Requests</a>
