@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<h3 class="header mt-2">Dormant Accounts</h3>
+<h3 class="header mt-2">Inactive Accounts</h3>
 <small class="text-muted"> 30 Days After Last Transaction</small>
 <div class="row mt-3">
         <div class="col">

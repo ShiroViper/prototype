@@ -33,7 +33,7 @@
                 <div class="card-body d-flex justify-content-center align-items-center flex-column">
                     <div class="border rounded-circle p-2 bg-light" ><i class="text-primary fas fa-piggy-bank fa-lg"></i></div>
                     <h5 class="pt-2 header display-5 font-weight-bold text-center">
-                        {{ $savings && $savings->savings != null ? $savings->savings >= 0 ? '₱ '.$savings->savings : '₱ '.number_format($savings->savings, 2) : '₱ 0.00' }}
+                        {{ $savings && $savings->savings != null ? $savings->savings >= 0 ? '₱ '.number_format(floor($savings->savings), 2) : '₱ '.number_format(floor($savings->savings), 2) : '₱ 0.00' }}
                     </h5>
                     @if($savings->savings >= 0)                        
                         <small>Savings</small>
@@ -60,14 +60,13 @@
                 <div class="card-body d-flex justify-content-center align-items-center flex-column">
                     <div class="border rounded-circle p-2 bg-light"><i class="text-warning fas fa-coins fa-lg"></i></div>
                     <h5 class="pt-2 header display-5 font-weight-bold text-center">
-                        {{ $loan ? ($loan->per_month_amount <= 0 ? '₱'.abs($loan->per_month_amount) : '₱'.$loan->per_month_amount ) : '₱ 0.00' }}
+                        {{ $loan ? ($loan->per_month_amount > 0 ? '₱'.number_format(ceil(abs($loan->per_month_amount)), 2) : '₱'. number_format(ceil($loan->balance), 2)) : '₱ 0.00' }}
                     </h5>
-                    {{-- <small >Current Loan Balance For This Month</small> --}}
-                    <small> {{$loan ? ($loan->per_month_amount <=0 ? 'Over Paid' : 'Current Loan Balance ' ) : 'Current Loan Balance'}} </small>
+                    <h6> {{$loan ? ($loan->per_month_amount > 0 ? 'Current Loan Balance' : 'Remaining Loan Balance ' ) : 'Current Loan Balance'}} </h6>
+                    <h6>{{$loan ? $loan->per_month_amount <= 0 ? 'Next Payment '. date('F d, Y', $loan->per_month_to) : '' : ''}} </h6>
+                    <small class="text-muted"> {{$loan ? $loan->per_month_amount < 0 ? 'Over Paid ₱ '.number_format(abs($loan->per_month_amount), 2) : '' : '' }}</small>
                     {{-- {!! $loan ? '<a class="text-primary clickable"><small>View Details</small></a>' : '' !!} --}}
                     {{-- <a class="text-primary clickable"><small>View Details</small></a> --}}
-                    {{-- <small> From {{ $loan ? (  $loan->per_month_from ? date('F d, Y', $loan->per_month_from) : '' ) : ''}} <br> To {{$loan ? (  $loan->per_month_to ? date('F d, Y', $loan->per_month_to) : '' ) : ''}}  --}}
-                    </small>
             </div>
         </div>
         <div class="row mt-2">
