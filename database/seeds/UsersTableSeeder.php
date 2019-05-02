@@ -25,7 +25,10 @@ class UsersTableSeeder extends Seeder
                 'cell_num' => '09365265437',
                 'password' => bcrypt('brendacordero@gmail.com'),
                 'user_type' => 2,
-                'address' => 'None, Barangay Poblacion, Compostela, Cebu City, Philippines, 6000',
+                'street_number' => 'None',
+                'barangay' => 'Barangay Poblacion',
+                'city_town' => 'Compostela Cebu City',
+                'province' => 'Cebu',
                 'remember_token'=> Str::random(10),
             ],
             [
@@ -37,7 +40,10 @@ class UsersTableSeeder extends Seeder
                 'cell_num' => '09937763872',
                 'password' => bcrypt('cortes@gmail.com'),
                 'user_type' => 1,
-                'address' => 'None, Barangay Poblacion, Compostela, Cebu City, Philippines, 6000',
+                'street_number' => 'None',
+                'barangay' => 'Barangay Poblacion',
+                'city_town' => 'Compostela Cebu City',
+                'province' => 'Cebu',
                 'remember_token'=> Str::random(10)
             ],
             [
@@ -49,7 +55,10 @@ class UsersTableSeeder extends Seeder
                 'cell_num' => '09827384772',
                 'password' => bcrypt('lebrias@gmail.com'),
                 'user_type' => 0,
-                'address' => 'None, Barangay Sambag 2, Danao, Cebu City, Philippines, 6000',
+                'street_number' => 'None',
+                'barangay' => 'Barangay Poblacion',
+                'city_town' => 'Compostela Cebu City',
+                'province' => 'Cebu',
                 'remember_token'=> Str::random(10)
             ],
             [
@@ -61,7 +70,10 @@ class UsersTableSeeder extends Seeder
                 'cell_num' => '09375628936',
                 'password' => bcrypt('bacus@gmail.com'),
                 'user_type' => 0,
-                'address' => 'None, Barangay Labogon, Mandaue, Cebu City, Philippines, 6000',
+                'street_number' => 'None',
+                'barangay' => 'Barangay Poblacion',
+                'city_town' => 'Compostela Cebu City',
+                'province' => 'Cebu',
                 'remember_token'=> Str::random(10)
             ],
             [
@@ -73,7 +85,10 @@ class UsersTableSeeder extends Seeder
                 'cell_num' => '09756820081',
                 'password' => bcrypt('cueva@gmail.com'),
                 'user_type' => 0,
-                'address' => 'None, Barangay Poblacion, Liloan, Cebu City, Philippines, 6000',
+                'street_number' => 'None',
+                'barangay' => 'Barangay Poblacion',
+                'city_town' => 'Compostela Cebu City',
+                'province' => 'Cebu',
                 'remember_token'=> Str::random(10)
             ],
         ];
