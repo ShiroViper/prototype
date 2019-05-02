@@ -14,7 +14,6 @@
 <a class="btn btn-light border" role="button" href="/collector/transaction/create"><i class="fas fa-arrow-left mr-2"></i>Go Back</a>
 
 <h3 class="header mt-2 mb-3">Make Transaction</h3>
-
 <div class="row">
     <div class="col-lg order-2 order-lg-1">  
         <div class="position-sticky fixed-top">
@@ -44,18 +43,23 @@
                 {{ Form::label('type', 'Type', ['class' => 'h6']) }}
                 {{-- {{ Form::select('type', [1 => 'Deposit', 3 => 'Loan Payment'], NULL, ['class' => 'form-control', 'required']) }} --}}
                 <select name="type" id="type" class="{{$errors->has('type') ? 'form-control is-invalid' : 'form-control'}} " required>
-                    <option selected="selected" value="null" hidden>-- Select Type --</option>
-                    <option value="1">Deposit</option>
-                    <option value="3">Loan Payment</option>
+                    <option selected="selected" value="" disabled hidden>-- Select Type --</option>
+                    <option value="1" {{session()->get('loan_type') == 1 ? 'selected' : ''}} >Deposit</option>
+                    @if($loan_request)
+                        <option value="3" {{session()->get('loan_type') == 3 ? 'selected' : ''}} >Manual Loan Payment</option>
+                        <option value="4" {{session()->get('loan_type') == 4 ? 'selected' : ''}} >Full Payment For This Month Loan Balance</option>
+                        <option value="5" {{session()->get('loan_type') == 5 ? 'selected' : ''}} >Full Payment The Remaining Loan Balance</option>
+                    @endif
                 </select>
             </div>
             @if ($errors->has('type'))
                 <div class="invalid-feedback">Please Select</div>
             @endif
-
             <div class="form-group">
-                {{ Form::label('amount', 'Amount Received', ['class' => 'h6']) }}
-                {{ Form::number('amount', old('amount'), ['class'=> 'form-control', 'step' => '1', 'required']) }}
+                <input type="number" id="full_payment" value="{{$loan_request ? ceil($loan_request->per_month_amount) : ''}}" hidden> 
+                <input type="number" id="full_remaining_balance" value="{{$loan_request ? ceil($loan_request->balance) : ''}}" hidden>
+                {{ Form::label('amount', 'Amount Received', ['class' => 'h6', 'id'=>'amount_label']) }}
+                {{ Form::number('amount', '', ['class'=> 'form-control',  'step' => '1', 'required']) }}
                 @if ($errors->has('amount'))
                     <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
                 @endif
@@ -124,32 +128,34 @@
                                 </div>
                             </div>
                         </li>
+                        @if(ceil($loan_request->per_month_amount) < 0)
+                            <li class="list-group-item">
+                                {{-- <div class="row">
+                                    <div class="col col-md col-lg">
+                                        Loan payment this month
+                                    </div>
+                                    <div class="col col-md col-lg">
+                                        <h6>₱ {{ round(($loan_request->loan_amount * 0.06  * $loan_request->days_payable + $loan_request->loan_amount) / $loan_request->days_payable, 2) - abs($loan_request->per_month_amount) }} </h6>
+                                    </div>
+                                </div> --}}
+                                <div class="row">
+                                    <div class="col col-md col-lg">
+                                        <small class="text-muted">Over Payment</small>
+                                    </div>
+                                    <div class="col col-md col-lg">
+                                        <small class="text-muted"><h6>₱ {{ number_format(round(abs($loan_request->per_month_amount)), 2) }} </h6></small>
+                                    </div>
+                                </div>
+                            </li>
+                        @endif
                         <li class="list-group-item">
-                            {{-- <div class="row">
-                                <div class="col col-md col-lg">
-                                    Loan payment this month
-                                </div>
-                                <div class="col col-md col-lg">
-                                    <h6>₱ {{ round(($loan_request->loan_amount * 0.06  * $loan_request->days_payable + $loan_request->loan_amount) / $loan_request->days_payable, 2) - abs($loan_request->per_month_amount) }} </h6>
-                                </div>
-                            </div> --}}
                             <div class="row">
                                 <div class="col col-md col-lg">
-                                    <small class="text-muted">Over Payment</small>
-                                </div>
-                                <div class="col col-md col-lg">
-                                    <small class="text-muted"><h6>₱ {{ number_format(round(abs($loan_request->per_month_amount)), 2) }} </h6></small>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col col-md col-lg">
-                                    Duration
+                                    Next Payment
                                 </div>
                                 <div class="col col-md col-lg">
                                     <h6>
-                                        {{ $loan_request ? (  $loan_request->per_month_amount ? date('F d, Y', $loan_request->per_month_from) : '' ) : ''}}  to {{$loan_request ? (  $loan_request->per_month_to ? date('F d, Y', $loan_request->per_month_to) : '' ) : ''}}
+                                        {{$loan_request ? (  $loan_request->per_month_to ? date('F d, Y', $loan_request->per_month_to) : '' ) : ''}}
                                     </h6>
                                 </div>
                             </div>
@@ -161,7 +167,7 @@
                                     Loan payment this month
                                 </div>
                                 <div class="col col-md col-lg">
-                                    <h6> {{ $loan_request ? ($loan_request->per_month_amount >= 0 ? '₱ '. $loan_request->per_month_amount  : '₱ 0.00') : '₱ 0.00' }}</h6>
+                                    <h6> {{ $loan_request ? ($loan_request->per_month_amount >= 0 ? '₱ '. number_format(ceil($loan_request->per_month_amount), 2)  : '₱ 0.00') : '₱ 0.00' }}</h6>
                                 </div>
                             </div>
                         </li>
@@ -354,5 +360,5 @@ function download_image(){
 }
 
 </script>
-
+{{session()->forget('loan_type')}}
 @endsection

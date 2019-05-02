@@ -168,3 +168,21 @@ function loan() {
   document.getElementById("monthly").innerHTML = '<p class="h6">Monthly Payment</p>' + '₱ ' + Math.round(monthly).toFixed(2);
  }
 
+ $('#type').change(function () {
+  var selected = $('#type').val();
+  // console.log(selected);
+  if (selected == '4') {    
+    var full_payment = document.getElementById("full_payment").value;
+    $("#amount").hide().prop("required", false);
+    document.getElementById("amount").value = full_payment;
+    $('#amount_label').hide();
+  }else if (selected == '5') {    
+      var full_payment = document.getElementById("full_remaining_balance").value;
+      $("#amount").hide().prop("required", false);
+      document.getElementById("amount").value = full_payment;
+      $('#amount_label').hide();
+  } else {
+    $("#amount").show();
+    $('#amount_label').show().prop("required", true);;
+  }
+});
