@@ -20,10 +20,13 @@ class CreateMemberRequestsTable extends Migration
             $table->string('mname')->nullable();
             $table->string('email')->unique();
             $table->string('contact')->unique();
+            $table->string('password');
             $table->text('street_number');
             $table->text('barangay');
             $table->text('city_town');
             $table->text('province');
+            $table->string('referral_email')->nullable();
+            $table->string('referral_num')->nullable();
             $table->boolean('approved')->nullable();
             $table->timestamps();
         });

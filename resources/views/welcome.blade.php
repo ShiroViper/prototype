@@ -108,6 +108,10 @@
                             @endif
                         </div>
 
+                        <div class="form-group">
+                                <label for="password">Password</label>
+                                <input name="password" type="password" class="form-control" autofocus required>
+                        </div>
               
                         <div class="form-group">
                             {{ Form::label('street_number', 'Street Number') }}
@@ -185,6 +189,14 @@
                             {{Form::file('back_id_photo', ['required', 'accept' => 'image/*'])}}
                         </div>
 
+                        <div class="form-group">
+                            {{ Form::label('referral', 'Referral ') }}
+                            <small class="text-muted">(Optional)</small>
+                            {{ Form::text('referral', '', ['class' => $errors->has('referral') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('referral'))
+                                <div class="invalid-feedback">{{ $errors->first('referral') }}</div>
+                            @endif
+                        </div>
 	
                         <small class="text-muted"><b>Note</b>: Please wait for our administrator to verify your request.</small>
                         <div class="pt-2">

@@ -21,6 +21,8 @@ class CreateUsersTable extends Migration
             $table->string('mname')->nullable();
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('referral_email')->nullable();
+            $table->string('referral_num')->nullable();
             $table->unsignedInteger('user_type');
             $table->boolean('setup')->nullable();
             $table->string('cell_num');

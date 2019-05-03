@@ -239,6 +239,8 @@
                                             <th>Email</th>
                                             <th>Contact</th>
                                             <th>Address</th>
+                                            <th>Referral</th>
+                                            <th>Photo</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -249,7 +251,12 @@
                                                 <td>{{ $req->lname}}, {{ $req->fname }} {{ $req->mname }}</td>
                                                 <td>{{ $req->email }}</td>
                                                 <td>{{ $req->contact }}</td>
-                                                <td>{{ $req->address }}</td>
+                                                <td>{{ $req->street_number}}, {{$req->barangay}}, {{$req->city_town}}, {{$req->province }}</td>
+                                                <td>{{ $req->referral_num}} - {{ $req->referral_email}}</td>
+
+                                                {{-- <td><img class="img-square" style="width:60px;height:60px" src="/public/face_photo/{{$m->id_photo}}"></td> --}}
+                                                <td>{{ HTML::image('/public/face_photo/{{$req->face_photo}}', 'face_photo') }}</td>
+                                                {{-- <a href="{{ action('MemberRequestController@accept', $req->id) }}" class="btn btn-success btn-sm m-1" role="button">Accept</a> --}}
                                                 <td>
                                                     <a href="{{ action('MemberRequestController@accept', $req->id) }}" class="btn btn-success btn-sm m-1" role="button">Accept</a>
                                                     <a href="{{ action('MemberRequestController@decline', $req->id) }}" class="btn btn-outline-secondary btn-sm m-1" role="button">Decline</button>

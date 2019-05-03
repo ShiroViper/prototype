@@ -126,14 +126,7 @@
                 <small>Account Updated: {{date("F d, Y", strtotime($user->updated_at))}}  Time: {{date(" h:i:s A", strtotime($user->updated_at))}}</small>
             </div>
         </div>
-        {{-- <div class="row mt-3">
-            <div class="col">
-                <button class="btn btn-outline-warning btn-block" type="button">Archive</button>
-            </div>
-            <div class="col">
-                <a href="/admin/users/{{ $user->id }}/edit" class="btn btn-success btn-block edit-button" role="button">Edit</a>
-            </div>
-        </div> --}}
+      
     </div>
 </div>
 @endsection

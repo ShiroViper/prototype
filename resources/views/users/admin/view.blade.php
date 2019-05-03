@@ -91,6 +91,13 @@
                         <div class="col font-weight-bold">{{ $user->address }}</div>
                     </div>
                 </li>
+                <li class="list-group-item">
+                        <div class="row">
+                            <div class="col col-sm">Referral</div>
+                        <div class="col font-weight-bold">{{ $user->referral_email }} - {{$user->referral_num}}</div>
+                        </div>
+                    </li>
+                
             </ul>
             <div class="card-footer text-muted">
                 <small>Account Created: {{date("F d, Y", strtotime($user->created_at))}}  Time: {{date(" h:i:s A", strtotime($user->created_at))}}</small><br>

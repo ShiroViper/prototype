@@ -36,6 +36,9 @@ class MemberRequestController extends Controller
             'front_id_photo' => 'image|required|max:1999',
             'back_id_photo' => 'image|required|max:1999',
             'id_type' => ['required', 'string'],
+            'referral_email' => ['nullable', 'string', 'email'],
+            'referral_num' => ['nullable', 'string', 'numeric'],
+            'password'=>['required', 'string', 'min:4'],
         ], $messages);
 
         // dd($request->id_type);
@@ -70,7 +73,6 @@ class MemberRequestController extends Controller
 
         if($request->hasFile('back_id_photo')){
             // Get filename with the extension
-            // $filenameWithExt = $request->input('email');
             $filenameWithExt3 = date('YmdHis');
             //Get just filename
             $filename3 = pathinfo($filenameWithExt3, PATHINFO_FILENAME);
@@ -86,7 +88,12 @@ class MemberRequestController extends Controller
         $mem_req->lname = $request->input('lname');
         $mem_req->fname = $request->input('fname');
         $mem_req->mname = $request->input('mname');
+        $mem_req->referral_email = $request->input('referral_email');
+        $mem_req->referral_num = $request->input('referral_num');
+
         $mem_req->email = $request->input('email');
+        $mem_req->password = Hash::make($request->password);
+        
         $mem_req->contact = $request->input('cell_num');
         $mem_req->street_number = $request->input('street_number');
         $mem_req->barangay = $request->input('barangay');
@@ -134,17 +141,21 @@ class MemberRequestController extends Controller
 
         $new = new User;
         $new->id = intval($result);
-        $new->password = Hash::make($req->email);
+        $new->password = $req->password;
         $new->user_type = 0;
         $new->lname = $req->lname;
         $new->fname = $req->fname;
         $new->mname = $req->mname;
+        
         $new->cell_num = $req->contact;
         $new->email = $req->email;
         $new->street_number = $req->street_number;
-        $new->barangay = $req->barangaye;
+        $new->barangay = $req->barangay;
         $new->city_town = $req->city_town;
         $new->province = $req->province;
+        $new->referral_num = $req->referral_num;
+        $new->referral_email = $req->referral_email;
+
         
         $new->save();
 
