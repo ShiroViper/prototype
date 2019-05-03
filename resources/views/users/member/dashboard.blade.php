@@ -35,10 +35,10 @@
                     <h5 class="pt-2 header display-5 font-weight-bold text-center">
                         {{ $savings && $savings->savings != null ? $savings->savings >= 0 ? '₱ '.number_format(floor($savings->savings), 2) : '₱ '.number_format(floor($savings->savings), 2) : '₱ 0.00' }}
                     </h5>
-                    @if($savings->savings >= 0)                        
-                        <small>Savings</small>
-                    @else
+                    @if($savings ? $savings->savings < 0 : '')                        
                         <h1 class="text-danger ">Debt</h1>
+                    @else
+                        <small>Savings</small>
                     @endif
                 </div>
             </div>

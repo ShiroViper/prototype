@@ -11,18 +11,7 @@
         <h3 class="header">Update {{$user->fname}}'s Profile</h3>
         {!! Form::open(['action' => ['ProfilesController@update', $user->id], 'method' => 'POST']) !!}
         @csrf
-        {{-- <div class="py-3">
-            {{Form::hidden('_method', 'PUT')}}
-            {{ Form::submit('Save Changes', ['class' => 'btn btn-success edit-button']) }}
-            @csrf
-            @if(Auth::user()->user_type == 2)
-                <a class="btn btn-outline-danger ml-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/admin/profile"><i class="fas fa-times fa-lg"></i></a>
-            @elseif(Auth::user()->user_type == 1)
-                <a class="btn btn-outline-danger ml-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/collector/profile"><i class="fas fa-times fa-lg"></i></a>
-            @else
-                <a class="btn btn-outline-danger ml-3" role="button" data-toggle="tooltip" data-placement="top" title="Discard Changes" href="/member/profile"><i class="fas fa-times fa-lg"></i></a>
-            @endif
-        </div> --}}
+       
         <div class="card mt-3">
             <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="header">User Information</h5>
@@ -120,6 +109,7 @@
                     </div>
                 </li>
             </ul>
+            
             <div class="card-footer text-muted">
                 <small>Account Created: {{date("F d, Y", strtotime($user->created_at))}}  Time: {{date(" h:i:s A", strtotime($user->created_at))}}</small><br>
                 <small>Account Updated: {{date("F d, Y", strtotime($user->updated_at))}}  Time: {{date(" h:i:s A", strtotime($user->updated_at))}}</small>

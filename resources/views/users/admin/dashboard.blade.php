@@ -239,6 +239,8 @@
                                             <th>Email</th>
                                             <th>Contact</th>
                                             <th>Address</th>
+                                            <th>Referral</th>
+                                            <th>Photo</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -249,7 +251,12 @@
                                                 <td>{{ $req->lname}}, {{ $req->fname }} {{ $req->mname }}</td>
                                                 <td>{{ $req->email }}</td>
                                                 <td>{{ $req->contact }}</td>
-                                                <td>{{ $req->address }}</td>
+                                                <td>{{ $req->street_number}}, {{$req->barangay}}, {{$req->city_town}}, {{$req->province }}</td>
+                                                <td>{{ $req->referral_num}} - {{ $req->referral_email}}</td>
+
+                                                {{-- <td><img class="img-square" style="width:60px;height:60px" src="/public/face_photo/{{$m->id_photo}}"></td> --}}
+                                                <td>{{ HTML::image('/public/face_photo/{{$req->face_photo}}', 'face_photo') }}</td>
+                                                {{-- <a href="{{ action('MemberRequestController@accept', $req->id) }}" class="btn btn-success btn-sm m-1" role="button">Accept</a> --}}
                                                 <td>
                                                     <a href="{{ action('MemberRequestController@accept', $req->id) }}" class="btn btn-success btn-sm m-1" role="button">Accept</a>
                                                     <a href="{{ action('MemberRequestController@decline', $req->id) }}" class="btn btn-outline-secondary btn-sm m-1" role="button">Decline</button>
@@ -346,7 +353,9 @@
                                             <th>Type</th>
                                             <th>Date & Time</th>
                                             <th>Member</th>
+                                            <th>Receipt</th>
                                             <th colspan="2">Amount</th>
+                                            <th>Photo</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -357,8 +366,14 @@
                                             @else
                                                 <td>Loan Payment</td>
                                             @endif
+                                             {{-- <td><img class="img-square" style="width:60px;height:60px" src="/storage/cover_images/{{$m->id_photo}}"></td> --}}
                                             <td>{{date("h:i A M d, Y", strtotime($trans->created_at))}}</td>
                                             <td>{{$trans->lname}}, {{$trans->fname}} {{$trans->mname}} </td>
+                                            <td>
+                                                <a href="{{ asset('storage/physical_receipts/'.$trans->receipt_id.'.jpg') }}" target="_blank">
+                                                    <img src="{{ asset('storage/physical_receipts/'.$trans->receipt_id.'.jpg') }}" alt="Receipt # {{ $trans->receipt_id }}" class="img-fluid" width="50" height="50">
+                                                </a>
+                                            </td>
                                             <td class="border-right-0">₱ {{number_format($trans->amount, 2)}}</td>
                                             <td class="text-right border-left-0">
                                                 <a class="btn btn-outline-primary mx-2 no-modal btn-sm" role="button" href="/admin/transaction/{{Crypt::encrypt($trans->id)}}/generate" data-toggle="tooltip" data-placement="top" title="Download PDF"><i class="fas fa-download"></i></a>

@@ -18,26 +18,94 @@ class MemberRequestController extends Controller
             'cell_num.unique' => 'That contact number was already registered',
             'email.unique' => 'That email was already registered',
             'numeric' => 'Please input a valid contact number'
+        
         ];
-
+        
         $this->validate($request, [
             'lname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'mname' => ['nullable', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'email' => ['required', 'string', 'unique:users', 'unique:member__requests,email', 'email'],
             'cell_num' => ['required', 'string', 'numeric', 'unique:member__requests,contact', 'unique:users', 'digits:11'],
-            'address' => ['required', 'string']
+            'email' => ['required', 'string', 'unique:member__requests,email', 'unique:users', 'email'],
+            'street_number' => ['required', 'string'],
+            'barangay' => ['required', 'string'],
+            'city_town' => ['required', 'string'],
+            'province' => ['required', 'string'],
+            'face_photo' => 'image|required|max:1999',
+            'front_id_photo' => 'image|required|max:1999',
+            'back_id_photo' => 'image|required|max:1999',
+            'id_type' => ['required', 'string'],
+            'referral_email' => ['nullable', 'string', 'email'],
+            'referral_num' => ['nullable', 'string', 'numeric'],
+            'password'=>['required', 'string', 'min:4'],
         ], $messages);
+
+        // dd($request->id_type);
+
+        if($request->hasFile('face_photo')){
+            // Get filename with the extension
+            // $filenameWithExt = $request->input('email');
+            $filenameWithExt = date('YmdHis');
+            //Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('face_photo')->getClientOriginalExtension();
+            //Filename to store
+            $face_photo = $filename.'.'.$extension;
+            //Upload Image
+            $path = $request->file('face_photo')->storeAs('public\face_images',$face_photo);            
+        } 
+
+        if($request->hasFile('front_id_photo')){
+            // Get filename with the extension
+            // $filenameWithExt = $request->input('email');
+            $filenameWithExt2 = date('YmdHis');
+            //Get just filename
+            $filename2 = pathinfo($filenameWithExt2, PATHINFO_FILENAME);
+            // Get just ext
+            $extension2 = $request->file('front_id_photo')->getClientOriginalExtension();
+            //Filename to store
+            $front_id_photo = $filename2.'.'.$extension2;
+            //Upload Image
+            $path2 = $request->file('front_id_photo')->storeAs('public\id_images',$front_id_photo);            
+        } 
+
+        if($request->hasFile('back_id_photo')){
+            // Get filename with the extension
+            $filenameWithExt3 = date('YmdHis');
+            //Get just filename
+            $filename3 = pathinfo($filenameWithExt3, PATHINFO_FILENAME);
+            // Get just ext
+            $extension3 = $request->file('back_id_photo')->getClientOriginalExtension();
+            //Filename to store
+            $back_id_photo = $filename3.'.'.$extension3;
+            //Upload Image
+            $path3 = $request->file('back_id_photo')->storeAs('public\id_images',$back_id_photo);            
+        } 
 
         $mem_req = new Member_Request;
         $mem_req->lname = $request->input('lname');
         $mem_req->fname = $request->input('fname');
         $mem_req->mname = $request->input('mname');
+        $mem_req->referral_email = $request->input('referral_email');
+        $mem_req->referral_num = $request->input('referral_num');
+
         $mem_req->email = $request->input('email');
+        $mem_req->password = Hash::make($request->password);
+        
         $mem_req->contact = $request->input('cell_num');
-        $mem_req->address = $request->input('address');
+        $mem_req->street_number = $request->input('street_number');
+        $mem_req->barangay = $request->input('barangay');
+        $mem_req->city_town = $request->input('city_town');
+        $mem_req->province = $request->input('province');
+        $mem_req->face_photo = $face_photo;
+        $mem_req->front_id_photo = $front_id_photo;
+        $mem_req->back_id_photo = $back_id_photo;
+        $mem_req->id_type = $request->input('id_type');
         $mem_req->save();
-        // return dd($mem_req);
+
+
         return redirect('/')->with('success', 'Request submitted successfully');
     }
 
@@ -73,14 +141,22 @@ class MemberRequestController extends Controller
 
         $new = new User;
         $new->id = intval($result);
-        $new->password = Hash::make($req->email);
+        $new->password = $req->password;
         $new->user_type = 0;
         $new->lname = $req->lname;
         $new->fname = $req->fname;
         $new->mname = $req->mname;
+        
         $new->cell_num = $req->contact;
         $new->email = $req->email;
-        $new->address = $req->address;
+        $new->street_number = $req->street_number;
+        $new->barangay = $req->barangay;
+        $new->city_town = $req->city_town;
+        $new->province = $req->province;
+        $new->referral_num = $req->referral_num;
+        $new->referral_email = $req->referral_email;
+
+        
         $new->save();
 
         $req->approved = true;

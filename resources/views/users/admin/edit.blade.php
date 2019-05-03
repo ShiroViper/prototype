@@ -124,16 +124,50 @@
                         @endif
                         <li class="list-group-item">
                             <div class="row">
-                                <div class="col">Address</div>
+                                <div class="col">Street Number</div>
                             </div>
                             <div class="row">
                                 <div class="col font-weight-bold">
-                                    {{ Form::textarea('address', $user->address, ['class' => 'form-control', 'rows' => 3, 'placeholder' => 'Street number, Barangay, City/Town, Province, Philippines, Zip Code']) }}
-                                    @if ($errors->has('address'))
-                                        <div class="invalid-feedback">{{ $errors->first('address') }}</div>
+                                    {{ Form::text('street_number', $user->street_number, ['class' => 'form-control', 'rows' => 3]) }}
+                                    @if ($errors->has('street_number'))
+                                        <div class="invalid-feedback">{{ $errors->first('street_number') }}</div>
                                     @endif
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col">Barangay</div>
+                            </div>
+                            <div class="row">
+                                <div class="col font-weight-bold">
+                                    {{ Form::text('barangay', $user->barangay, ['class' => 'form-control', 'rows' => 3]) }}
+                                    @if ($errors->has('barangay'))
+                                        <div class="invalid-feedback">{{ $errors->first('barangay') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row">
+                            <div class="col">City/Town</div>
+                        </div>
+                        <div class="row">
+                            <div class="col font-weight-bold">
+                                {{ Form::text('city_town', $user->city_town, ['class' => 'form-control', 'rows' => 3]) }}
+                                @if ($errors->has('city_town'))
+                                    <div class="invalid-feedback">{{ $errors->first('city_town') }}</div>
+                                @endif
+                            </div>
+                            </div>
+                            <div class="row">
+                                    <div class="col">Province</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col font-weight-bold">
+                                        {{ Form::text('province', $user->province, ['class' => 'form-control', 'rows' => 3]) }}
+                                        @if ($errors->has('province'))
+                                            <div class="invalid-feedback">{{ $errors->first('province') }}</div>
+                                        @endif
+                                    </div>
+                            </div>
+                           
                         </li>
                     </ul>
                 </div>

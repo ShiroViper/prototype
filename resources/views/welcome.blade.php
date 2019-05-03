@@ -8,6 +8,7 @@
 @section('content')
 @push('scripts')
     <script src="{{ asset('js/scripts.js') }}"></script>
+   
 @endpush
 <div class="main-feature">
     <div class="container">
@@ -40,67 +41,7 @@
                 </div>
             </div>
         </div>
-        {{-- <div class="addon-feature pt-5">
-            <div class="row mb-3">
-                <div class="col">
-                    <span class="text-info title-header">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</span>
-                    <hr>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg">
-                    <div class="box bg-light border rounded mb-3 shadow">
-                        <div class="row d-flex align-items-center m-auto">
-                            <div class="col">
-                                <h4 class="title-header font-weight-bold">Easy</h4>
-                            </div>
-                            <div class="col-2 col-sm-2 col-md-2 col-lg-3">
-                                <img src="img/ez.png" alt="" class="img-fluid" min-height="33px">
-                            </div>
-                        </div>
-                        <div class="row px-3">
-                             <div class="col col-md featured-desc lead">
-                                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse cupiditate a quis laboriosam facilis omnis non dolorum modi aperiam.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg">
-                    <div class="box bg-light border rounded mb-3 shadow">
-                        <div class="row d-flex align-items-center m-auto">
-                            <div class="col">
-                                <h4 class="title-header font-weight-bold">Fast</h4>
-                            </div>
-                            <div class="col-2 col-sm-2 col-md-2 col-lg-3">
-                                <img src="img/rr.png" alt="" class="img-fluid" style="max-height: 60px;">
-                            </div>
-                            <div class="row px-3">
-                                <div class="col col-md featured-desc lead">
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor, facilis vitae! Aperiam numquam vitae, facilis illo, nostrum itaque provident maiores.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg">
-                    <div class="box bg-light border rounded mb-3 shadow">
-                        <div class="row d-flex align-items-center m-auto">
-                            <div class="col">
-                                <h4 class="title-header font-weight-bold">Reliable</h4>
-                            </div>
-                            <div class="col-2 col-sm-2 col-md-2 col-lg-3">
-                                <img src="img/tu.png" alt="" class="img-fluid" style="max-height: 60px;">
-                            </div>
-                            <div class="row px-3">
-                                <div class="col col-md featured-desc lead">
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam odio esse cumque earum minima quidem qui doloremque hic possimus porro.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
+       
     </div>
 </div>
   
@@ -120,9 +61,10 @@
             <div class="modal-body">
                 <div class="container">
                     <h6>Please enter your credentials</h6>
-                    {!!Form::open(['action'=> 'MemberRequestController@memberRequest', 'method'=>'POST']) !!}
+                  
+                    {!!Form::open(['action'=> 'MemberRequestController@memberRequest', 'method'=>'POST' , 'enctype' => 'multipart/form-data']) !!}
                         @csrf
-
+                        
                         <div class="form-group">
                             {{ Form::label('lname', 'Last Name') }}
                             {{ Form::text('lname', '', ['class' => $errors->has('lname') ? 'form-control is-invalid' : 'form-control']) }}
@@ -130,6 +72,8 @@
                                 <div class="invalid-feedback">{{ $errors->first('lname') }}</div>
                             @endif
                         </div>
+
+                       
 
                         <div class="form-group">
                             {{ Form::label('fname', 'First Name') }}
@@ -165,52 +109,104 @@
                         </div>
 
                         <div class="form-group">
-                            {{ Form::label('address', 'Complete Address', ['class' => 'mb-0']) }}
-                            <div class="mb-2"><small class="text-muted">Street number, Barangay, City/Town, Province, Philippines, Zip Code</small></div>
-                            {{ Form::textarea('address', '', ['class' => $errors->has('address') ? 'form-control is-invalid' : 'form-control', 'rows' => 2]) }}
-                            @if ($errors->has('address'))
-                                <div class="invalid-feedback">{{ $errors->first('address') }}</div>
+                                <label for="password">Password</label>
+                                <input name="password" type="password" class="form-control" autofocus required>
+                        </div>
+              
+                        <div class="form-group">
+                            {{ Form::label('street_number', 'Street Number') }}
+                            {{ Form::text('street_number', '', ['class' => $errors->has('street_number') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('street_number'))
+                                <div class="invalid-feedback">{{ $errors->first('street_number') }}</div>
                             @endif
-                            {{-- <small class="text-muted">Default Password: 123456</small> --}}
                         </div>
 
-                        {{-- <small class="text-muted"><b>Note</b>: Please wait for our administrator to verify your request.</small> --}}
+                        <div class="form-group">
+                            {{ Form::label('barangay', 'Barangay') }}
+                            {{ Form::text('barangay', '', ['class' => $errors->has('barangay') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('barangay'))
+                                <div class="invalid-feedback">{{ $errors->first('barangay') }}</div>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            {{ Form::label('city_town', 'City/Town') }}
+                            {{ Form::text('city_town', '', ['class' => $errors->has('city_town') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('city_town'))
+                                <div class="invalid-feedback">{{ $errors->first('city_town') }}</div>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            {{ Form::label('province', 'Province') }}
+                            {{ Form::text('province', '', ['class' => $errors->has('province') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('province'))
+                                <div class="invalid-feedback">{{ $errors->first('province') }}</div>
+                            @endif
+                        </div>
+                    
+                        <div>
+                        {{Form::label('id_type', 'ID Type')}}
+                        {{Form::select('id_type', [
+                        'Passport' => 'Passport', 
+                        'Driver\'s License' => 'Driver\'s License', 
+                        'SSS Card' => 'SSS Card', 
+                        'Professional Regulation Commission (PRC ID)' => 'Professional Regulation Commission (PRC ID)', 
+                        'GSIS e-Card Plus2' => 'GSIS e-Card Plus2', 
+                        'Postal ID' => 'Postal ID', 
+                        'Unified Multi-Purpose ID' => 'Unified Multi-Purpose ID', 
+                        'NBI Clearance' => 'NBI Clearance', 
+                        'Alien Certificate of Registration' => 'Alien Certificate of Registration',
+                        'AFP ID' => 'AFP ID', 
+                        'NCWDP Certificate' => 'NCWDP Certificate', 
+                        'IBP ID' => 'IBP ID', 
+                        'OWWA ID' => 'OWWA ID', 
+                        'Seaman\'s Book' => 'Seaman\'s Book', 
+                        'Bureau of Fire Protection ID' => 'Bureau of Fire Protection ID', 
+                        'Integrated Bar of the Philippines ID' => 'Integrated Bar of the Philippines ID', 
+                        'Philippine National Police ID' => 'Philippine National Police ID', 
+                        'Police Clearance Card' => 'Police Clearance Card', 
+                        'Police Clearance Certificate' => 'Police Clearance Certificate'],                         
+                        "",
+                        ['class' => 'form-control']
+                        )}}
+                        </div>
+
+
+                        <div class="form-group">
+                            {{Form::label('face_photo', 'Photo')}}
+                            {{Form::file('face_photo'), ['required', 'accept' => 'image/*']  }}
+                           
+                        </div>
+
+                        <div class="form-group">
+                            {{Form::label('front_id_photo', 'Front ID Photo')}}
+                            {{Form::file('front_id_photo'), ['required', 'accept' => 'image/*']  }}
+                           
+                        </div>
+                        
+                        <div class="form-group">
+                            {{Form::label('back_id_photo', 'Back ID Photo')}}
+                            {{Form::file('back_id_photo', ['required', 'accept' => 'image/*'])}}
+                        </div>
+
+                        <div class="form-group">
+                            {{ Form::label('referral', 'Referral ') }}
+                            <small class="text-muted">(Optional)</small>
+                            {{ Form::text('referral', '', ['class' => $errors->has('referral') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('referral'))
+                                <div class="invalid-feedback">{{ $errors->first('referral') }}</div>
+                            @endif
+                        </div>
+	
+                        <small class="text-muted"><b>Note</b>: Please wait for our administrator to verify your request.</small>
                         <div class="pt-2">
-                            {{ Form::submit('Submit', ['class' => 'btn btn-primary btn-block mb-3']) }}
-                        </div>
-                    {!!Form::close()!!}
-                    {{-- <form method="POST" action="/request" >  
-                        <div class="form-group">
-                            <label for="">Last Name</label>
-                            <input type="text" class="form-control" name="lname">
-                        </div>
-                        <div class="form-group">
-                            <label for="">First Name</label>
-                            <input type="text" class="form-control" name="fname">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Middle Name</label>
-                            <small>*Optional</small>
-                            <input type="text" class="form-control" name="mname">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Email Address</label>
-                            <input type="email" class="form-control" name="email">
-                        </div>
-                        <small class="text-muted"><b>Note</b>: Please wait for our administrator to validate your request.</small>
-                        <div class="py-3">
-                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
-                        </div>
-                    </form> --}}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
+                        {{ Form::submit('Submit', ['class' => 'btn btn-primary btn-block mb-3']) }}
+                        </div>    
+                        
 <script type="text/javascript">
     @if (count($errors) > 0)
         $('#member').modal('show');
     @endif
-</script>
+   
+  </script>
 @endsection

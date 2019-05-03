@@ -103,6 +103,7 @@ class UsersController extends Controller
             'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
             'email' => ['required', 'string', 'unique:users', 'email'],
             'address' => ['required', 'string'],
+            'password'=>['required', 'string', 'min:4'],
         ], $messages);
 
         $user = new User;
@@ -114,7 +115,12 @@ class UsersController extends Controller
         $user->password = Hash::make($request->input('email'));
         $user->email = $request->input('email');
         $user->cell_num = $request->input('cell_num');
-        $user->address = $request->input('address');
+        $new->street_number = $request->input('street_number');
+        $new->barangay = $req->input('barangay');
+        $new->city_town = $req->input('city_town');
+        $new->province = $req->input('province');
+        $new->referral_num = $req->input('referral_num');
+        $new->referral_email = $req->input('referral_email');
         $user->save();
 
         // this will create a new status row in status column for his/her savings and patronage refund
@@ -238,7 +244,7 @@ class UsersController extends Controller
             'lname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'mname' => ['nullable', 'string'],
-            'password' => ['required', 'string', 'alpha_num'],
+            'password' => ['required', 'string'],
             'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
             'email' => ['required', 'email', Rule::unique('users')->ignore(Auth::user()->id)],
             'address' => ['required', 'string'],

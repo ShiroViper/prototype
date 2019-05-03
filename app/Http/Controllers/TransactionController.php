@@ -59,7 +59,7 @@ class TransactionController extends Controller
             $memberRequests = Member_Request::where('approved', null)->paginate(5);
 
             // Transactions
-            $transactions = Transaction::join('users', 'users.id', '=' ,'member_id')->select('transactions.id', 'trans_type', 'transactions.created_at', 'lname', 'fname', 'mname', 'amount')->where('confirmed',1)->orderBy('transactions.created_at', 'desc')->paginate(10);
+            $transactions = Transaction::join('users', 'users.id', '=' ,'member_id')->select('transactions.id', 'transactions.receipt_id', 'trans_type', 'transactions.created_at', 'lname', 'fname', 'mname', 'amount')->where('confirmed',1)->orderBy('transactions.created_at', 'desc')->paginate(10);
 
             $trans = Transaction::where([['confirmed', 1], ['turn_over', 2]])->get();
             $turn_over = TurnOver::select('turn_over.id', 'lname', 'fname', 'mname', 'amount')->join('users', 'users.id', '=', 'collector_id')->where('confirmed', null)->paginate(5);
@@ -69,10 +69,10 @@ class TransactionController extends Controller
             
             return view('users.admin.dashboard')->with('distribution', $distribution)->with('status', $status)->with('turn_over', $turn_over)->with('trans', $trans)->with('transactions', $transactions)->with('active', 'dashboard')->with('memReq', $memberRequests)->with('pending', $pending);
         } else if ( Auth::user()->user_type == 1 ) {
-            $transactions = Transaction::join('users', 'users.id', '=', 'member_id' )->select('transactions.id', 'transactions.created_at', 'lname', 'fname', 'mname', 'trans_type', 'amount')->where([['collector_id', Auth::user()->id], ['confirmed', 1]])->orderBy('transactions.created_at', 'DESC')->paginate(10);
+            $transactions = Transaction::join('users', 'users.id', '=', 'member_id' )->select('transactions.id', 'transactions.receipt_id', 'transactions.created_at', 'lname', 'fname', 'mname', 'trans_type', 'amount')->where([['collector_id', Auth::user()->id], ['confirmed', 1]])->orderBy('transactions.created_at', 'DESC')->paginate(10);
             return view('users.collector.dashboard')->with('transactions', $transactions)->with('active', 'dashboard');
         } else {
-            $transactions = Transaction::join('users', 'users.id', '=', 'collector_id')->select('transactions.id', 'amount', 'lname', 'fname', 'mname', 'trans_type', 'transactions.created_at')->where('member_id', Auth::user()->id)->whereNotNull('confirmed')->orderBy('transactions.created_at', 'desc')->paginate(5);
+            $transactions = Transaction::join('users', 'users.id', '=', 'collector_id')->select('transactions.id', 'transactions.receipt_id', 'amount', 'lname', 'fname', 'mname', 'trans_type', 'transactions.created_at')->where('member_id', Auth::user()->id)->whereNotNull('confirmed')->orderBy('transactions.created_at', 'desc')->paginate(5);
             return view('users.member.transactions')->with('transactions', $transactions)->with('active', 'transactions');
         }
         // $transactions = DB::table('transactions')
@@ -268,7 +268,7 @@ class TransactionController extends Controller
                 $extension = $request->file('receiptImg')->getClientOriginalExtension();
     
                 //Filename to store
-                $fileNameToStore = date('YmdHis').'_'.$request->receiptID.'.'.$extension;
+                $fileNameToStore = $request->receiptID.'.'.$extension;
     
                 //Upload Image
                 $path = $request->file('receiptImg')->storeAs('public/physical_receipts',$fileNameToStore);

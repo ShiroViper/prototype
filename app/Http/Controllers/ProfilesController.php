@@ -83,7 +83,10 @@ class ProfilesController extends Controller
             'lname' => ['required', 'string', 'alpha'],
             'fname' => ['required', 'string', 'alpha'],
             'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
-            'address' => ['required', 'string'],
+            'street_number' => ['required', 'string'],
+            'barangay' => ['required', 'string'],
+            'city_town' => ['required', 'string'],
+            'province' => ['required', 'string'],
         ], $messages);
         
         $user = User::find($id);
@@ -91,7 +94,10 @@ class ProfilesController extends Controller
         $user->fname = $request->fname;
         $user->mname = $request->mname;
         $user->user_type = Auth::user()->user_type;
-        $user->address = $request->address;
+        $user->street_number = $request->input('street_number');
+        $user->barangay = $request->input('barangay');
+        $user->city_town = $request->input('city_town');
+        $user->province = $request->input('province');
         $user->cell_num = $request->cell_num;
         $request->email ? $user->email = $request->email : '';
         $user->save();
