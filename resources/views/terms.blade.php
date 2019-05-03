@@ -6,11 +6,16 @@
 
 @section('content')
 
+@push('scripts')
+    <script src="{{ asset('js/jquery-ui.js') }}"></script>
+    <script src="{{ asset('js/scripts.js') }}"></script>
+@endpush
+
 <style>
     html {
          scroll-behavior: smooth;
     }
-    .justify {
+    /* .justify {
         text-align: justify;
         text-justify: inter-word;
     }
@@ -29,14 +34,14 @@
       cursor: pointer;
       padding: 15px;
       border-radius: 4px;
-      -webkit-transition-duration: 0.4s; /* Safari */
+      -webkit-transition-duration: 0.4s;
      transition-duration: 0.4s;
     }
     
     #myBtn:hover {
       background-color: gray;
       color: white;
-    }
+    } */
     </style>
 
 <h2 class="welcome-title mt-3 display-5">Terms and Conditions</h2>
@@ -62,20 +67,32 @@
             </div>
         </div>
     </div>
-    <div class="row my-5">
+    <div class="row my-5" id="moreInfo">
         <div class="col">
             <div class="terms-title h4 pb-2">Our Services</div>
             <div class="terms-content">
                 <p>Alkansya serves as an online savings bank for the people in the organization in a particular area with an aim to provide financial assistance to those who are in need of money</p>
-                <p>Rules and Regulations:</p>
+                <p class="h5">Rules and Regulations:</p>
+                <h6 class="mt-3">Registration</h6>
                 <ol>
-                    <li>Application for member starts on the early months every year. The registration of members depends on the <b>Administrator's</b> decision.</li>
-                    <li>The minimum loan amount depends on the member's savings.</li>
-                    <li>Loan Request <b>MUST</b> not be greater than the <b>Member's savings</b>.</li>
-                    <li>The minimum deposit per year is ₱1825, having a saving that is greater than the said amount increases that amount once the member withdraws it by the end of the year.</li>
-                    <li>Deactivating your account let's the member withdraw his/her current savings regardless of the member's number of shares and its patronage refund.</li>
-                    {{-- <mark class="text-info"><u>https://alkansya.com</u></mark>
-                    <mark class="text-info"><u>https://alkansya.com</u></mark> --}}
+                    <li>Application for member starts on the early months every year. The registration of members depends on the Administrator's decision.</li>
+                </ol>
+                <h6 class="mt-3">Saving & Withdrawal</h6>
+                <ol>
+                    <li>Minimum deposit is ₱5 per day or ₱35 per week</li>
+                    <li>Deposits will be collected by the collector every Saturday and Sunday of the week.</li>
+                    <li>All savings can be withdrawn by December.</li>
+                    <li>Only those who will forfeit their accounts can withdraw their savings earlier than December but forfeited accounts cannot gain interest nor loan money from the organization anymore.</li>
+                    <li>FORFEITED accounts can join and transact again next year.</li>
+                </ol>
+                <h6 class="mt-3">Loan</h6>
+                <ol>
+                    <li>Upon loaning, savings must be greater than or equal to the amount of the loan requested unless it is an emergency.</li>
+                    <li>Emergency Loan allows the member to request beyond the amount of his/her savings.</li>
+                    <li>3.	All request will undergo extensive decision by the Admin.</li>
+                    <li>4.	All loans have 6% monthly interest rate; The interest is the 6% of your current/remaining loan balance</li>
+                    <li>5.	All unpaid loans beyond the term agreed will be deducted from their savings with the interest.</li>
+                    <li>6.	There will be a 40% PATRONAGE REFUND; this means that 40% of the total interest you have paid will return to you.</li>
                 </ol>
                 <p>
                     <h5>Note:</h5>
