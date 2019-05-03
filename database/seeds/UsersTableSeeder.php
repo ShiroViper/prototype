@@ -50,7 +50,8 @@ class UsersTableSeeder extends Seeder
                 'password' => bcrypt('lebrias@gmail.com'),
                 'user_type' => 0,
                 'address' => 'None, Barangay Sambag 2, Danao, Cebu City, Philippines, 6000',
-                'remember_token'=> Str::random(10)
+                'remember_token'=> Str::random(10),
+                'setup' => 1
             ],
             [
                 'id' => '190004',
@@ -62,7 +63,8 @@ class UsersTableSeeder extends Seeder
                 'password' => bcrypt('bacus@gmail.com'),
                 'user_type' => 0,
                 'address' => 'None, Barangay Labogon, Mandaue, Cebu City, Philippines, 6000',
-                'remember_token'=> Str::random(10)
+                'remember_token'=> Str::random(10),
+                'setup' => 1
             ],
             [
                 'id' => '190005',
@@ -74,7 +76,8 @@ class UsersTableSeeder extends Seeder
                 'password' => bcrypt('cueva@gmail.com'),
                 'user_type' => 0,
                 'address' => 'None, Barangay Poblacion, Liloan, Cebu City, Philippines, 6000',
-                'remember_token'=> Str::random(10)
+                'remember_token'=> Str::random(10),
+                'setup' => 1
             ],
         ];
 
