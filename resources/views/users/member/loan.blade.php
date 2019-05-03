@@ -41,7 +41,7 @@
                 @endif
             </div>
 
-            {{ Form::label('months', 'Due Month', ['class' => 'h6']) }}
+            {{ Form::label('months', 'End of Term', ['class' => 'h6']) }}
             <div class="form-group">
             {{-- {{ Form::number('months', '', ['class' => $errors->has('months') ? 'form-control is-invalid' : 'form-control', 'min'=>'1', 'max'=> $count_end_month, 'step'=> 1, 'required']) }}
                 @if ($errors->has('months'))
@@ -74,10 +74,10 @@
             <div>
             </div>
 
-            <label for="pass"> Password</label>
+            {{-- <label for="pass"> Password</label>
             <div class="form-group">
                 <input type="password" value="{{session()->get('loan.0.pass')}}" name="pass" class="form-control" required>
-            </div>
+            </div> --}}
 
             <div class="form-group">
                 <div class="form-check">
@@ -120,18 +120,20 @@
     </div>
 @endif
 
-{{-- <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="termsModalLabel" aria-hidden="true">
+<div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="termsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="reqModalLabel">User Terms and Condition Agreement</h5>
+                <h5 class="modal-title" id="reqModalLabel">Loan Breakdown</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="container">
-                    <h1 class="display-4">Terms and Conditions</h1>
+                    Loan Amount * 6% / Months Payable = Monthly Payment
+                    Remaining Balanace * 6% / Months Payable = Monthly Payment 
+                    <p id="interest"></p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -139,7 +141,7 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 {{-- forget session loan --}}
 {{session()->forget('loan')}}
 @endsection

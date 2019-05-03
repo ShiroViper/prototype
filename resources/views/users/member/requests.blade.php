@@ -29,6 +29,7 @@
                         <table class="table table-hover" >
                             <thead>
                                 <tr>
+                                    <th>Date Distribute</th>
                                     <th>Savings</th>
                                     <th>Distribution Amount</th>
                                     <th>Patronage Refund</th>
@@ -38,6 +39,7 @@
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td>{{date('h:i A F d, Y', strtotime($distribution->created_at))}} </td>
                                     <td>₱ {{number_format($distribution->savings,2)}} </td>
                                     <td>₱ {{number_format($distribution->patronage_refund,2)}} </td>
                                     <td>₱ {{number_format($distribution->amount, 2)}} </td>

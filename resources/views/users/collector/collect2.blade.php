@@ -56,7 +56,9 @@
                     <option value="1" {{session()->get('loan_type') == 1 ? 'selected' : ''}} >Deposit</option>
                     @if($loan_request)
                         <option value="3" {{session()->get('loan_type') == 3 ? 'selected' : ''}} >Manual Loan Payment</option>
-                        <option value="4" {{session()->get('loan_type') == 4 ? 'selected' : ''}} >Full Payment For This Month Loan Balance</option>
+                        @if($loan_request ? $loan_request->per_month_amount > 0 : '')
+                            <option value="4" {{session()->get('loan_type') == 4 ? 'selected' : ''}} >Full Payment For This Month Loan Balance</option>
+                        @endif
                         <option value="5" {{session()->get('loan_type') == 5 ? 'selected' : ''}} >Full Payment The Remaining Loan Balance</option>
                     @endif
                 </select>
@@ -68,7 +70,7 @@
                 <input type="number" id="full_payment" value="{{$loan_request ? ceil($loan_request->per_month_amount) : ''}}" hidden> 
                 <input type="number" id="full_remaining_balance" value="{{$loan_request ? ceil($loan_request->balance) : ''}}" hidden>
                 {{ Form::label('amount', 'Amount Received', ['class' => 'h6', 'id'=>'amount_label']) }}
-                {{ Form::number('amount', '', ['class'=> 'form-control',  'step' => '1', 'required']) }}
+                {{ Form::number('amount', '', ['class'=> 'form-control', 'min' => 1,  'step' => '1', 'required']) }}
                 @if ($errors->has('amount'))
                     <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
                 @endif

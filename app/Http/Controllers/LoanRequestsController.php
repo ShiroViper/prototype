@@ -138,9 +138,9 @@ class LoanRequestsController extends Controller
             return redirect()->back()->with('error', 'Months payable should not beyond the current end year')->withInput();
         // check if password is not match
         }else if(!Hash::check($request->pass, Auth::user()->password)){
-            // session(['months'=>$request->months], ['reason'=>$request->reason], ['pass'=>$request->pass]);
-            Session::push('loan', Input::all());
-            return redirect()->back()->with('error', 'Wrong Password')->withInput();
+            // // session(['months'=>$request->months], ['reason'=>$request->reason], ['pass'=>$request->pass]);
+            // Session::push('loan', Input::all());
+            // return redirect()->back()->with('error', 'Wrong Password')->withInput();
         }
 
         // dd($request);
@@ -155,7 +155,7 @@ class LoanRequestsController extends Controller
             'amount' => ['required', 'numeric', 'min:200'],   
             'reason' => ['required', 'string'],
             'other' => ['nullable'],
-            'pass' => ['required'],
+            // 'pass' => ['required'],
             'months' => ['required', 'numeric', 'min:1', 'max:12']
         ], $messages);
         // return 'hji';
