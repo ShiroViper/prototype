@@ -238,7 +238,7 @@ class UsersController extends Controller
             'lname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'fname' => ['required', 'string', 'regex:/^[\pL\s\-]+$/u'],
             'mname' => ['nullable', 'string'],
-            'password' => ['required', 'string', 'alpha_num'],
+            'password' => ['required', 'string'],
             'cell_num' => ['required', 'string', 'numeric', 'digits:11'],
             'email' => ['required', 'email', Rule::unique('users')->ignore(Auth::user()->id)],
             'address' => ['required', 'string'],

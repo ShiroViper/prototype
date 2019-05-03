@@ -13,6 +13,7 @@
                 <th>Type</th>
                 <th>Date</th>
                 <th>Collector</th>
+                <th>Receipt</th>
                 <th colspan="2">Amount</th>
                 {{-- <th>PDF</th> --}}
             </tr>
@@ -28,6 +29,11 @@
                 @endif
                 <td>{{ date("h:i A  F d, Y", strtotime($trans->created_at)) }}</td>
                 <td>{{$trans->fname}}, {{$trans->fname}} {{$trans->mname}} </td>
+                <td>
+                    <a href="{{ asset('storage/physical_receipts/'.$trans->receipt_id.'.jpg') }}" target="_blank">
+                        <img src="{{ asset('storage/physical_receipts/'.$trans->receipt_id.'.jpg') }}" alt="Receipt # {{ $trans->receipt_id }}" class="img-fluid" width="50" height="50">
+                    </a>
+                </td>
                 <td>₱ {{ number_format($trans->amount, 2) }}</td>
                 <td class="text-right">
                     {{-- <a class="btn btn-outline-primary mx-2 no-modal btn-sm" role="button" href="/member/transaction/{{Crypt::encrypt($trans->id)}}/generate" data-toggle="tooltip" data-placement="top" title="Download PDF"><i class="fas fa-download"></i></a> --}}
