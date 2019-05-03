@@ -438,16 +438,16 @@ class SchedulesController extends Controller
             // dd($collectors);
             return view('users.admin.calendar')->with(compact('calendar_details'))->with('active', 'sched')->with('collectors', $collectors);
         } else {
-            if ($user = User::where([
-                    ['id', '=', Auth::user()->id],
-                    ['setup', '=', null]
-                ])->first()) {
-                return view('users.member.dashboard')->with('user', $user)->with('active', 'dashboard');
-            } else {
+            // if ($user = User::where([
+            //         ['id', '=', Auth::user()->id],
+            //         ['setup', '=', null]
+            //     ])->first()) {
+            //     return view('users.member.dashboard')->with('user', $user)->with('active', 'dashboard');
+            // } else {
 
                 // return view('users.member.status')->with('loan', $loan)->with('savings', $savings)->with('patronage', $patronage)->with('active', 'status');
                 return view('users.member.dashboard')->with(compact('calendar_details'))->with('active', 'dashboard')->with('user', null)->with('loan', $loan)->with('savings', $savings)->with('patronage', $patronage);
-            }
+            // }
         }
     }
 

@@ -240,7 +240,8 @@
                                             <th>Contact</th>
                                             <th>Address</th>
                                             <th>Referral</th>
-                                            <th>Photo</th>
+                                            {{-- <th>Face Photo</th> --}}
+                                            <th colspan="3">ID Photos</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -253,9 +254,23 @@
                                                 <td>{{ $req->contact }}</td>
                                                 <td>{{ $req->street_number}}, {{$req->barangay}}, {{$req->city_town}}, {{$req->province }}</td>
                                                 <td>{{ $req->referral_num}} - {{ $req->referral_email}}</td>
-
+                                                <td>
+                                                    <a href="{{ asset('storage/face_images/'.$req->face_photo) }}" target="_blank">
+                                                        <img src="{{ asset('storage/face_images/'.$req->face_photo) }}" alt="Face ID {{ $req->face_photo }}" class="img-fluid" width="85" height="85">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ asset('storage/id_images/'.$req->front_id_photo) }}" target="_blank">
+                                                        <img src="{{ asset('storage/id_images/'.$req->front_id_photo) }}" alt="Front ID # {{ $req->front_id_photo }}" class="img-fluid" width="85" height="85">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ asset('storage/id_images/'.$req->back_id_photo) }}" target="_blank">
+                                                        <img src="{{ asset('storage/id_images/'.$req->back_id_photo) }}" alt="Back ID # {{ $req->back_id_photo }}" class="img-fluid" width="85" height="85">
+                                                    </a>
+                                                </td>
                                                 {{-- <td><img class="img-square" style="width:60px;height:60px" src="/public/face_photo/{{$m->id_photo}}"></td> --}}
-                                                <td>{{ HTML::image('/public/face_photo/{{$req->face_photo}}', 'face_photo') }}</td>
+                                                {{-- <td>{{ HTML::image('/public/face_photo/'.$req->face_photo, 'face_photo') }}</td> --}}
                                                 {{-- <a href="{{ action('MemberRequestController@accept', $req->id) }}" class="btn btn-success btn-sm m-1" role="button">Accept</a> --}}
                                                 <td>
                                                     <a href="{{ action('MemberRequestController@accept', $req->id) }}" class="btn btn-success btn-sm m-1" role="button">Accept</a>

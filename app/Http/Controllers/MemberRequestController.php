@@ -37,7 +37,7 @@ class MemberRequestController extends Controller
             'back_id_photo' => 'image|required|max:1999',
             'id_type' => ['required', 'string'],
             'referral_email' => ['nullable', 'string', 'email'],
-            'referral_num' => ['nullable', 'string', 'numeric'],
+            'referral_num' => ['nullable', 'string', 'numeric', 'digits:11'],
             'password'=>['required', 'string', 'min:4'],
         ], $messages);
 
@@ -46,7 +46,7 @@ class MemberRequestController extends Controller
         if($request->hasFile('face_photo')){
             // Get filename with the extension
             // $filenameWithExt = $request->input('email');
-            $filenameWithExt = date('YmdHis');
+            $filenameWithExt =  'face_'.$request->input('email');
             //Get just filename
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
             // Get just ext
@@ -60,7 +60,7 @@ class MemberRequestController extends Controller
         if($request->hasFile('front_id_photo')){
             // Get filename with the extension
             // $filenameWithExt = $request->input('email');
-            $filenameWithExt2 = date('YmdHis');
+            $filenameWithExt2 = 'front_'.$request->input('email');
             //Get just filename
             $filename2 = pathinfo($filenameWithExt2, PATHINFO_FILENAME);
             // Get just ext
@@ -73,7 +73,7 @@ class MemberRequestController extends Controller
 
         if($request->hasFile('back_id_photo')){
             // Get filename with the extension
-            $filenameWithExt3 = date('YmdHis');
+            $filenameWithExt3 = 'back_'.$request->input('email');
             //Get just filename
             $filename3 = pathinfo($filenameWithExt3, PATHINFO_FILENAME);
             // Get just ext
@@ -155,6 +155,7 @@ class MemberRequestController extends Controller
         $new->province = $req->province;
         $new->referral_num = $req->referral_num;
         $new->referral_email = $req->referral_email;
+        $new->setup = 1;
 
         
         $new->save();
