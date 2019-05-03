@@ -190,19 +190,32 @@
                         </div>
 
                         <div class="form-group">
-                            {{ Form::label('referral', 'Referral ') }}
+                            {{ Form::label('referral_email', 'Referral Email') }}
                             <small class="text-muted">(Optional)</small>
-                            {{ Form::text('referral', '', ['class' => $errors->has('referral') ? 'form-control is-invalid' : 'form-control']) }}
-                            @if ($errors->has('referral'))
-                                <div class="invalid-feedback">{{ $errors->first('referral') }}</div>
+                            {{ Form::email('referral_email', '', ['class' => $errors->has('referral_email') ? 'form-control is-invalid' : 'form-control']) }}
+                            @if ($errors->has('referral_email'))
+                                <div class="invalid-feedback">{{ $errors->first('referral_email') }}</div>
                             @endif
                         </div>
+                        <div class="form-group">
+                                {{ Form::label('referral_num', 'Referral Number') }}
+                                <small class="text-muted">(Optional)</small>
+                                {{ Form::text('referral_num', '', ['class' => $errors->has('referral_num') ? 'form-control is-invalid' : 'form-control']) }}
+                                @if ($errors->has('referral_num'))
+                                    <div class="invalid-feedback">{{ $errors->first('referral_num') }}</div>
+                                @endif
+                            </div>
 	
                         <small class="text-muted"><b>Note</b>: Please wait for our administrator to verify your request.</small>
                         <div class="pt-2">
                         {{ Form::submit('Submit', ['class' => 'btn btn-primary btn-block mb-3']) }}
                         </div>    
-                        
+                    {!!Form::close()!!}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     @if (count($errors) > 0)
         $('#member').modal('show');
