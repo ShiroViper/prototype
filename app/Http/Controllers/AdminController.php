@@ -70,22 +70,37 @@ class AdminController extends Controller
         // $user = User::where([['user_type', 0], ['setup', 1], ['inactive', '!=', 1]])->get();
         $user = User::join('status', 'status.user_id', '=', 'users.id')->select('users.*')->where([['user_type', 0], ['setup', 1], ['inactive', '!=', 1],['savings', '>=', 1825]])->get();
         $user_count = count($user);
+        $i = 0;
+        $total_shares = 0;
+
+        $status_member = Status::where('user_id', '!=', 1)->get();
+        foreach($user as $u){
+            $share = $status_member[$i]->savings / 1825;
+            $total_shares = $total_shares + $share;
+            $i++;
+        }
+        $multiplier = $status->distribution / $total_shares;
+        // dd($multiplier);
         
         if(!$user_count){
             return redirect()->back()->with('error', 'No User to Distribute');
-        }else if($status->distribution <= 0 && date('n', strtotime(NOW())) > 11){
+        }else if($status->distribution <= 0 && date('n', strtotime(NOW())) < 11){
             return redirect()->back()->with('error', 'Action Invalid! Distribution is done');
-        }else if($status->distribution > 0 && date('n', strtotime(NOW())) > 11){
-            $distribute = $status->distribution / $user_count;
+        }else if($status->distribution > 0 && date('n', strtotime(NOW())) < 11){
             foreach($user as $u){
                 // dd(! $temp = Distribution::where([['user_id', $u->id], ['confirmed', null]])->first(), $temp);
                 if(!Distribution::where([['user_id', $u->id], ['confirmed', null], [DB::raw('ADDDATE(created_at, INTERVAL 1 month)'), '>', NOW()]])->first() ){
                     if(!Distribution::where([['user_id', $u->id], ['confirmed', 1], [DB::raw('ADDDATE(created_at, INTERVAL 1 month)'), '>', NOW()]])->first()){
+                        $status_per_member = Status::where('user_id', $u->id)->first();
+
                         $dis = New Distribution;
                         $dis->user_id = $u->id;
-                        $dis->amount = $distribute;
-                        $dis->save();
-                        
+
+                        $mem_share = $status_per_member->savings / 1825;
+                        $per_mem_dist = $mem_share * $multiplier;
+
+                        $dis->amount = $per_mem_dist;
+                        $dis->save();                        
                         // save this in confirmation
                         $status->save();
                     }
