@@ -45,7 +45,8 @@ class UsersTableSeeder extends Seeder
                 'barangay' => 'Barangay Poblacion',
                 'city_town' => 'Compostela Cebu City',
                 'province' => 'Cebu',
-                'remember_token'=> Str::random(10)
+                'remember_token'=> Str::random(10),
+                'setup' => 1
             ],
             [
                 'id' => '190003',
@@ -61,7 +62,8 @@ class UsersTableSeeder extends Seeder
                 'barangay' => 'Barangay Poblacion',
                 'city_town' => 'Compostela Cebu City',
                 'province' => 'Cebu',
-                'remember_token'=> Str::random(10)
+                'remember_token'=> Str::random(10),
+                'setup' => 1
             ],
             [
                 'id' => '190004',
@@ -77,7 +79,8 @@ class UsersTableSeeder extends Seeder
                 'barangay' => 'Barangay Poblacion',
                 'city_town' => 'Compostela Cebu City',
                 'province' => 'Cebu',
-                'remember_token'=> Str::random(10)
+                'remember_token'=> Str::random(10),
+                'setup' => 1
             ],
             [
                 'id' => '190005',
@@ -92,7 +95,8 @@ class UsersTableSeeder extends Seeder
                 'barangay' => 'Barangay Poblacion',
                 'city_town' => 'Compostela Cebu City',
                 'province' => 'Cebu',
-                'remember_token'=> Str::random(10)
+                'remember_token'=> Str::random(10),
+                'setup' => 1
             ],
         ];
 
