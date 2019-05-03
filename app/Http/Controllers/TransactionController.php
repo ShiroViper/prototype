@@ -135,8 +135,8 @@ class TransactionController extends Controller
         
         // testing 
         //  TESTINGGGGG THE VALUE
-        // dd(date(strtotime(now().'-1 months')), strtotime(now().'-29 days'));
-        // 1554250194
+        // dd(date(strtotime(now().'-1 months')), strtotime(now().'-28 days'));
+        // 1554433307
         // 1553947046
         // dd(strtotime("+1 months", $loan_request->per_month_to));
         // dd(strtotime(NOW()) > strtotime("+".$loan_request->days_payable." months") && $loan_request->date_approved);
@@ -308,6 +308,27 @@ class TransactionController extends Controller
             $transact->member_id = $request->memID;
             $transact->trans_type = $request->type;
             $transact->token = $request->token;
+            $transact->receipt_id = $request->receiptID;
+                        
+            if($request->hasFile('receiptImg')){
+                // Get filename with the extension
+                // $filenameWithExt = $request->file('receiptImg')->getClientOriginalName();
+    
+                //Get just filename
+                // $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+    
+                // Get just ext
+                $extension = $request->file('receiptImg')->getClientOriginalExtension();
+    
+                //Filename to store
+                $fileNameToStore = date('YmdHis').'_'.$request->receiptID.'.'.$extension;
+    
+                //Upload Image
+                $path = $request->file('receiptImg')->storeAs('public/physical_receipts',$fileNameToStore);
+            } else {
+                // $fileNameToStore = 'noimage.jpg';
+                $fileNameToStore = NULL;
+            }
 
             // Add new condition where transaction: member id is null or no existing loan payment transaction execute this code 
             if (Transaction::where('member_id','=', $request->memID)->first() == NULL) {
@@ -515,7 +536,7 @@ class TransactionController extends Controller
 
     public function generatepdf($id){
         // decrypt the encrtypted id
-        $decrypt = Crypt::decrypt($id);
+        $decrypt = Crypt::decrypt($id);        
 
         $trans = Transaction::where('id', $decrypt)->first();
         $mem = User::where('id', $trans->member_id)->first();
@@ -525,20 +546,28 @@ class TransactionController extends Controller
 		$pdf->AddPage();			//can add another page
 		$pdf->SetFont('Arial','',12); //set font of your PDF
 		$margin = 10;
-		$x = 150;
+        $x = 150;
+        
+        // dd($trans); 
 
 		//header
-		$text = 'Sinking Fund';
+		$text = 'Alkansya';
 		$pdf->Text($x*0.45, $margin, $text);
 
-		$text = 'Poblacion Compostela Cebu';
-		$pdf->Text($x*0.35, 20, $text);
+		$text = 'Barangay Poblacion Compostela Cebu';
+		$pdf->Text($x*0.25, 20, $text);
 
+		//Receipt ID
+		$text = 'Receipt ID:';
+        $pdf->Text($margin, 35, $text);
+        $text = $trans->receipt_id;
+        $pdf->Text($margin + 40, 35, $text);
+        
 		//Partial Details
 		$text = 'Member ID:';
-        $pdf->Text($margin, 35, $text);
+        $pdf->Text($margin, 45, $text);
         $text = $trans->member_id;
-		$pdf->Text($margin + 40, 35, $text);
+        $pdf->Text($margin + 40, 45, $text);        
 
 		$text = 'Date';
         $pdf->Text($x*0.65, 35, $text);
